@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            direction: rtl;
+            font-weight: bold;
+            font-size: medium;
+        }
+
+        body {
+            background-color: #070709;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: #ebecee;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input,
+        select {
+            border-radius: 10px;
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 200px;
+            box-sizing: border-box;
+            border: 1px solid #ebecee;
+            background-color: #ebecee;
+            color: #070709;
+        }
+
+        form label {
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #df1d40;
+            color: #ebecee;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="../media/fontawesome-free-6.5.1-web/css/fontawesome.css">
+    <link rel="stylesheet" href="../media/fontawesome-free-6.5.1-web/css/solid.css">
+    <title>Electron Form</title>
+</head>
+
+
+
+
+<body>
+    <div class="container">
+        <form id="dataForm">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="uniqueId">رقم الايصال</label>
+                        </td>
+                        <td>
+                            <input type="text" id="uniqueId" pattern="[0-9]{6}" required>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="name">الاسم</label>
+                        </td>
+                        <td>
+                            <input type="text" id="name" required>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="gender">النوع</label>
+                        </td>
+                        <td>
+                            <select id="gender">
+                                <option value="">-اختيار-</option>
+                                <option value="ذكر">ذكر</option>
+                                <option value="انثى">انثى</option>
+                            </select>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="subscription">نوع الاشتراك</label>
+                        </td>
+                        <td>
+                            <input type="text" id="subscription" required>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="type">برايفت / عادي</label>
+                        </td>
+                        <td>
+                            <select id="type">
+                                <option value="عادي">عادي</option>
+                                <option value="برايفت">برايفت</option>
+                            </select>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="age">السن</label>
+                        </td>
+                        <td>
+                            <input type="number" id="age" required>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="calss_num">عدد السيشن</label>
+                        </td>
+                        <td>
+                            <input type="number" id="calss_num" required>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="price">قيمه الاشتراك</label>
+                        </td>
+                        <td>
+                            <input type="number" id="price" required onchange="fn_calc_still()">
+                        </td>
+
+                    </tr>
+                    <td>
+                        <label for="paid">المدفوع</label>
+                    </td>
+                    <td>
+                        <input type="number" id="paid" required onchange="fn_calc_still()">
+                    </td>
+                    </tr>
+
+                    </tr>
+                    <td>
+                        <label for="still">المتبقي</label>
+                    </td>
+                    <td>
+                        <input type="number" id="still" required>
+                    </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="fromDate">تاريخ البدايه</label>
+                        </td>
+                        <td>
+                            <input type="date" id="fromDate" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="toDate">المدة</label>
+                        </td>
+                        <td>
+                            <select id="duration" onchange="calculateDate()">
+                                <option value="0">-اختيار-</option>
+                                <option value="1">شهر </option>
+                                <option value="2">شهرين </option>
+                                <option value="3">3 شهور</option>
+                                <option value="4">4 شهور</option>
+                                <option value="5">5 شهور</option>
+                                <option value="6">6 شهور</option>
+                                <option value="7">7 شهور</option>
+                                <option value="8">8 شهور</option>
+                                <option value="9">9 شهور</option>
+                                <option value="10">10 شهور</option>
+                                <option value="11">11 شهر</option>
+                                <option value="12"> سنه</option>
+                            </select>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="toDate">تاريخ النهايه</label>
+                        </td>
+                        <td>
+                            <input type="date" id="toDate" required>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="phone_num">رقم التيليفون</label>
+                        </td>
+                        <td>
+                            <input type="text" id="phone_num" oninput="validateNumericInput(this)" required>
+
+                        </td>
+                    </tr>
+
+
+
+                    <tr>
+                        <td></td>
+                        <td>
+
+                            <button type="button" id="Submit_btn"><i class="fa-solid fa-floppy-disk"></i>  حفظ</button>
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+
+    <script>
+        var calc_price = document.getElementById('price');
+        var calc_paid = document.getElementById('paid');
+        var calc_still = document.getElementById('still');
+        function fn_calc_still() {
+            calc_still.value = calc_price.value - +calc_paid.value
+        }
+        function validateNumericInput(input) {
+            // Remove non-numeric characters
+            input.value = input.value.replace(/\D/g, '');
+        }
+        function calculateDate() {
+            const fromDateInput = document.getElementById('fromDate');
+            const toDateInput = document.getElementById('toDate');
+            const durationSelect = document.getElementById('duration');
+
+            // Get the selected duration value
+            const selectedDuration = parseInt(durationSelect.value);
+
+            // Get the selected date from the input
+            const fromDate = new Date(fromDateInput.value);
+
+            // Calculate the new date
+            const toDate = new Date(fromDate);
+            toDate.setMonth(toDate.getMonth() + selectedDuration);
+
+            // Format the result date in the same format as the input date
+            const formattedResultDate = toDate.toISOString().split('T')[0];
+
+            // Set the calculated date to the "toDate" input
+            toDateInput.value = formattedResultDate;
+        }
+        </script>
+    <script type="module">
+        function getFormattedDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); 
+            const day = String(today.getDate()).padStart(2, '0');
+
+            const formattedDate = `${year}-${month}-${day}`;
+            return formattedDate;
+        }
+        
+        
+        // Example usage
+        
+        const uniqueId_num = document.getElementById('uniqueId');
+        const name_txt = document.getElementById('name');
+        const gender_slt = document.getElementById('gender');
+        const subscription_txt = document.getElementById('subscription');
+        const type_slt = document.getElementById('type');
+        const age_num = document.getElementById('age');
+        const calss_num = document.getElementById('calss_num');
+        const price_num = document.getElementById('price');
+        const paid_num = document.getElementById('paid');
+        const still_num = document.getElementById('still');
+        const fromDate_num = document.getElementById('fromDate');
+        const toDate_num = document.getElementById('toDate');
+        const phone_num = document.getElementById('phone_num');
+        
+        fromDate_num.value = getFormattedDate();
+        
+        const submit_btn = document.getElementById('Submit_btn');
+        
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBgoFiH47cwQF_esE6NaGxCbEqgNFIrdQ0",
+            authDomain: "o2-gym.firebaseapp.com",
+            databaseURL: "https://o2-gym-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "o2-gym",
+            storageBucket: "o2-gym.appspot.com",
+            messagingSenderId: "471550681333",
+            appId: "1:471550681333:web:bfe6da464b74e593ed65bc"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Get reference to database service
+        const db = getDatabase(app);
+
+        submit_btn.addEventListener('click', function (e) {
+            
+            const Id = uniqueId_num.value;
+            const Name = name_txt.value;
+            const Age = age_num.value;
+            const FromDate = fromDate_num.value;
+            const ToDate = toDate_num.value;
+            const gender = gender_slt.value;
+            const subscription = subscription_txt.value;
+            const type = type_slt.value;
+            const calss = calss_num.value;
+            const price = price_num.value;
+            const paid = paid_num.value
+            const still = still_num.value
+            const phone = phone_num.value
+
+            if (Name ==="") {
+                alert("اكتب الاسم")
+            }else if (ToDate ==="") {
+                
+                alert("اكتب تاريخ الانتهاء")
+            }else{
+
+            
+
+            set(ref(db, 'users/' + document.getElementById("name").value), {
+                "Id": Id,
+                "Name": Name,
+                "Age": Age,
+                "FromDate": FromDate,
+                "ToDate": ToDate,
+                "gender": gender,
+                "subscription": subscription,
+                "type": type,
+                "calss": calss,
+                "paid": paid,
+                "still": still,
+                "phone": phone,
+                "price": price
+
+            });
+
+            alert("تمت اضافة عضو جديد")
+        }
+        });
+
+    </script>
+
+</body>
+
+</html>

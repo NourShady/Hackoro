@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            direction: rtl;
+            font-weight: bold;
+            font-size: medium;
+        }
+        .container {
+            text-align: center;
+        }
+        .container #searchInput{
+            width: 80%;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input,
+        select {
+            border-radius: 10px;
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 200px;
+            box-sizing: border-box;
+            border: 1px solid #ebecee;
+            background-color: #ebecee;
+            color: #070709;
+        }
+
+        form label {
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #df1d40;
+            color: #ebecee;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        body {
+            background-color: #070709;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: #ebecee;
+            font-family: Arial, sans-serif;
+        }
+        input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ebecee;
+            background-color: #ebecee;
+            color: #070709;
+            font-size: medium;
+        }
+
+        button {
+            width: 100%;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #df1d40;
+            color: #ebecee;
+            border: none;
+            cursor: pointer;
+            font-size: large;
+        }
+
+        button:hover {
+            background-color: #ab1933;
+        }
+
+        .myList button {
+            width: 200px;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #df1d40;
+            color: #ebecee;
+            border: none;
+            cursor: pointer;
+            font-size: large;
+        }
+
+        .myList button:hover {
+            background-color: #ab1933;
+        }
+
+        .myList div {
+            width: 1200px;
+            display: flex;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #ebecee;
+            color: #070709;
+            font-size: medium;
+        }
+
+        .result td {
+            width: 250px;
+            text-align: right;
+            font-weight: bold;
+            font-size: large;
+        }
+
+        #result_container {
+            padding: 10px;
+            padding-top: 0;
+            width: 1100px;
+            height: 500px;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        #result_container::-webkit-scrollbar {
+            width: 5px;
+            /* Width of the scrollbar */
+        }
+
+        /* Handle on hover */
+        #result_container::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+
+        /* Handle on normal state */
+        #result_container::-webkit-scrollbar-thumb {
+            background-color: #df1d40;
+        }
+
+        /* Track */
+        #result_container::-webkit-scrollbar-track {
+            background: #f1f1f100;
+        }
+
+        /* Handle on drag */
+        #result_container::-webkit-scrollbar-thumb:active {
+            background-color: #555;
+        }
+        .checkbox-cell{
+            padding-left: 23%;
+        }
+
+
+    </style>
+
+    <link rel="stylesheet" href="../media/fontawesome-free-6.5.1-web/css/fontawesome.css">
+    <link rel="stylesheet" href="../media/fontawesome-free-6.5.1-web/css/solid.css">
+
+</head>
+<body>
+    
+    <div class="container">
+
+        <input type="text" id="searchInput" placeholder="بحث...">
+        <select id="filterChoice_stl">
+            <option value="greater">اشتراك ساري</option>
+            <option value="less">اشتراك منتهي</option>
+        </select>
+        <div id="result_container">
+
+            <ul  class="myList">
+                <li style="">
+                    <table border="0" class="result">
+                        <tbody>
+                            <tr>
+                                <td>Id</td>
+                                <td>الأسم</td>
+                                <td>عدد الايام المتبقيه</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+
+            </ul>
+
+            <ul id="myList" class="myList">
+
+
+
+            </ul>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- /////////////////////////////////////////////////////////////// -->
+<script type="module">
+// Import Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyBgoFiH47cwQF_esE6NaGxCbEqgNFIrdQ0",
+    authDomain: "o2-gym.firebaseapp.com",
+    databaseURL: "https://o2-gym-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "o2-gym",
+    storageBucket: "o2-gym.appspot.com",
+    messagingSenderId: "471550681333",
+    appId: "1:471550681333:web:bfe6da464b74e593ed65bc"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Get a reference to the database service
+const db = getDatabase(app);
+
+// Specify the path to the data you want to read
+const userRef = ref(db, 'users/'); // Assuming you have a 'users' node
+
+// User's filter choice (change as per your UI or logic)
+let filterChoice = 'greater'; // 'greater' for daysLeft > 0, 'less' for daysLeft <= 0
+
+// Use the get function to retrieve data
+function fetchData() {
+    get(userRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            // The data exists, you can access it using snapshot.val()
+            const userData = snapshot.val();
+
+            // Reference to the ul element
+            const userList = document.getElementById('myList');
+
+            // Create ul element
+            const userUl = document.createElement('ul');
+
+            // Iterate through userData object
+            for (const userName in userData) {
+                if (userData.hasOwnProperty(userName)) {
+                    const user = userData[userName];
+
+                    // Calculate days left from ToDate
+                    const currentDate = new Date();
+                    const toDate = new Date(user.ToDate);
+                    const daysLeft = Math.ceil((toDate - currentDate) / (1000 * 60 * 60 * 24));
+
+                    // Only display users based on the filter choice
+                    if ((daysLeft > 0 && filterChoice === 'greater') || (daysLeft <= 0 && filterChoice === 'less')) {
+                        // Create li element
+
+                        const userLi = document.createElement('li');
+
+                        // Create table element
+                        const userTable = document.createElement('table');
+                        userTable.border = '0';
+                        userTable.classList.add('result');
+
+                        // Create table row
+                        const userRow = userTable.insertRow();
+
+                        // Create table cells
+                        const checkboxCell = userRow.insertCell(0);
+                        const nameCell = userRow.insertCell(1);
+                        const daysLeftCell = userRow.insertCell(2);
+                        const detailsCell = userRow.insertCell(3);
+                        checkboxCell.classList.add('checkbox-cell');
+
+                        // Populate table cells
+                        nameCell.innerHTML = user.Name;
+                        if (filterChoice === 'less') {
+                            daysLeftCell.innerHTML = '<span style="color:red;padding-right:13%"><i class=" wrong-ico  fa-solid fa-circle-xmark"></i></span>';
+                            
+                        }else if (filterChoice === 'greater') {
+                            
+                            daysLeftCell.innerHTML = daysLeft;
+                        }
+
+                        // Create checkbox
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = 'checkbox_' + userName; // Add a unique identifier
+                        checkboxCell.appendChild(checkbox);
+
+                        // Create button for more details
+                        const detailsButton = document.createElement('button');
+                        detailsButton.innerHTML = '<i  class="fa-solid fa-circle-info"></i>';
+                        detailsButton.onclick = function () {
+                            showDetails(userName);
+                        };
+
+                        // Append button to detailsCell
+                        detailsCell.appendChild(detailsButton);
+
+                        // Append the table to the li element
+                        userLi.appendChild(userTable);
+
+                        // Append li to ul
+                        userUl.appendChild(userLi);
+
+                        // Add event listener to checkbox
+                        checkbox.addEventListener('change', function () {
+                            // Check if the checkbox is checked
+                            if (checkbox.checked === true) {
+                                // Save log to user/name/log file
+                                const logData = {
+                                    date: currentDate.toISOString().split('T')[0], // Get today's date
+                                    checked: checkbox.checked
+                                };
+                                // Reference to the log file
+                                const logRef = ref(db, `users/${userName}/log/${logData.date}`);
+
+                                // Set the log data
+                                set(logRef, logData);
+                                createNotification(userName)
+                            }
+                        });
+                    }
+                }
+            }
+
+            // Append the ul to the userList
+            userList.appendChild(userUl);
+        } else {
+            console.log('No users found in the specified range.');
+        }
+    }).catch((error) => {
+        console.error('Error retrieving data:', error);
+    });
+}
+
+// Function to show details (replace with your implementation)
+function showDetails(userName) {
+    console.log('Showing details for user:', userName);
+}
+
+document.getElementById('searchInput').addEventListener("keydown", filterList);
+
+function filterList() {
+    var input, filter, ul, li, txtValue;
+    input = document.getElementById('searchInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById('myList');
+    li = ul.getElementsByTagName('li');
+
+    for (var i = 0; i < li.length; i++) {
+        // Get all <td> elements within the current <li>
+        var cells = li[i].querySelectorAll('table.result td');
+
+        // Check if any of the <td> elements contain the filter text
+        var found = false;
+        for (var j = 0; j < cells.length; j++) {
+            txtValue = cells[j].textContent || cells[j].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                found = true;
+                break;
+            }
+        }
+
+        // Set display style based on whether the filter text was found
+        li[i].style.display = found ? '' : 'none';
+    }
+}
+
+// Add event listener to filterChoice_stl
+document.getElementById('filterChoice_stl').addEventListener('change', function () {
+    // Update filterChoice when the select value changes
+    filterChoice = this.value;
+    // Clear existing results
+    document.getElementById('myList').innerHTML = '';
+    // Fetch and display data based on the updated filterChoice
+    fetchData();
+});
+
+// Initial data fetch and display
+fetchData();
+</script>
+
+<style>
+    #toasts{
+      position:fixed;
+      bottom: 10px;
+      right:10px;
+      display: flex;
+      flex-direction:column;
+      align-items:flex-end;
+    
+    }
+    
+    .toast{
+      background-color:#fff;
+      color: rebeccapurple;
+      font-size: 20px;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      border-radius:5px;
+      padding:1rem 2rem;
+      margin: 0.5rem;
+    }
+    </style>
+    
+    <div id="toasts"></div>
+    <script>
+        function createNotification(name){
+      const notif = document.createElement('div')
+      notif.classList.add('toast')
+      
+      notif.innerText = name+  ' تم تسجيل حضور '
+      
+      toasts.appendChild(notif)
+      
+      setTimeout(()=>{
+        notif.remove()
+      }, 2000)};
+    
+    </script>
+</body>
+</html>
