@@ -24,7 +24,8 @@
         body {
             background-color: var(--background);
             padding-bottom: 250px;
-
+            position: relative;
+            margin: 0;
         }
 
         #profile_img_bg {
@@ -52,7 +53,7 @@
             height: 200px;
             border-radius: 50%;
             /* background: linear-gradient(45deg, transparent, transparent 40%, yellow),
-                linear-gradient(#262626, #141414); */
+            linear-gradient(#262626, #141414); */
             /* animation: rotate 2s linear infinite; */
             z-index: 1;
         }
@@ -61,14 +62,15 @@
             /* animation: neg_rotate 2s linear infinite; */
         }
 
-        #border_profile_img:before,
+        /* #border_profile_img:before,
         #border_profile_img:after {
             content: " ";
             position: absolute;
             inset: 8px;
-            /* background: linear-gradient(#161616, #262626); */
+            
+             background: linear-gradient(#161616, #262626); 
             border-radius: inherit;
-        }
+        } */
 
         #border_profile_img:before {
             /* background: linear-gradient(45deg, transparent, transparent 20%, var(--hue_1));
@@ -264,7 +266,7 @@
             position: fixed;
             right: 15px;
             bottom: 10px;
-            z-index: 3;
+            z-index: 5;
             animation: bounce 1.5s infinite;
         }
 
@@ -284,6 +286,41 @@
 
             /* 100%     {bottom:0;} */
         }
+
+        #big_img {
+            background-color: #00000099;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 4;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #big_img img {
+            max-width: 80%;
+            z-index: 4;
+        }
+
+        #big_img button {
+
+            width: 80%;
+            background-color: #ffffff00;
+            color: #e4e4e4;
+            font-size: large;
+            letter-spacing: 5px;
+            border: 2px solid #9d9d9d;
+            border-radius: 5px;
+            padding: 5px 15px;
+            margin-top: 20px;
+            cursor: pointer;
+            
+        }
+
 
         /* #gallery {
     display: flex;
@@ -1170,19 +1207,19 @@
     <div id="drawing" class="closed">
         <div class="row">
             <div class="column">
-                <img src="./buildingcolor.png" style="width:100%">
-                <img src="./JNYR.png" style="width:100%">
-                <img src="./mahran1.png" style="width:100%">
-                <img src="./Untitled-11.png" style="width:100%">
+                <img src="./buildingcolor.png" class="gallery_img" style="width:100%">
+                <img src="./JNYR.png" class="gallery_img" style="width:100%">
+                <img src="./mahran1.png" class="gallery_img" style="width:100%">
+                <img src="./Untitled-11.png" class="gallery_img" style="width:100%">
 
             </div>
             <div class="column">
-                <img src="./untitled1.png" style="width:100%">
-                <img src="./f1.jpg" style="width:100%">
-                <img src="./untitled.png" style="width:100%">
-                <img src="./hackoro.png" style="width:100%">
-                <img src="./IMG_20221127_225813.jpg" style="width:100%">
-                <img src="./Untitled-5.png" style="width:100%">
+                <img src="./Untitled1.png" class="gallery_img" style="width:100%">
+                <img src="./f1.jpg" class="gallery_img" style="width:100%">
+                <img src="./untitled.png" class="gallery_img" style="width:100%">
+                <img src="./hackoro.png" class="gallery_img" style="width:100%">
+                <img src="./IMG_20221127_225813.jpg" class="gallery_img" style="width:100%">
+                <img src="./untitled-5.png" class="gallery_img" style="width:100%">
             </div>
 
 
@@ -1197,16 +1234,16 @@
     <div id="photos" class="closed">
         <div class="row">
             <div class="column">
-                <img src="./IMG_0573.jpeg" style="width:100%">
-                <img src="./IMG_1450.jpeg" style="width:100%">
-                <img src="./IMG_1663.jpeg" style="width:100%">
-                <img src="./IMG_2327.jpeg" style="width:100%">
+                <img src="./IMG_0573.jpeg" class="gallery_img" style="width:100%">
+                <img src="./IMG_1450.jpeg" class="gallery_img" style="width:100%">
+                <img src="./IMG_1663.jpeg" class="gallery_img" style="width:100%">
+                <img src="./IMG_2327.jpeg" class="gallery_img" style="width:100%">
             </div>
             <div class="column">
-                <img src="./IMG_2809.jpeg" style="width:100%">
-                <img src="./IMG_6728.png" style="width:100%">
-                <img src="./IMG_0703 2.jpeg" style="width:100%">
-                <img src="./IMG_1483.jpeg" style="width:100%">
+                <img src="./IMG_2809.jpeg" class="gallery_img" style="width:100%">
+                <img src="./IMG_6728.png" class="gallery_img" style="width:100%">
+                <img src="./IMG_0703 2.jpeg" class="gallery_img" style="width:100%">
+                <img src="./IMG_1483.jpeg" class="gallery_img" style="width:100%">
             </div>
 
 
@@ -1233,7 +1270,36 @@
             </polygon>
         </g>
     </svg>
+    <!-- ///////////////////////////////////////////////////////// -->
+
+    <div id="big_img">
+        <img src="" alt="">
+        <button onclick="close_img()"> Close </button>
+    </div>
+
+    <!-- ///////////////////////////////////////////////////////// -->
     <script>
+        var images = document.querySelectorAll('.gallery_img');
+        var show_div = document.querySelector('#big_img')
+        var show_img = show_div.querySelector('img')
+
+        // Iterate over the NodeList and add event listener to each element
+        images.forEach(function (image) {
+            image.addEventListener('click', function () {
+                show_div.style.display = 'flex';
+                show_img.src = image.src
+                window.onclick = function (event) {
+                    if (event.target == show_div) {
+                        show_div.style.display = "none";
+                    }
+                }
+            })
+
+        });
+
+        function close_img() {
+            show_div.style.display = "none";
+        }
         function go_up() {
             window.scrollTo(0, 0);
         }
