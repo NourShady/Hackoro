@@ -323,6 +323,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify(data), // Send JSON data
                 success: function (response) {
+                    window.close()
                     console.log('Document updated successfully:', response);
                 },
                 error: function (xhr, status, error) {
