@@ -264,6 +264,19 @@
             transition: all 0.4s ease;
         }
 
+        .done {
+            border: 0;
+            width: 100%;
+            height: 100%;
+            padding: 10px 20px;
+            color: #014da5;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0);
+        }
+
         .field:focus {
             outline: none;
             box-shadow: 0px 9px 20px rgba(75, 72, 72, 0.3);
@@ -297,7 +310,10 @@
                 <div class="x-down"></div>
             </div>
         </div>
-    </fieldset>
+
+
+
+   
 
     <script>
         var devices_id = window.location.hash
@@ -323,8 +339,8 @@
                 contentType: 'application/json',
                 data: JSON.stringify(data), // Send JSON data
                 success: function (response) {
-                    window.history.replaceState(null, '', 'Sorry_try_to_rescan_the_code_again'); // Update the URL displayed in the address bar
-                    window.open('about:blank', '_self');
+                    $('body').empty().append(' <h1 class="done">Link Opened Please Close this page ❤️</h1>')
+                    window.location.hash = "";
                     console.log('Document updated successfully:', response);
                 },
                 error: function (xhr, status, error) {
@@ -351,14 +367,14 @@
             }
         });
         $('.field').on('paste', function () {
-           
-setTimeout(function (){
 
-    updateDeviceUrl(devices_id, $('#url').val());
-}, 500);
-               
-               
-          
+            setTimeout(function () {
+
+                updateDeviceUrl(devices_id, $('#url').val());
+            }, 500);
+
+
+
             // Small delay to allow the pasted content to be inserted
         });
 
