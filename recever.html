@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackoro | Receiver</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <style>
+        .qr-code {
+            text-align: center;
+        }
+
+        @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background-color: #272626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100%;
+            font-family: "Outfit", sans-serif;
+
+        }
+
+        .qr-code {
+            position: relative;
+            width: fit-content;
+            padding: 18px;
+            background-color: hsl(0, 0%, 100%);
+            border-radius: 20px;
+            margin: 0 28px;
+            box-shadow: 0 0 8px rgba(30, 30, 30, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+            top: -7%;
+        }
+
+        .qr-code:hover {
+            transform: translateY(-10px);
+        }
+
+        .qr-code-code {
+            background-color: #3685fe;
+            display: flex;
+            justify-content: center;
+            padding: 60px 30px;
+            /* width: 500px; */
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .qr-code-code:hover {
+            transition-delay: 1s;
+            transform: scale(1.5);
+        }
+
+        .qr-code-content {
+            padding: 30px 18px;
+
+            text-align: center;
+            transition: padding 0.3s;
+        }
+
+        .qr-code-content h3 {
+            font-size: 1.3rem;
+            color: hsl(218, 44%, 22%);
+            margin-bottom: 20px;
+        }
+
+        .qr-code-content p {
+            color: hsl(220, 15%, 55%);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+    <div class="qr-code">
+        <div class="qr-code-code" id="qrCode"></div>
+        <div class="qr-code-content">
+            <h3 id="qrTitle"></h3>
+            <p id="qrText"></p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // var name = '';
+            // Function to get the unique device identifier
+
+            // Fetch the IP address from the API
+            // fetch("https://api.ipify.org?format=json")
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         name = data.ip;
+
+            //         // Display the IP address on the screen
+            //         if (name) {
+            //             listenForUpdates(name);
+            //             const url = "https://nourshady.github.io/Hackoro/sender.html#" + name;
+            //             const title = name;
+            //             const text = "Hackoro Mini Tool - Open Links";
+
+            //             // Populate title and text
+            //             document.getElementById('qrTitle').textContent = title;
+            //             document.getElementById('qrText').textContent = text;
+            //             var dimension = screen.height * 0.4
+            //             // Generate QR Code
+            //             document.getElementsByClassName('qr-code-code').width = dimension
+            //             const qrCodeElement = document.getElementById("qrCode");
+            //             const code = new QRCode(qrCodeElement, {
+            //                 text: url,
+            //                 width: dimension,
+            //                 height: dimension,
+            //                 colorDark: "#FFFFFF",
+            //                 colorLight: "#3685fe",
+            //                 correctLevel: QRCode.CorrectLevel.H
+            //             });
+
+            //             // Remove built-in tooltip
+            //             qrCodeElement.title = "";
+            //         }
+
+            //         // document.getElementById('qr_code').width = qr_code_width/2;
+            //         // document.getElementById('qr_code').height = qr_code_width/2;
+            //         // console.log(data.ip)
+            //     })
+            //     .catch(error => {
+            //         console.error("Error fetching IP address:", error);
+        // });
+
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBmNEupX0GQ_CAmuINQpm4yXz_dvw7by20",
+            authDomain: "northern-bot-435722-i1.firebaseapp.com",
+            projectId: "northern-bot-435722-i1",
+            storageBucket: "northern-bot-435722-i1.appspot.com",
+            messagingSenderId: "749423780475",
+            appId: "1:749423780475:web:62bd881763b56820d0f8de",
+            measurementId: "G-Y49FYC5K1P"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function listenForUpdates(name) {
+    const docRef = db.collection('devices').doc(name);
+    docRef.onSnapshot((doc) => {
+        if (doc.exists) {
+            const data = doc.data();
+            if (data.url) {
+                
+                const currentUrl = data.url;
+                docRef.delete().then(() => {  // Delete the document instead of updating the URL
+                    
+                    window.location.href = currentUrl; // Redirect to the URL
+
+                }).catch((error) => {
+                    console.error("Error deleting document: ", error);
+                });
+            }
+        } else {
+            // document.getElementById('test').textContent = "Name not found.";
+        }
+    }, (error) => {
+        console.error("Error fetching document: ", error);
+        // document.getElementById('test').textContent = "Error fetching URL.";
+    });
+}
+
+            // Call the function to listen for updates if a name is provided
+            function getDeviceIdentifier() {
+                let deviceId = localStorage.getItem('deviceId');
+                if (!deviceId) {
+                    // If no identifier exists, generate a new one and store it
+                    deviceId = 'device_' + Math.random().toString(36).substring(2, 15);
+                    localStorage.setItem('deviceId', deviceId);
+                }
+                return deviceId;
+            }
+
+            function main_function(name) {
+
+                const url = "https://nourshady.github.io/Hackoro/sender.html#" + name;
+                const title = name;
+                const text = "Hackoro Mini Tool - Open Links";
+                
+                // Populate title and text
+                document.getElementById('qrTitle').textContent = title;
+                document.getElementById('qrText').textContent = text;
+                var dimension = screen.height * 0.4
+                // Generate QR Code
+                document.getElementsByClassName('qr-code-code').width = dimension
+                const qrCodeElement = document.getElementById("qrCode");
+                const code = new QRCode(qrCodeElement, {
+                    text: url,
+                    width: dimension,
+                    height: dimension,
+                    colorDark: "#FFFFFF",
+                    colorLight: "#3685fe",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                listenForUpdates(name);
+                
+                // Remove built-in tooltip
+                qrCodeElement.title = "";
+            }        
+            main_function(getDeviceIdentifier())
+
+        });
+
+    </script>
+    <script>
+        // const url = "test";
+        // const title = "156.158.1.2";
+        // const text = "Hackoro Mini Tool - Open Links";
+
+        // // Populate title and text
+        // document.getElementById('qrTitle').textContent = title;
+        // document.getElementById('qrText').textContent = text;
+
+        // // Generate QR Code
+        // const qrCodeElement = document.getElementById("qrCode");
+        // const code = new QRCode(qrCodeElement, {
+        //     text: url,
+        //     width: 160,
+        //     height: 160,
+        //     colorDark: "#FFFFFF",
+        //     colorLight: "#3685fe",
+        //     correctLevel: QRCode.CorrectLevel.H
+        // });
+
+        // // Remove built-in tooltip
+        // qrCodeElement.title = "";
+    </script>
+
+</body>
+
+</html>
