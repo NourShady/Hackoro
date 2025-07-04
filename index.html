@@ -2,1293 +2,141 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hackoro| Portfolio</title>
-
-    <style>
-        /* 
-  =======================
-  Base styles
-  =======================
-*/
-        :root {
-            --background: #f8f9fa;
-            --foreground: #0f172a;
-            --card: #ffffff;
-            --card-foreground: #0f172a;
-            --primary: #3b82f6;
-            --primary-foreground: #f8f9fa;
-            --secondary: #f1f5f9;
-            --secondary-foreground: #0f172a;
-            --muted: #f1f5f9;
-            --muted-foreground: #64748b;
-            --accent: #3b82f6;
-            --accent-foreground: #0f172a;
-            --destructive: #ef4444;
-            --destructive-foreground: #f8f9fa;
-            --border: #e2e8f0;
-            --input: #e2e8f0;
-            --ring: #3b82f6;
-            --radius: 0.5rem;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            border-color: var(--border);
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: var(--foreground);
-            line-height: 1.6;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        section {
-            padding: 5rem 0;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-            text-align: center;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-        }
-
-        a {
-            color: var(--primary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        a:hover {
-            color: #2563eb;
-        }
-
-        .divider {
-            width: 5rem;
-            height: 0.25rem;
-            background-color: var(--primary);
-            margin: 0.5rem auto 3rem;
-        }
-
-        /* 
-    =======================
-    Animations
-    =======================
-  */
-        .fade-in {
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out forwards;
-        }
-
-        .fade-in-delay-1 {
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.2s forwards;
-        }
-
-        .fade-in-delay-2 {
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.4s forwards;
-        }
-
-        .fade-in-delay-3 {
-            opacity: 0;
-            animation: fadeIn 0.8s ease-out 0.6s forwards;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 
-    =======================
-    Button Styles
-    =======================
-  */
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            border-radius: var(--radius);
-            transition: background-color 0.3s, color 0.3s;
-            cursor: pointer;
-        }
-
-        .button svg {
-            flex-shrink: 0;
-        }
-
-        .button.primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .button.primary:hover {
-            background-color: #2563eb;
-        }
-
-        .button.secondary {
-            background-color: var(--secondary);
-            color: var(--foreground);
-        }
-
-        .button.secondary:hover {
-            background-color: #cbd5e1;
-        }
-
-        /* 
-    =======================
-    Navbar
-    =======================
-  */
-        #navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            padding: 1.5rem 0;
-        }
-
-        #navbar.scrolled {
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 1rem 0;
-        }
-
-        #navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .desktop-nav {
-            display: none;
-        }
-
-        .desktop-nav a {
-            margin-left: 2rem;
-            color: var(--foreground);
-            font-weight: 500;
-        }
-
-        .desktop-nav a:hover {
-            color: var(--primary);
-        }
-
-        .mobile-menu-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        .menu-icon,
-        .menu-icon::before,
-        .menu-icon::after {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background-color: var(--foreground);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .menu-icon::before,
-        .menu-icon::after {
-            content: '';
-            position: absolute;
-            left: 0;
-        }
-
-        .menu-icon::before {
-            top: -8px;
-        }
-
-        .menu-icon::after {
-            bottom: -8px;
-        }
-
-        .menu-open .menu-icon {
-            background-color: transparent;
-        }
-
-        .menu-open .menu-icon::before {
-            top: 0;
-            transform: rotate(45deg);
-        }
-
-        .menu-open .menu-icon::after {
-            bottom: 0;
-            transform: rotate(-45deg);
-        }
-
-        .mobile-nav {
-            display: none;
-            width: 100%;
-            background-color: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            top: 100%;
-            left: 0;
-            padding: 1rem 0;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .mobile-nav.open {
-            display: block;
-        }
-
-        .mobile-nav a {
-            display: block;
-            padding: 0.75rem 0;
-            color: var(--foreground);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .mobile-nav a:last-child {
-            border-bottom: none;
-        }
-
-        /* 
-    =======================
-    Hero Section
-    =======================
-  */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding-top: 5rem;
-        }
-
-        .hero-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .profile-image {
-            width: 8rem;
-            height: 8rem;
-            overflow: hidden;
-            border-radius: 50%;
-            border: 4px solid var(--primary);
-            padding: 0.25rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .hero h1 {
-            margin-bottom: 1rem;
-        }
-
-        .hero h1 .text-primary {
-            color: var(--primary);
-        }
-
-        .hero h2 {
-            font-size: 1.25rem;
-            font-weight: 400;
-            color: var(--muted-foreground);
-            margin-bottom: 1.5rem;
-            max-width: 36rem;
-        }
-
-        .hero h2 .font-medium {
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            background-color: var(--secondary);
-            color: var(--foreground);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .scroll-down {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            background-color: var(--secondary);
-            color: var(--foreground);
-            border-radius: 50%;
-            animation: bounce 2s infinite;
-            transition: all 0.3s ease;
-        }
-
-        .scroll-down:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        @keyframes bounce {
-
-            0%,
-            20%,
-            50%,
-            80%,
-            100% {
-                transform: translateY(0);
-            }
-
-            40% {
-                transform: translateY(-10px);
-            }
-
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
-        /* 
-    =======================
-    About Section
-    =======================
-  */
-        .about {
-            background-color: var(--secondary);
-        }
-
-        .section-content {
-            max-width: 48rem;
-            margin: 0 auto;
-        }
-
-        .about-card {
-            background-color: white;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-        }
-
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .skill-pill img {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-        }
-
-        .skill-pill {
-            cursor: pointer;
-            background-color: var(--secondary);
-            color: var(--foreground);
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .skill-pill:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .resume-button-container {
-            display: flex;
-            justify-content: center;
-        }
-
-        /* 
-    =======================
-    Projects Section
-    =======================
-  */
-        .project-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
-        }
-
-        .project-card {
-            background-color: white;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .project-card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            transform: translateY(-4px);
-        }
-
-        .project-image {
-            display: flex;
-            position: relative;
-            width: 100%;
-            height: 16rem;
-            overflow: hidden;
-        }
-
-        .project-image img {
-            width: 100%;
-
-            /* height: 100%; */
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .project-card:hover .project-image img {
-            transform: scale(1.1);
-        }
-
-        .project-overlay {
-            position: absolute;
-            inset: 0;
-            background-color: rgba(59, 130, 246, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .project-card:hover .project-overlay {
-            opacity: 1;
-        }
-
-        .project-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            background-color: white;
-            color: var(--primary);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .project-link:hover {
-            background-color: var(--foreground);
-            color: white;
-        }
-
-        .project-details {
-            padding: 1.5rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .project-details h3 {
-            margin-bottom: 0.75rem;
-        }
-
-        .project-details p {
-            color: var(--muted-foreground);
-            margin-bottom: 1rem;
-        }
-
-        .project-technologies {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .project-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: auto;
-        }
-
-        /* 
-    =======================
-    Contact Section
-    =======================
-  */
-        .contact {
-            background-color: var(--secondary);
-        }
-
-        .contact-container {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .contact-info,
-        .contact-form {
-            background-color: white;
-            border-radius: var(--radius);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-        }
-
-        .contact-details {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .contact-icon img {
-            width: 30px;
-            height: 30px;
-        }
-
-        .contact-icon {
-            /* background-color: rgba(59, 130, 246, 0.1); */
-            padding: 0.75rem;
-
-            border-radius: 50%;
-            margin-right: 1rem;
-            color: var(--primary);
-        }
-
-        .contact-text h4 {
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .contact-text a {
-            color: var(--primary);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            background-color: white;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-        }
-
-        /* 
-    =======================
-    Footer
-    =======================
-  */
-        .footer {
-            background-color: white;
-            padding: 2rem 0;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .footer .social-links {
-            margin-bottom: 1rem;
-        }
-
-        .footer-text {
-            text-align: center;
-        }
-
-        .footer-text p {
-            color: var(--muted-foreground);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.25rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .footer-text p:last-child {
-            margin-bottom: 0;
-            font-size: 0.875rem;
-        }
-
-        /* 
-    =======================
-    Media Queries
-    =======================
-  */
-        @media (min-width: 768px) {
-            h1 {
-                font-size: 3rem;
-            }
-
-            h2 {
-                font-size: 2.25rem;
-            }
-
-            .desktop-nav {
-                display: flex;
-            }
-
-            .mobile-menu-button {
-                display: none;
-            }
-
-            .profile-image {
-                width: 10rem;
-                height: 10rem;
-            }
-
-            .hero h2 {
-                font-size: 1.5rem;
-            }
-
-            .project-card {
-                flex-direction: row;
-            }
-
-            .project-card.reverse {
-                flex-direction: row-reverse;
-            }
-
-            .project-image {
-                width: 50%;
-                height: auto;
-            }
-
-            .contact-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            h1 {
-                font-size: 3.5rem;
-            }
-        }
-
-        @media (min-width: 300px) and (max-width: 700px) {
-            .project-image {
-                display: flex;
-                justify-content: center;
-
-            }
-
-            .project-image img {
-                width: auto;
-                height: 100%;
-            }
-        }
-    </style>
-    <!-- <link rel="stylesheet" href="styles.css"> -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* iframe {
+      width: 50%;
+      height: 50vh;
+      border: none;
+      scale: 1;
+    } */
+    #bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      border: none;
+    }
+
+    .iframe-wrapper {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      border: 2px solid #ccc;
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    .iframe-wrapper iframe {
+      width: 270%;
+      height: 300%;
+      border: none;
+      scale: 0.7;
+      margin-left: -40%;
+      margin-top: -17%;
+    }
+
+    .resizer {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      right: 0;
+      bottom: 0;
+      background: #101010;
+      cursor: se-resize;
+      touch-action: none;
+    }
+  </style>
+   <style>
+    #fullscreen-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      padding: 12px 16px;
+      background-color: #101010;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    #fullscreen-btn:active {
+      background-color: #101010;
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Navigation -->
-    <header id="navbar">
-        <div class="container">
-            <a href="#" class="logo">Nour Shady</a>
+  <iframe id="bg" src="https://flipclock.app/" frameborder="0"></iframe>
+  <div class="iframe-wrapper" id="iframeContainer">
 
-            <button class="mobile-menu-button" aria-label="Toggle menu">
-                <span class="menu-icon"></span>
-            </button>
+    <iframe src="http://192.168.1.4:9510/client/" frameborder="0"></iframe>
+    <div class="resizer" id="resizerHandle"></div>
+  </div>
 
-            <nav class="desktop-nav">
-                <a href="#home">Home</a>
-                <a href="#about">About</a>
-                <a href="#projects">Projects</a>
-                <a href="#equipments">Equipments</a>
-                <a href="#contact">Contact</a>
-            </nav>
-        </div>
-
-        <nav class="mobile-nav">
-            <div class="container">
-                <a href="#home">Home</a>
-                <a href="#about">About</a>
-                <a href="#projects">Projects</a>
-                <a href="#equipments">Equipments</a>
-                <a href="#contact">Contact</a>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="profile-image fade-in">
-                    <img src="https://nourshady.github.io/Hackoro/Untitled-5.png" alt="Profile">
-                </div>
-
-                <h1 class="fade-in-delay-1">
-                    Hi, I'm <span class="text-primary">Nour Shady</span> 👋
-                </h1>
-                <h3 class="fade-in-delay-1">- Hackoro -</h3>
-
-                <h2 class="fade-in-delay-2">
-                    A passionate <span class="font-medium">Frontend Developer, Montage & Sound Designer, 3D & 2D Artist,
-                        Photographer, Videographer/Director for Vlogs, Electronics Enthusiast, and AI Developer</span>,
-                    creating engaging digital experiences with modern technologies.
-                </h2>
+  <video id="stayAwakeVideo" autoplay muted loop playsinline style="display: none;">
+  <source src="data:video/mp4;base64,AAAAHGZ0eXBtcDQyAAAAAG1wNDFtcDQyaXNvbQAAAA...==">
+</video>
 
 
+  <button id="fullscreen-btn">⛶</button>
 
-                <a href="#about" class="scroll-down">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m6 9 6 6 6-6"></path>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </section>
+  <script>
+    const btn = document.getElementById('fullscreen-btn');
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="section-content">
-                <h2>About Me</h2>
-                <div class="divider"></div>
-
-                <div class="about-card">
-                    <p>
-                        I'm a passionate Frontend Developer, Multimedia Designer, and Electronics Enthusiast with a
-                        strong focus on creating engaging, high-quality digital experiences.
-
-                        With 4 years of experience in development and coding, I specialize in building beautiful,
-                        responsive, and user-friendly web applications. Beyond coding, I have: </p>
-                    <p>
-                        <li>
-
-                            4 years of experience in 3D drawing and modeling.
-                        </li>
-                        <li>
-
-                            3 years of experience in graphic design using Illustrator, Photoshop, and other tools.
-                        </li>
-                        <li>
-
-                            4 years of experience in video editing and montage.
-                        </li>
-                        <li>
-
-                            1 year in sound effects and sound montage.
-                        </li>
-                        <li>
-
-                            2 years working with electronics, Arduino, Raspberry Pi, and embedded systems.
-                        </li>
-                        <li>
-
-                            2 years of experience in Android app development.
-                        </li>
-
-                    </p>
-                    <p>
-                        I love solving complex problems with simple, elegant solutions and thrive in collaborative
-                        environments where I can learn and share knowledge with others. My goal is to create
-                        functional, efficient, and immersive digital experiences across multiple domains.
-                    </p>
-
-                    <h3>My Skills</h3>
-                    <div class="skills">
-
-                        JS Automation
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2>My Projects</h2>
-            <div class="divider"></div>
-
-            <div class="project-cards">
-                <!-- Project 1 -->
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                            alt="E-commerce Dashboard">
-                    </div>
-
-                    <div class="project-details">
-                        <h3>E-commerce Dashboard</h3>
-                        <p>A comprehensive admin dashboard for e-commerce platforms with sales analytics, inventory
-                            management, and customer insights.</p>
-
-
-
-
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-    </section>
-    <section id="equipments" class="projects">
-        <div class="container">
-            <h2>My Equipments</h2>
-            <div class="divider"></div>
-
-            <div class="project-cards equipments">
-                <!-- Project 1 -->
-                <div class="project-card reverse">
-                    <div class="project-image">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                            alt="E-commerce Dashboard">
-                    </div>
-
-                    <div class="project-details">
-                        <h3>E-commerce Dashboard</h3>
-                        <p>A comprehensive admin dashboard for e-commerce platforms with sales analytics, inventory
-                            management, and customer insights.</p>
-
-
-
-
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Get In Touch</h2>
-            <div class="divider"></div>
-
-            <div class="contact-container">
-                <div class="contact-info">
-                    <h3>Contact Information</h3>
-
-                    <div class="contact-details">
-                        js Automation
-                        <!-- <div class="contact-item">
-                            <div class="contact-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path
-                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Phone</h4>
-                                <a href="tel:+1234567890">+1 (234) 567-890</a>
-                            </div>
-                        </div>
-
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Location</h4>
-                                <p>San Francisco, California</p>
-                            </div>
-                        </div> -->
-                    </div>
-                </div>
-
-                <!-- <div class="contact-form">
-                    <h3>Send a Message</h3>
-
-                    <form id="contact-form">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="4" required></textarea>
-                        </div>
-
-                        <button type="submit" class="button primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m22 2-7 20-4-9-9-4Z"></path>
-                                <path d="M22 2 11 13"></path>
-                            </svg>
-                            Send Message
-                        </button>
-                    </form>
-                </div> -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-
-    </footer>
-
-    <!-- <script src="main.js"></script> -->
-    <script>
-        // ___________________________________________ Confige ___________________________________________
-        const skills = [
-            { name: "JavaScript", svg: "https://lh3.googleusercontent.com/pw/AP1GczOJlcj0iBzrik9txrRHB7UQpDpvapz-FG-g__K0ezLjo5T7ii6Jlb6CYkZnL3StvuNlIJ5nQyPN9ewH87YeE6Ezvob9v2M3i-bKyl_Ez_OU1UxnSfiY=w2400" },
-            { name: "TypeScript", svg: "https://lh3.googleusercontent.com/pw/AP1GczOIIRu2m6fMBYieqJKgdre_kPSlw0qsRZKwSaI0kcjywyxP0mT5M10-JyfKFIlsLQKiVJ5Grlowlql6ijSBQ-iB8y4raziH-4McjaYOyXEqHBIfQuFr=w2400" },
-            { name: "Angular", svg: "https://lh3.googleusercontent.com/pw/AP1GczNuM38khTfJCS-s9tb4Y3qx3S6qTg-T0petTQwqWb_frH6VtT9lmJ3DLKVyUXav0HgobK9b5Wqo9o5K4WEIQx3-NIYwrQN6ptnc_vCmCX4M3VcYeL9C=w2400" },
-            { name: "ReactJS", svg: "https://lh3.googleusercontent.com/pw/AP1GczOx_8jMQJ8QIz8k1TpsyP19yymdACveQka3SFHNBNDXJTpQs1CGTlheu5RR2BVtSNRXY6u3C0k9zHu76Sqf5NsEVtguMC_MzBAZwqXppBauUxvR4Ypf=w2400" },
-            { name: "Java ME", svg: "https://lh3.googleusercontent.com/pw/AP1GczN6wHyeCMx1rdlasjXFcv8d3D80mRk32I-8rC4D-UYOVjqPvQWxdJLSHT52-S_nOC7qH1o-3DJzYi4ffwNuS4h0hS0P90uAYYVvPCrgUbV8IHXCmO0V=w2400" },
-            { name: "NodeJS", svg: "https://lh3.googleusercontent.com/pw/AP1GczMJcP2VtPD_JJvsVzGetN26bmkA_fNLadGa0WwhWhskMhgu7PAxYnVtahKrYpMfSirOSFnPsEsnVp803OADSraDo6lUUFIyL3wPBt_IhltVTrh1fE63=w2400" },
-            { name: "Python", svg: "https://lh3.googleusercontent.com/pw/AP1GczN2uVBF9MLNo06I68NEhC51GEHK6FqBuVotw87fBZWoG5TvNSASdvg-oFXMD7U3Vkw8C_e2CRqlwhcfGHi12zDQ196BsAOBWK0upe43JF94bbH84v5y=w2400" },
-            { name: "Dart", svg: "https://lh3.googleusercontent.com/pw/AP1GczNk7UQsGoBg9rRwn7BVESXz5ukv6KxWZTy4irfXgEocQOzT5rA6RZV8p--ma_4DUOWUBZtU6x61ruZp5RhQyDo2ARxdWOZvbp-i6FoDots9IBs2X_y0=w2400" },
-            { name: "HTML", svg: "https://lh3.googleusercontent.com/pw/AP1GczP2wjsuwRQEskfjwOKPKZtO2VrJVRRizysc8ElAEK7LHe5maCufOhC9Sdbq_ziaNCN09KSjiT0YxGhBfvhsDt3xrZYG_EpTN49GaMbggd7IarYVCaFj=w2400" },
-            { name: "Php", svg: "https://lh3.googleusercontent.com/pw/AP1GczMEK6k1VZsKVsko8c1cjhZfP7UQOXzJa9rXiFwjxBNCNd4jnkSWungCpEK1BBM78yawwJEjHq4YjQET1pyDMCz55OVI-3I7LSqnbF4jFpm0HzDrG872=w2400" },
-            { name: "CSS", svg: "https://lh3.googleusercontent.com/pw/AP1GczOBU6hvo-9urmNNbjVDNzSthgUf5OhW_8CIWPrtx6uPclhXwFJnSqG2ww8sIYEm54hfbXOiCZszkDELKHeKQP1UDXc6WTnr_8ygm9d3Hp7Z7CMCT9op=w2400" },
-            { name: "C++", svg: "https://lh3.googleusercontent.com/pw/AP1GczMhajUhEa97x4Aw2cgJtBxMx7ZHaydowRDZsHezH218YvFf7mboFXWN9wIcTBecnpSzQa8XAujMUSupV0GKGNNlTPW5BMHnOFnPSvZ3Uay0Fq1VBATi=w2400" },
-            { name: "C#", svg: "https://lh3.googleusercontent.com/pw/AP1GczNoinwzPTAGn4Cg4NK5aOJeHeF0wmcT2YOnSw2olFT_xweFECRu5eQOpHJ36eVyXcbopkhs2FxDRWBUSGBqqa8Yh2i8G1Yha1UrcYfY-_PsGU8Y8-r-=w2400" },
-            { name: "AutoDesk 3D Studio Max", svg: "https://lh3.googleusercontent.com/pw/AP1GczNH-EYWcyypmVR_CaWa8S7okRjRgt_l8hxVXYpo67W6TOUmsJ_d265eTvCo_gwcyE5RTmp9ITcZeCVfRzpYaAFUcKdy99VWRwlw4-38_Ofd1EGoEJEh=w2400" },
-            { name: "AutoDesk Sketchbook", svg: "https://lh3.googleusercontent.com/pw/AP1GczNzHECtYtD0q2BK9fqeIJzoLSTFXsjTNMZeuEZq7tk5QUz7m1tYs9Q63BtEPqCR_GCH5QnRYpREBfnZeEGTOxXA30tU_FqX_cU8aCfwCpUHY9n42Pm8=w2400" },
-            { name: "AutoDesk Maya", svg: "https://lh3.googleusercontent.com/pw/AP1GczPVuxjkVG0IIU6qukqYFnrXMi13p3IuYMX27fT2NL-6xHASB5e32xy1YjVE1HRqVmRbL1eJX6cdLbRBlgOcsgwFGFPtuiXpCFguSasxiWY0cYE48Pmg=w2400" },
-            { name: "Blender", svg: "https://lh3.googleusercontent.com/pw/AP1GczP40ldz3FELKLWrLfUbu0htyL4Ajg2CoXojMH6YzWxJdOGXErwI7hi3Yglx2JuJd_UsIWyfX1meF9LEPX6aMC7HCDc9plmPEPLHFR2yYrx3VpEPgzxi=w2400" },
-            { name: "Adobe Illustrator", svg: "https://lh3.googleusercontent.com/pw/AP1GczPOqSpOTjUzdytuLAYcdYGhrxixUWGnmgbB-YTX6DBMkXxDwZh8U7nDYpgpFG-kbP_-jnF_s6UwD56kCn2GRVT43AAgXvvBhbvVx8Sn1bCzAaLzjT2b=w2400" },
-            { name: "Adobe Lightroom", svg: "https://lh3.googleusercontent.com/pw/AP1GczOAiZFzmutDB5P7sMEc8UK_8Thfi30XIg6wQrL5Jkp5_Yh5yYvbfDu7YSaOCuKD0kTW8BcvrxPhW8_F8n-SmnhQ0MGPIvGqvGhQo4MwAMe4I4KGF0Cy=w2400" },
-            { name: "Adobe Photoshop", svg: "https://lh3.googleusercontent.com/pw/AP1GczNhZ2uCoUaMJ1nbe9hFqOXd2_GwQ38RmMtif6getQu0xGwL_gWUUUZZgbnYClKSe2kut3-Nlu1upI5ZxPR67z2sr-EtCs4Hw-7Lb2akBXv95DjJQ94Z=w2400" },
-            { name: "Adobe Premiere Pro", svg: "https://lh3.googleusercontent.com/pw/AP1GczMKc34D3s3Hw7FAsniR7hwS9o2xAvwvP3yBGxvIiUJwzU9zazA450qjF9YIowft8qUe-t27EfCuue_hFKNtQ2jrmzm20DhPQhh1-RgV9G1tiykk3HZC=w2400" },
-            { name: "Adobe After Effect", svg: "https://lh3.googleusercontent.com/pw/AP1GczOyNKsVAl2cCm6JGRPr2MTVHM9tGLx8R6-Oy5vbzTJqhV3denluglJFM6My5HszS-By0WcecEYI8AZkSIp2yyYRo7-esc_UABvpoGeyk1zILoQx0Skg=s273-p-k" },
-            { name: "Procreate", svg: "https://lh3.googleusercontent.com/pw/AP1GczMgfChMCFnlfCrax8o_zaZYqqwqiyfq8XdqDyN0Aob-ix53RnBDBD0AmFrSY0NgiAc5LX2EtTqJSP_TT1hBTp0Z9nDdbYTk72_CubELzCPdpOPLFZHh=w2400" },
-            { name: "FL Studio", svg: "https://lh3.googleusercontent.com/pw/AP1GczO78g26Q9XN5oo3BYEtuXDPNASTzNmYHyVQJc6k4_w7mUAlaNtqfKOt2nSqZ0pseI89F_iMHpt5kt8Iwq20_bJdEs-yOM4PiZfbFQgnrU8eWh4d-GFQ=w2400" },
-            { name: "Raspberry Pi", svg: "https://lh3.googleusercontent.com/pw/AP1GczN4D1UUq6Oa0q9-5Rm6fxXjoldX4JEeBMvoLKc8fw_BVRsUbo0kxeIMQr4Km-9KWGSgE26tjrk46itiNI6esYSUwHeA6kLA2gpldx66LNIjdcBejXK6=w2400" },
-            { name: "Arduino", svg: "https://lh3.googleusercontent.com/pw/AP1GczP8u39PLHJRMv6uV_z6Yj5yY43PD22J1FdCJgpTRFASvale-dlDNQjhN1Wv3v_VyKNumPe79WPzgsH5MTKCrfaWm4-KpkqgGQj062PUK9DONFP6iFKO=w2400" },
-            // { name: "xxx", svg: "xxx" },
-        ];
-        const Projects = [
-            { name: "2D Art & Vector Illustration", img: "https://lh3.googleusercontent.com/pw/AP1GczOuX52gKakQZc0wCjZ85PG-g90_BxGZMdyHNCI-6B1-wIUalrXIh--Y8yOrliaQeM5MjspQko0x9NTBgwWoTd8E19Zvy3F0sAudWH7QBDYL-5jj3JZ4=w2400", bio: "My portfolio features a combination of 2D and vector drawings that reflect both creativity and technical precision. The 2D pieces are hand-drawn with attention to form, light, and storytelling, capturing emotion and movement in a traditional artistic style. In contrast, the vector illustrations showcase clean, modern designs created digitally—perfectly scalable and sharp, designed with a focus on shape, color harmony, and visual clarity.Each piece is crafted with purpose, whether to convey a narrative, express a concept, or explore new visual styles. This collection represents my versatility and passion for bringing ideas to life through different mediums." },
-            { name: "3D Design", img: "https://lh3.googleusercontent.com/pw/AP1GczMRIasNhwZrI1fPAdDbxpW5jXCc7QFIwlaZ3KTlSDQhlHF3sQzXso9vRf8GpdkV75BwDdcOFOu2M_E1qGNWZBQmy8hyHtyk5BSpjgH-Tqv0o0oq4K6-=w2400", bio: "Digital sculptures and models that explore depth, lighting, and texture. Whether realistic or stylized, these 3D pieces demonstrate an understanding of space, form, and detail—designed for both still renders and potential animation or game use." },
-            { name: "Photography", img: "https://lh3.googleusercontent.com/pw/AP1GczPWaIGj_psy4GZPjEFyDPul2WOBCpVNgoZsZLgvnOO3MnxqAiGZZYC9UfRovwkteAw1z8ssOdv4aqHB1GU9_2LyQwGlT8k-NrvUMATEbsp9qCynqljz=w2400", bio: "Moments captured through my lens, focusing on light, composition, and emotion. My photography ranges from candid street scenes to carefully composed portraits and landscapes, each telling a unique story and reflecting my perspective of the world around me." },
-            { name: "Interactive & Web Experiences", img: "https://lh3.googleusercontent.com/pw/AP1GczPMHY_05mVhLR_N9SBMZql1mx0nQzCcz8o9ThrsF_FJfUE2-MH00_WPb_SsTWtywgM6SXEWp12iOchhBC4If5Jg-oG1aEpfwvz5HNSsHcgjcMcs5zEV=w2400", bio: "Beyond static visuals, I design and develop digital experiences that are both functional and visually compelling. My web design work focuses on clean interfaces, smooth user flows, and responsive layouts — bringing stories and ideas to life online." },
-            { name: "Arduino & electronics", img: "https://lh3.googleusercontent.com/pw/AP1GczMy5YmpCr4EQ26O-gQ3FqZlmSplKNi65jWU4kCKmoTxum3k1MJs3ybpRwAytKCYwElaqIdNEWRgWc_FrKPC5_yNwYgPH-8oG54Lxv0EZrsOvvsVt3l7=w2400", bio: "Beyond simple circuits, I design and build interactive electronic systems that are both intelligent and engaging. My work with Arduino and embedded hardware focuses on efficient functionality, clean wiring, and intuitive control — transforming ideas into responsive, real-world experiences." },
-        ];
-
-        const equipments = [
-            { name: "Iphone 15", bio: "Internal<br>128GB 6GB RAM NVMe<br>Main Camera<br>Dual	48 MP, f/1.6, 26mm (wide), 1/1.56, 1.0µm, dual pixel PDAF, sensor-shift OIS 12 MP, f/2.4, 13mm, 120˚ (ultrawide), 0.7µm<br>Features	Dual-LED dual-tone flash, HDR (photo/panorama)<br>Video	4K@24/25/30/60fps, 1080p@25/30/60/120/240fps, HDR, Dolby Vision HDR (up to 60fps), stereo sound rec.<br>Selfie camera	Single	12 MP, f/1.9, 23mm (wide), 1/3.6, 1.0µm, PDAF SL 3D, (depth/biometrics sensor)<br>Features	HDR, Dolby Vision HDR Video	4K@24/25/30/60fps, 1080p@25/30/60/120fps, gyro-EIS<br>Sound	Loudspeaker<br>stereo speakers", img: "https://lh3.googleusercontent.com/pw/AP1GczPNR8T5Cjhv8hs9c35GdeiEle01EfujWLORSiiIlNOTNBU7O8NxEyQQ1Teh0dH3jKmV4X2RAWq9UXQD1L4TY8k2970c0wT_Oc9708Ybk6heAqdm07EL=w2400" },
-            { name: "Ipad Air 5", bio: "Internal<br>256GB 8GB RAM<br>Main Camera<br>Single	12 MP, f/1.8, (wide), 1/3.0, 1.22µm, dual pixel PDAF Features	HDR Video	4K@24/25/30/60fps, 1080p@25/30/60/120/240fps; gyro-EIS<br>Selfie camera<br>Single	12 MP, f/2.4, 122˚ (ultrawide)Features	HDR Video	1080p@30/60fps<br>Sound	Loudspeaker<br>stereo speakers", img: "https://lh3.googleusercontent.com/pw/AP1GczPUHKfR993WSH-vF5JXlxbzkpQdcu7GSsBVP8EJgjI-PySUrMbRk_13rxrvZE9CpSM-kIjSjw4crfhZ7-ygv3x1oDzUNNnqTkv4sQgfniehDmG-08Hm=w2400" },
-            { name: "Lenovo Ideapad Gaming 3", bio: "Processor<br>Intel Core i7-11370H (4C / 8T, 3.3 / 4.8GHz, 12MB)<br>Graphics<br>NVIDIA GeForce RTX 3050 4GB GDDR6, Boost Clock 1500 / 1740MHz, TGP 90W<br>Memory<br>2x 8GB SO-DIMM DDR4-3200<br>Storage<br>512GB SSD M.2 2280 PCIe 3.0x4 NVMe", img: "https://lh3.googleusercontent.com/pw/AP1GczN-wKzyLBbRACZQnWn9N_t8NVyAbBy--h3RbTC5R_4YO1kCE6WN2mdkH2hbx8ATEFu8rKui0fdRvdz3x64JI15sGh_EObxgGCnqg3veJ80T4bEFsYfO=w2400" },
-            { name: "huion HS64", bio: "Drawing Pad For PC ", img: "https://lh3.googleusercontent.com/pw/AP1GczNLkHs0F9PE2T-9iMw7FTlTGePydwU96ZXLFNSYlNz0NZSmdzkmlKFQXvDUgClNAmRv-b2bYdhX2BtmGKOxFQUZpBVjbD3iWEX80xo2K06LbI1TBdXa=w2400" },
-            { name: "Computer Case", bio: "Processor<br>Intel Core i5-11370H (4C / 8T, 3.3 / 4.8GHz, 12MB)<br>Graphics<br>NVIDIA GeForce GTX 750ti 4GB GDDR5, Boost Clock 1500 / 1740MHz, TGP 90W<br>Memory<br>2x 8GB SO-DIMM DDR4-3200<br>Storage<br>2 TB SSD M.2 2280 PCIe 3.0x4 NVMe", img: "https://lh3.googleusercontent.com/pw/AP1GczNcxxzXS9JN5_bjBJJVO_MGA0KWKTrcJkw0vr10VOZyP8RAawAuK4RQ7Msw5KmhWBPDljQ_C8xaD9zN88QickXlNBp76Vk1xcrcNfOw1RBv90GEOF3n=w2400" },
-            { name: "Full Setup", bio: "Full Setup in Full Form :)", img: "https://lh3.googleusercontent.com/pw/AP1GczMaVdBIlW9_Q9H00xNlr-OdwMvwoZHd0ZFjSWNEON0cvDIQAodhLsZcT_cBbc1aYgz79sU8HvvHxurjOnzDDERv180onWPuEBP_1lKip0V70Mw3uiCK=w2400" },
-        ];
-
-        const contacts = [
-            { lable: "Whatsapp", name: "01145969006", link: "https://wa.me/201145969006", img: "https://lh3.googleusercontent.com/pw/AP1GczNmxgZ7BTUNWFF4Iu8XIGTvl1nUOb0N_rrWbLMvn-LBW5xDzJCoBgwhE814_7mPq4HyevecQ3zKDy8oH5OQu3OLkhJSnu65Bg_B_PpkwR8zSCKfD0hA=w2400" },
-            { lable: "Instagram", name: "whois_.nour", link: "https://www.instagram.com/whois_.nour/", img: "https://lh3.googleusercontent.com/pw/AP1GczORtI2WR3O2zO6Jyozxd6HGrcr2RFZtQDu571zQQOFqtRlVIS2GLeaNa7uRX_ST27BANApcMAQMYtlcGq14DU8qbnzgKTyjP5E8Iht-u7eRjaqrxSsn=w2400" },
-            { lable: "Behance", name: "Nour Shady", link: "https://www.behance.net/nourshady1", img: "https://lh3.googleusercontent.com/pw/AP1GczPhXMljX7Wx_aI6AP4OokP4tfO6cOCD8L6akPLStC74bAsa6tm2wYNVd1Lu16eTjEpNjuYa9UQp5KYacvB4wOPaLzA_1upGdRO7jVAMfZh4McT7Nb-x=w2400" },
-            { lable: "Facebook", name: "Nour Shady", link: "https://www.facebook.com/nourshadymohamed", img: "https://lh3.googleusercontent.com/pw/AP1GczMAyck3pSFN95JWe5Hih9X6Tlsw-CdUB_Q0RcGRlhV-0kIW1vZ4In-L-VHZjIztfOTM29Zz0UtFIpON4phrHqhzExJd56HodICjNdx_j8_zXa6GsWj6=w2400" },
-            { lable: "Work Gmail", name: "nourshadymohamed@gmail.com", link: "mailto:nourshadymohamed@gmail.com", img: "https://lh3.googleusercontent.com/pw/AP1GczPAylb8YWX4LEFDChKk5qeQ43YDgMlnvijnW9a3ffkZWN_tMDeORuoCF__pR_ngoLXkKqLsqbByVS3Pln3WTd_FcRhibII-XUdMehJlQRKc_cCcQiOx=w2400" },
-            { lable: "Personal Gmail", name: "iamnour789524@gmail.com", link: "mailto:iamnour789524@gmail.com", img: "https://lh3.googleusercontent.com/pw/AP1GczPAylb8YWX4LEFDChKk5qeQ43YDgMlnvijnW9a3ffkZWN_tMDeORuoCF__pR_ngoLXkKqLsqbByVS3Pln3WTd_FcRhibII-XUdMehJlQRKc_cCcQiOx=w2400" },
-            { lable: "Snapchat", name: "hackoro", link: "https://www.snapchat.com/add/hackoro?share_id=duVzWpK3QOCsxn2I6FRLYQ&locale=en_EG", img: "https://lh3.googleusercontent.com/pw/AP1GczMpQ312eJpG7FvwYAYxVP_MPYPb_PLVaB8S5c4X6R9IEGdoWnLg_s61jHoR4xHEMYSSQ5egGysgvjjUjPmownnaj8Xc_2sCfU9JsEAXd_yY5zoIVNm2=w2400" },
-            // { lable: "test",name: "reactjs", link: "./reactjs.svg", img: "./reactjs.svg" },
-        ];
-
-        // ___________________________________________ Confige ___________________________________________
-
-        // DOM Elements
-        const navbar = document.getElementById("navbar");
-        const mobileMenuButton = document.querySelector(".mobile-menu-button");
-        const mobileNav = document.querySelector(".mobile-nav");
-        const contactForm = document.getElementById("contact-form");
-        const currentYearElement = document.getElementById("current-year");
-
-        // Set current year in footer
-        // currentYearElement.textContent = new Date().getFullYear();
-
-        // Handle navbar scroll effect
-        window.addEventListener("scroll", () => {
-            if (window.scrollY > 10) {
-                navbar.classList.add("scrolled");
-            } else {
-                navbar.classList.remove("scrolled");
-            }
+    btn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          alert(`Error attempting to enable full-screen mode: ${err.message}`);
         });
+      } else {
+        document.exitFullscreen();
+      }
+    });
+  </script>
 
-        // Toggle mobile menu
-        mobileMenuButton.addEventListener("click", () => {
-            mobileMenuButton.classList.toggle("menu-open");
-            mobileNav.classList.toggle("open");
-        });
+  <script>
+    const resizer = document.getElementById("resizerHandle");
+    const container = document.getElementById("iframeContainer");
 
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll(".mobile-nav a").forEach((link) => {
-            link.addEventListener("click", () => {
-                mobileMenuButton.classList.remove("menu-open");
-                mobileNav.classList.remove("open");
-            });
-        });
+    let startX, startY, startWidth, startHeight;
 
-        // Handle contact form submission
-        if (contactForm) {
-            contactForm.addEventListener("submit", (e) => {
-                e.preventDefault();
+    function startResize(e) {
+      e.preventDefault();
+      startX = e.touches ? e.touches[0].clientX : e.clientX;
+      startY = e.touches ? e.touches[0].clientY : e.clientY;
+      startWidth = container.offsetWidth;
+      startHeight = container.offsetHeight;
 
-                const formData = new FormData(contactForm);
-                const formValues = Object.fromEntries(formData.entries());
+      document.addEventListener("touchmove", resize);
+      document.addEventListener("touchend", stopResize);
+      document.addEventListener("mousemove", resize);
+      document.addEventListener("mouseup", stopResize);
+    }
 
-                // Log form data (in a real app, you would send this to a server)
-                console.log("Form submitted:", formValues);
+    function resize(e) {
+      const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+      const currentY = e.touches ? e.touches[0].clientY : e.clientY;
 
-                // Show success message
-                alert("Thanks for your message! I'll get back to you soon.");
+      container.style.width = startWidth + (currentX - startX) + "px";
+      container.style.height = startHeight + (currentY - startY) + "px";
+    }
 
-                // Reset form
-                contactForm.reset();
-            });
-        }
+    function stopResize() {
+      document.removeEventListener("mousemove", resize);
+      document.removeEventListener("mouseup", stopResize);
+      document.removeEventListener("touchmove", resize);
+      document.removeEventListener("touchend", stopResize);
+    }
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-            anchor.addEventListener("click", function (e) {
-                e.preventDefault();
-
-                const targetId = this.getAttribute("href");
-                if (targetId === "#") return;
-
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80, // Offset for navbar
-                        behavior: "smooth",
-                    });
-                }
-            });
-        });
-
-        // Simple animation for project cards
-        const observeElements = (elements, className) => {
-            const observer = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add(className);
-                        }
-                    });
-                },
-                {
-                    threshold: 0.1,
-                }
-            );
-
-            elements.forEach((el) => {
-                observer.observe(el);
-            });
-        };
-
-        // Add animation classes when elements come into view
-        document.addEventListener("DOMContentLoaded", () => {
-            observeElements(document.querySelectorAll(".project-card"), "fade-in");
-            observeElements(document.querySelectorAll(".about-card"), "fade-in");
-            observeElements(
-                document.querySelectorAll(".contact-info, .contact-form"),
-                "fade-in"
-            );
-        });
-
-        // skills <div class="skills">
-        var skill_dev = "";
-        function processIcons() {
-            skills.forEach((icon) => {
-                skill_dev += `<span class="skill-pill"><img src="${icon.svg}" alt="${icon.name}">${icon.name}</span>`;
-            });
-            document.querySelector(".skills").innerHTML = skill_dev;
-            //   console.log(skill_dev);
-        }
-
-        // Call the function
-        processIcons();
-
-        // skills <div class="project-cards">
-        var projects_dev = "";
-        function processProjects() {
-            Projects.forEach((Project) => {
-                projects_dev += `<div class="project-card">
-                    <div class="project-image">
-                        <img src="${Project.img}"
-                            alt="${Project.name}">
-                    </div>
-                    <div class="project-details">
-                        <h3>${Project.name}</h3>
-                        <p>${Project.bio}</p>
-                    </div>
-                    </div>`;
-            });
-            document.querySelector(".project-cards").innerHTML = projects_dev;
-            //   console.log(projects_dev);
-        }
-
-        // Call the function
-        processProjects();
-        var equipments_dev = "";
-        function equipmentsProjects() {
-            equipments.forEach((equipment) => {
-                equipments_dev += `<div class="project-card reverse">
-                    <div class="project-image">
-                        <img src="${equipment.img}"
-                            alt="${equipment.name}">
-                    </div>
-                    <div class="project-details">
-                        <h3>${equipment.name}</h3>
-                        <p>${equipment.bio}</p>
-                    </div>
-                    </div>`;
-            });
-            document.querySelector(".equipments").innerHTML = equipments_dev;
-            //   console.log(projects_dev);
-        }
-
-        // Call the function
-        equipmentsProjects();
-
-        // skills  <div class="contact-details">
-        var contacts_dev = "";
-        function processContacts() {
-            contacts.forEach((contact) => {
-                contacts_dev += `   <div class="contact-details">
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                               <img src="${contact.img}"
-                            alt="${contact.lable}">
-                            </div>
-                            <div class="contact-text">
-                                <h4>${contact.lable}</h4>
-                                <a target="_blank" href="${contact.link}">${contact.name}</a>
-                            </div>
-                        </div>`;
-            });
-            document.querySelector(".contact-details").innerHTML = contacts_dev;
-            //   console.log(contacts_dev);
-        }
-
-        // Call the function
-        processContacts();
-
-    </script>
+    resizer.addEventListener("mousedown", startResize);
+    resizer.addEventListener("touchstart", startResize);
+  </script>
 </body>
 
 </html>
