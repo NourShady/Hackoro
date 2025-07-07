@@ -20,15 +20,17 @@
     </a-assets>
 
     <!-- Left eye screen -->
-    <a-entity geometry="primitive: plane; height: 4.5; width: 8"
-              position="-0.03 2 -6" rotation="0 0 0"
+    <a-entity id="leftEye"
+              geometry="primitive: plane; height: 5; width: 8"
+              position="-0.06 1.6 -4"
               material="shader: flat; src: #video360"
               stereo="eye: left">
     </a-entity>
 
     <!-- Right eye screen -->
-    <a-entity geometry="primitive: plane; height: 4.5; width: 8"
-              position="0.03 2 -6" rotation="0 0 0"
+    <a-entity id="rightEye"
+              geometry="primitive: plane; height: 5; width: 8"
+              position="0.06 1.6 -4"
               material="shader: flat; src: #video360"
               stereo="eye: right">
     </a-entity>
