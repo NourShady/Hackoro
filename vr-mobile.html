@@ -19,13 +19,13 @@
       <video id="video360" autoplay loop muted playsinline crossorigin="anonymous"></video>
     </a-assets>
 
-    <!-- Single flat screen, centered, no stereo distortion -->
-    <a-entity geometry="primitive: plane; height: 2.5; width: 4.5"
-              material="shader: flat; src: #video360"
-              position="0 1.6 -4">
+    <!-- Slightly smaller flat screen -->
+    <a-entity id="videoPlane" geometry="primitive: plane; height: 2; width: 3.5"
+              position="0 1.6 -4" rotation="0 0 0"
+              material="shader: flat; src: #video360">
     </a-entity>
 
-    <a-camera position="0 1.6 0" look-controls="magicWindowTrackingEnabled: true;"></a-camera>
+    <a-camera look-controls="magicWindowTrackingEnabled: true" position="0 1.6 0"></a-camera>
   </a-scene>
 
   <script>
