@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>VR Stream Receiver (Stereo View)</title>
+  <title>VR Stream Receiver (Flat Stereo)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -19,18 +19,10 @@
       <video id="video360" autoplay loop muted playsinline crossorigin="anonymous"></video>
     </a-assets>
 
-    <!-- Stereo flat screen view -->
-    <a-entity position="0 1.6 -3">
-      <a-entity geometry="primitive: plane; height: 1.5; width: 2.5"
-                material="shader: flat; src: #video360"
-                stereo="eye: left"
-                position="-0.03 0 0">
-      </a-entity>
-      <a-entity geometry="primitive: plane; height: 1.5; width: 2.5"
-                material="shader: flat; src: #video360"
-                stereo="eye: right"
-                position="0.03 0 0">
-      </a-entity>
+    <!-- Single flat screen, centered, no stereo distortion -->
+    <a-entity geometry="primitive: plane; height: 2.5; width: 4.5"
+              material="shader: flat; src: #video360"
+              position="0 1.6 -4">
     </a-entity>
 
     <a-camera position="0 1.6 0" look-controls="magicWindowTrackingEnabled: true;"></a-camera>
