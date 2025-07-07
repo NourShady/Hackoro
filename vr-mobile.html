@@ -19,14 +19,14 @@
       <video id="video360" autoplay loop muted playsinline crossorigin="anonymous"></video>
     </a-assets>
 
-    <!-- Stereo view with two screens, one for each eye -->
-    <a-entity id="leftEye" geometry="primitive: plane; height: 5; width: 8" position="-0.06 1.6 -4" material="shader: flat; src: #video360"></a-entity>
-    <a-entity id="rightEye" geometry="primitive: plane; height: 5; width: 8" position="0.06 1.6 -4" material="shader: flat; src: #video360"></a-entity>
+    <!-- Proper stereo rendering using aframe-stereo-component -->
+    <a-entity geometry="primitive: plane; height: 6; width: 10"
+              position="0 1.6 -4"
+              material="shader: flat; src: #video360"
+              stereo="eye: both">
+    </a-entity>
 
-    <a-camera position="0 1.6 0" look-controls wasd-controls>
-      <a-entity stereo="eye: left"></a-entity>
-      <a-entity stereo="eye: right"></a-entity>
-    </a-camera>
+    <a-camera position="0 1.6 0" look-controls wasd-controls></a-camera>
   </a-scene>
 
   <script>
