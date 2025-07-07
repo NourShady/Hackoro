@@ -4,7 +4,6 @@
   <title>VR Stream Receiver</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  <script src="https://unpkg.com/aframe-stereo-component@1.0.0/dist/aframe-stereo-component.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <style>
@@ -16,9 +15,12 @@
   <video id="vid" autoplay muted playsinline></video>
 
   <a-scene vr-mode-ui="enabled: true" background="color: #000000">
-    <!-- Stereo VR sphere (left and right eyes) -->
-    <a-videosphere id="leftEye" stereo="eye: left" rotation="0 -90 0" src="#vid"></a-videosphere>
-    <a-videosphere id="rightEye" stereo="eye: right" rotation="0 -90 0" src="#vid"></a-videosphere>
+    <!-- Basic videosphere for monoscopic 360 VR -->
+    <a-assets>
+      <video id="video360" autoplay loop muted playsinline crossorigin="anonymous"></video>
+    </a-assets>
+
+    <a-videosphere id="sphere" rotation="0 -90 0" src="#video360"></a-videosphere>
 
     <a-camera position="0 1.6 0" look-controls="magicWindowTrackingEnabled: true;"></a-camera>
   </a-scene>
@@ -57,10 +59,10 @@
         const videoEl = document.getElementById("vid");
         videoEl.srcObject = stream;
 
-        videoEl.onloadedmetadata = () => {
-          videoEl.play().then(() => {
-            // Autoplay ok
-          }).catch(err => console.warn("Autoplay failed", err));
+        const assetVideo = document.getElementById("video360");
+        assetVideo.srcObject = stream;
+        assetVideo.onloadedmetadata = () => {
+          assetVideo.play().catch(console.warn);
         };
       };
     }
