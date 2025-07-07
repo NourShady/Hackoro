@@ -1,108 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>VR Stream Receiver (Stereo View)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <meta charset="UTF-8">
+  <title>Three.js VR Both Eyes Viewer</title>
   <style>
-    body { margin: 0; background-color: black; }
-    video#vid { display: none; }
+    body { margin: 0; }
+    canvas { display: block; }
   </style>
 </head>
 <body>
-  <video id="vid" autoplay muted playsinline></video>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+    import { VRButton } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/webxr/VRButton.js';
 
-  <a-scene vr-mode-ui="enabled: true" background="color: #000000">
-    <a-assets>
-      <video id="video360" autoplay loop muted playsinline crossorigin="anonymous"></video>
-    </a-assets>
+    // Scene
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x202020);
 
-    <!-- Proper stereo rendering using aframe-stereo-component -->
-    <a-entity geometry="primitive: plane; height: 6; width: 10"
-              position="0 1.6 -4"
-              material="shader: flat; src: #video360"
-              stereo="eye: both">
-    </a-entity>
+    // Camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 3;
 
-    <a-camera position="0 1.6 0" look-controls wasd-controls></a-camera>
-  </a-scene>
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.xr.enabled = true;
+    document.body.appendChild(renderer.domElement);
+    document.body.appendChild(VRButton.createButton(renderer));
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCgjFG8b39I9_AdE9kvGzwH7Cnx_Ym_qoY",
-      authDomain: "hackoro-screen-share.firebaseapp.com",
-      projectId: "hackoro-screen-share",
-      storageBucket: "hackoro-screen-share.appspot.com",
-      messagingSenderId: "613738987554",
-      appId: "1:613738987554:web:3e9f0e57f67b1c8f70ca7b",
-      databaseURL: "https://hackoro-screen-share-default-rtdb.firebaseio.com/"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const roomId = "vr-room";
-    const roomRef = db.ref(`rooms/${roomId}`);
-    let peerConnection;
+    // Add objects
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshNormalMaterial();
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
 
-    const servers = {
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-    };
-
-    function createPeerConnection() {
-      peerConnection = new RTCPeerConnection(servers);
-
-      peerConnection.onicecandidate = event => {
-        if (event.candidate) {
-          roomRef.child("answerCandidates").push({ candidate: event.candidate.toJSON() });
-        }
-      };
-
-      peerConnection.ontrack = event => {
-        const stream = event.streams[0];
-        const videoEl = document.getElementById("vid");
-        videoEl.srcObject = stream;
-
-        const assetVideo = document.getElementById("video360");
-        assetVideo.srcObject = stream;
-        assetVideo.onloadedmetadata = () => {
-          assetVideo.play().catch(console.warn);
-        };
-      };
+    // Animate
+    function animate() {
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+      renderer.setAnimationLoop(animate); // WebXR compatible animation loop
+      renderer.render(scene, camera);
     }
 
-    async function waitForOffer() {
-      return new Promise(resolve => {
-        roomRef.child("offer").on("value", snapshot => {
-          const offer = snapshot.val();
-          if (offer?.sdp) resolve(offer);
-        });
-      });
-    }
-
-    async function connectAutomatically() {
-      createPeerConnection();
-
-      const offer = await waitForOffer();
-      await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-
-      const answer = await peerConnection.createAnswer();
-      await peerConnection.setLocalDescription(answer);
-
-      await roomRef.child("answer").set({
-        type: answer.type,
-        sdp: answer.sdp
-      });
-
-      roomRef.child("offerCandidates").on("child_added", snapshot => {
-        const data = snapshot.val();
-        if (data?.candidate && peerConnection.remoteDescription) {
-          peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate)).catch(console.warn);
-        }
-      });
-    }
-
-    connectAutomatically();
+    animate();
   </script>
 </body>
 </html>
