@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>VR Stream Receiver</title>
+  <title>VR Stream Receiver (Stereo View)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -15,12 +15,23 @@
   <video id="vid" autoplay muted playsinline></video>
 
   <a-scene vr-mode-ui="enabled: true" background="color: #000000">
-    <!-- Basic videosphere for monoscopic 360 VR -->
     <a-assets>
       <video id="video360" autoplay loop muted playsinline crossorigin="anonymous"></video>
     </a-assets>
 
-    <a-videosphere id="sphere" rotation="0 -90 0" src="#video360"></a-videosphere>
+    <!-- Stereo flat screen view -->
+    <a-entity position="0 1.6 -3">
+      <a-entity geometry="primitive: plane; height: 1.5; width: 2.5"
+                material="shader: flat; src: #video360"
+                stereo="eye: left"
+                position="-0.03 0 0">
+      </a-entity>
+      <a-entity geometry="primitive: plane; height: 1.5; width: 2.5"
+                material="shader: flat; src: #video360"
+                stereo="eye: right"
+                position="0.03 0 0">
+      </a-entity>
+    </a-entity>
 
     <a-camera position="0 1.6 0" look-controls="magicWindowTrackingEnabled: true;"></a-camera>
   </a-scene>
