@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>VR Receiver</title>
+  <title>VR Stream Receiver</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-stereo-component@1.0.0/dist/aframe-stereo-component.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <style>
@@ -11,13 +12,15 @@
     video#vid { display: none; }
   </style>
 </head>
-
 <body>
   <video id="vid" autoplay muted playsinline></video>
 
-  <a-scene>
-    <a-entity id="videoPlane" geometry="primitive: plane; height: 9; width: 16" position="0 1.6 -4" rotation="0 0 0" material="shader: flat;"></a-entity>
-    <a-camera look-controls="magicWindowTrackingEnabled: true" position="0 1.6 0"></a-camera>
+  <a-scene vr-mode-ui="enabled: true" background="color: #000000">
+    <!-- Stereo VR sphere (left and right eyes) -->
+    <a-videosphere id="leftEye" stereo="eye: left" rotation="0 -90 0" src="#vid"></a-videosphere>
+    <a-videosphere id="rightEye" stereo="eye: right" rotation="0 -90 0" src="#vid"></a-videosphere>
+
+    <a-camera position="0 1.6 0" look-controls="magicWindowTrackingEnabled: true;"></a-camera>
   </a-scene>
 
   <script>
@@ -56,15 +59,8 @@
 
         videoEl.onloadedmetadata = () => {
           videoEl.play().then(() => {
-            const videoTexture = new THREE.VideoTexture(videoEl);
-            videoTexture.minFilter = THREE.LinearFilter;
-            videoTexture.magFilter = THREE.LinearFilter;
-            videoTexture.format = THREE.RGBFormat;
-
-            const mesh = document.querySelector("#videoPlane").getObject3D("mesh");
-            mesh.material.map = videoTexture;
-            mesh.material.needsUpdate = true;
-          }).catch(err => console.warn("Autoplay error", err));
+            // Autoplay ok
+          }).catch(err => console.warn("Autoplay failed", err));
         };
       };
     }
@@ -94,10 +90,8 @@
 
       roomRef.child("offerCandidates").on("child_added", snapshot => {
         const data = snapshot.val();
-        if (data?.candidate) {
-          if (peerConnection.remoteDescription) {
-            peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate)).catch(console.warn);
-          }
+        if (data?.candidate && peerConnection.remoteDescription) {
+          peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate)).catch(console.warn);
         }
       });
     }
