@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VR Receiver</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <style>
+    body { margin: 0; background-color: black; }
+    video#vid { display: none; }
+  </style>
+</head>
+
+<body>
+  <video id="vid" autoplay muted playsinline></video>
+
+  <a-scene>
+    <a-entity id="videoPlane" geometry="primitive: plane; height: 9; width: 16" position="0 1.6 -4" rotation="0 0 0" material="shader: flat;"></a-entity>
+    <a-camera look-controls="magicWindowTrackingEnabled: true" position="0 1.6 0"></a-camera>
+  </a-scene>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCgjFG8b39I9_AdE9kvGzwH7Cnx_Ym_qoY",
+      authDomain: "hackoro-screen-share.firebaseapp.com",
+      projectId: "hackoro-screen-share",
+      storageBucket: "hackoro-screen-share.appspot.com",
+      messagingSenderId: "613738987554",
+      appId: "1:613738987554:web:3e9f0e57f67b1c8f70ca7b",
+      databaseURL: "https://hackoro-screen-share-default-rtdb.firebaseio.com/"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const roomId = "vr-room";
+    const roomRef = db.ref(`rooms/${roomId}`);
+    let peerConnection;
+
+    const servers = {
+      iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+    };
+
+    function createPeerConnection() {
+      peerConnection = new RTCPeerConnection(servers);
+
+      peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+          roomRef.child("answerCandidates").push({ candidate: event.candidate.toJSON() });
+        }
+      };
+
+      peerConnection.ontrack = event => {
+        const stream = event.streams[0];
+        const videoEl = document.getElementById("vid");
+        videoEl.srcObject = stream;
+
+        videoEl.onloadedmetadata = () => {
+          videoEl.play().then(() => {
+            const videoTexture = new THREE.VideoTexture(videoEl);
+            videoTexture.minFilter = THREE.LinearFilter;
+            videoTexture.magFilter = THREE.LinearFilter;
+            videoTexture.format = THREE.RGBFormat;
+
+            const mesh = document.querySelector("#videoPlane").getObject3D("mesh");
+            mesh.material.map = videoTexture;
+            mesh.material.needsUpdate = true;
+          }).catch(err => console.warn("Autoplay error", err));
+        };
+      };
+    }
+
+    async function waitForOffer() {
+      return new Promise(resolve => {
+        roomRef.child("offer").on("value", snapshot => {
+          const offer = snapshot.val();
+          if (offer?.sdp) resolve(offer);
+        });
+      });
+    }
+
+    async function connectAutomatically() {
+      createPeerConnection();
+
+      const offer = await waitForOffer();
+      await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+
+      const answer = await peerConnection.createAnswer();
+      await peerConnection.setLocalDescription(answer);
+
+      await roomRef.child("answer").set({
+        type: answer.type,
+        sdp: answer.sdp
+      });
+
+      roomRef.child("offerCandidates").on("child_added", snapshot => {
+        const data = snapshot.val();
+        if (data?.candidate) {
+          if (peerConnection.remoteDescription) {
+            peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate)).catch(console.warn);
+          }
+        }
+      });
+    }
+
+    connectAutomatically();
+  </script>
+</body>
+</html>
