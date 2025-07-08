@@ -2,47 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Three.js VR Both Eyes Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
   <style>
-    body { margin: 0; }
-    canvas { display: block; }
+    iframe {
+      width: 50%;
+      height: 100vh;
+      border: none;
+      float: left;
+    }
   </style>
 </head>
 <body>
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
-    import { VRButton } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/webxr/VRButton.js';
-
-    // Scene
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x202020);
-
-    // Camera
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 3;
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.xr.enabled = true;
-    document.body.appendChild(renderer.domElement);
-    document.body.appendChild(VRButton.createButton(renderer));
-
-    // Add objects
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshNormalMaterial();
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-
-    // Animate
-    function animate() {
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
-      renderer.setAnimationLoop(animate); // WebXR compatible animation loop
-      renderer.render(scene, camera);
-    }
-
-    animate();
-  </script>
+  <iframe src="./vr-mobile.html" frameborder="0"></iframe>
+  <iframe src="./vr-mobile.html" frameborder="0"></iframe>
 </body>
 </html>
