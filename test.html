@@ -10,47 +10,68 @@
 </head>
 <body>
 
+<!-- الفيديو الذي سيُستخدم كـ Texture -->
 <video id="vid" autoplay muted playsinline style="display: none;"></video>
 
+<!-- مشهد A-Frame -->
 <a-scene>
-  <a-entity id="videoPlane" geometry="primitive: plane; height: 2; width: 3" position="0 1.6 -4"></a-entity>
+  <a-entity id="videoPlane"
+            geometry="primitive: plane; height: 2; width: 3"
+            position="0 1.6 -4">
+  </a-entity>
 </a-scene>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const scene = document.querySelector("a-scene");
-  scene.addEventListener("loaded", () => {
-    console.log("A-Frame scene loaded");
-
-    window.addEventListener("message", (event) => {
-      if (event.data.type === "initStream") {
-        const stream = parent.sharedStream;
-        if (!stream) return console.warn("No shared stream found");
-
-        const videoEl = document.getElementById("vid");
-        videoEl.muted = true;
-        videoEl.srcObject = stream;
-
-        videoEl.onloadedmetadata = () => {
-          videoEl.play().then(() => {
-            const mesh = document.querySelector("#videoPlane").getObject3D("mesh");
-            if (!mesh) return console.warn("Mesh not found");
-
-            const videoTexture = new THREE.VideoTexture(videoEl);
-            videoTexture.minFilter = THREE.LinearFilter;
-            videoTexture.magFilter = THREE.LinearFilter;
-            videoTexture.format = THREE.RGBFormat;
-
-            mesh.material.map = videoTexture;
-            mesh.material.needsUpdate = true;
-
-            console.log("Texture applied to mesh");
-          }).catch(err => console.warn("Autoplay error", err));
-        };
+  document.addEventListener("DOMContentLoaded", () => {
+    // نتحقق بشكل متكرر إذا كانت a-scene موجودة فعلاً
+    const checkSceneReady = () => {
+      const scene = document.querySelector("a-scene");
+      if (!scene) {
+        console.warn("A-Frame scene not ready yet...");
+        return setTimeout(checkSceneReady, 100); // نعيد المحاولة كل 100ms
       }
-    });
+
+      // عندما تكون جاهزة، ننتظر تحميلها بالكامل
+      scene.addEventListener("loaded", () => {
+        console.log("A-Frame scene loaded");
+
+        // نستمع للرسائل القادمة من الصفحة الرئيسية
+        window.addEventListener("message", (event) => {
+          if (event.data.type === "initStream") {
+            const stream = parent.sharedStream;
+            if (!stream) return console.warn("No shared stream found");
+
+            const videoEl = document.getElementById("vid");
+            videoEl.muted = true;
+            videoEl.srcObject = stream;
+
+            videoEl.onloadedmetadata = () => {
+              videoEl.play().then(() => {
+                console.log("Video is playing");
+
+                const mesh = document.querySelector("#videoPlane").getObject3D("mesh");
+                if (!mesh) return console.warn("Mesh not found");
+
+                const videoTexture = new THREE.VideoTexture(videoEl);
+                videoTexture.minFilter = THREE.LinearFilter;
+                videoTexture.magFilter = THREE.LinearFilter;
+                videoTexture.format = THREE.RGBFormat;
+
+                mesh.material.map = videoTexture;
+                mesh.material.needsUpdate = true;
+
+                console.log("Video texture applied to mesh");
+              }).catch(err => {
+                console.warn("Autoplay error", err);
+              });
+            };
+          }
+        });
+      });
+    };
+
+    checkSceneReady();
   });
-});
 </script>
 
 </body>
