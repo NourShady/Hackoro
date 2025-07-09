@@ -1,29 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VR Frame</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <style>
+    body { margin: 0; background: black; }
+  </style>
+</head>
+<body>
+
 <video id="vid" autoplay muted playsinline style="display: none;"></video>
+
 <a-scene>
-  <a-assets></a-assets>
   <a-entity id="videoPlane" geometry="primitive: plane; height: 2; width: 3" position="0 1.6 -4"></a-entity>
 </a-scene>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.142.0/build/three.min.js"></script>
 <script>
-  window.addEventListener("message", (event) => {
-    if (event.data.type === "initStream") {
-      const stream = parent.sharedStream;
-      const videoEl = document.getElementById("vid");
+document.addEventListener("DOMContentLoaded", () => {
+  const scene = document.querySelector("a-scene");
+  scene.addEventListener("loaded", () => {
+    console.log("A-Frame scene loaded");
 
-      videoEl.srcObject = stream;
-      videoEl.onloadedmetadata = () => {
-        videoEl.play().then(() => {
-          const videoTexture = new THREE.VideoTexture(videoEl);
-          videoTexture.minFilter = THREE.LinearFilter;
-          videoTexture.magFilter = THREE.LinearFilter;
-          videoTexture.format = THREE.RGBFormat;
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "initStream") {
+        const stream = parent.sharedStream;
+        if (!stream) return console.warn("No shared stream found");
 
-          const mesh = document.querySelector("#videoPlane").getObject3D("mesh");
-          mesh.material.map = videoTexture;
-          mesh.material.needsUpdate = true;
-        }).catch(err => console.warn("Autoplay error", err));
-      };
-    }
+        const videoEl = document.getElementById("vid");
+        videoEl.muted = true;
+        videoEl.srcObject = stream;
+
+        videoEl.onloadedmetadata = () => {
+          videoEl.play().then(() => {
+            const mesh = document.querySelector("#videoPlane").getObject3D("mesh");
+            if (!mesh) return console.warn("Mesh not found");
+
+            const videoTexture = new THREE.VideoTexture(videoEl);
+            videoTexture.minFilter = THREE.LinearFilter;
+            videoTexture.magFilter = THREE.LinearFilter;
+            videoTexture.format = THREE.RGBFormat;
+
+            mesh.material.map = videoTexture;
+            mesh.material.needsUpdate = true;
+
+            console.log("Texture applied to mesh");
+          }).catch(err => console.warn("Autoplay error", err));
+        };
+      }
+    });
   });
+});
 </script>
+
+</body>
+</html>
