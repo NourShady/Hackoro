@@ -4,69 +4,84 @@
   <title>VR Frame</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-video-shader@5.0.0/dist/aframe-video-shader.min.js"></script>
   <style>
     body { margin: 0; background: black; }
+    #startBtn {
+      position: absolute;
+      z-index: 10;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
-<button id="startBtn" style="position: absolute; z-index: 10;">Start VR</button>
 
-<!-- الفيديو الذي سيُستخدم كـ Texture -->
-<video id="vid" autoplay muted playsinline style="display: none;"></video>
+<!-- زر التشغيل -->
+<button id="startBtn">Start VR</button>
+
+<!-- الفيديو الخفي المستخدم كـ texture -->
+<video id="vid" autoplay muted playsinline style="display: none;" crossorigin="anonymous"></video>
 
 <!-- مشهد A-Frame -->
 <a-scene>
-  <a-entity id="videoPlane"
-            geometry="primitive: plane; height: 2; width: 3"
-            position="0 1.6 -4">
-  </a-entity>
+  <a-assets>
+    <video id="vidAsset" autoplay loop="true" muted playsinline crossorigin="anonymous"></video>
+  </a-assets>
+
+<a-video 
+  id="videoPlane"
+  src="#vidAsset"
+  width="10"
+  height="6"
+  position="0 1.6 -1.5"
+  shader="flat">
+</a-video>
 </a-scene>
+
 <script>
   let streamReady = false;
 
-  // نستلم الستريم من الصفحة الأم
+  // استقبال الرسالة من الصفحة الأم
   window.addEventListener("message", (event) => {
     if (event.data.type === "initStream") {
       const stream = parent.sharedStream;
-      if (!stream) return console.warn("No stream received yet.");
+      if (!stream) return console.warn("No stream received.");
       window.receivedStream = stream;
       streamReady = true;
-      console.log("Stream received. Waiting for user click.");
+      console.log("✅ Stream received. Ready for user click.");
     }
   });
 
-  // عند الضغط على الزر
+  // تشغيل الفيديو وتطبيقه على a-video عند الضغط
   document.getElementById("startBtn").addEventListener("click", () => {
     if (!streamReady || !window.receivedStream) {
-      return alert("Stream not ready yet. Please wait.");
+      return alert("⏳ Stream not ready yet. Please wait...");
     }
 
     const videoEl = document.getElementById("vid");
-    videoEl.muted = true;
+    const assetVideo = document.getElementById("vidAsset");
+
+    // إعداد الفيديو
     videoEl.srcObject = window.receivedStream;
+    assetVideo.srcObject = window.receivedStream;
 
     videoEl.onloadedmetadata = () => {
-      videoEl.play().then(() => {
-        console.log("Video is playing via user interaction");
+      videoEl.play();
+      assetVideo.play();
 
-        const scene = document.querySelector("a-scene");
-        const mesh = document.querySelector("#videoPlane").getObject3D("mesh");
-        if (!mesh) return console.warn("Mesh not found");
+      console.log("▶️ Video playing");
 
-        const videoTexture = new THREE.VideoTexture(videoEl);
-        videoTexture.minFilter = THREE.LinearFilter;
-        videoTexture.magFilter = THREE.LinearFilter;
-        videoTexture.format = THREE.RGBFormat;
-
-        mesh.material.map = videoTexture;
-        mesh.material.needsUpdate = true;
-
-        console.log("Texture applied to mesh");
-      }).catch(err => console.warn("Autoplay error", err));
+      // إخفاء الزر بعد التشغيل
+      document.getElementById("startBtn").style.display = "none";
     };
   });
 </script>
-
 
 </body>
 </html>
