@@ -54,15 +54,19 @@
         }
       };
 
-      peerConnection.ontrack = event => {
-        const stream = event.streams[0];
-        window.sharedStream = event.streams[0];
+peerConnection.ontrack = event => {
+  const stream = event.streams[0];
+  window.sharedStream = stream;
 
-        // Broadcast to iframes when stream is ready
-        document.getElementById("frame1").contentWindow.postMessage({ type: "initStream" }, "*");
-        document.getElementById("frame2").contentWindow.postMessage({ type: "initStream" }, "*");
-      };
-    }
+  const iframe1 = document.getElementById("frame1");
+  const iframe2 = document.getElementById("frame2");
+
+  // Wait 1s before messaging to ensure iframe loaded
+  setTimeout(() => {
+    iframe1.contentWindow.postMessage({ type: "initStream" }, "*");
+    iframe2.contentWindow.postMessage({ type: "initStream" }, "*");
+  }, 1000);
+};
 
     async function waitForOffer() {
       return new Promise(resolve => {
