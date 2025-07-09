@@ -24,7 +24,7 @@
 
 <!-- زر التشغيل -->
 <button id="startBtn">Start VR</button>
-
+<input type="range" onchange="test(this)" min="1" max="8" step="0.5" value="5" style="position: absolute; top: 60px; left: 20px; z-index: 10;">
 <!-- الفيديو الخفي المستخدم كـ texture -->
 <video id="vid" autoplay muted playsinline style="display: none;" crossorigin="anonymous"></video>
 
@@ -39,12 +39,16 @@
   src="#vidAsset"
   width="10"
   height="6"
-  position="0 1.6 -3.5"
+  position="0 1.6 -5"
   shader="flat">
 </a-video>
 </a-scene>
 
 <script>
+  function test(el){
+document.getElementById("videoPlane").setAttribute("position", `0 1.6 -${el.value}`);
+   
+  }
   let streamReady = false;
 
   // استقبال الرسالة من الصفحة الأم
