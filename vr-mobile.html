@@ -13,15 +13,17 @@
       background-color: black;
     }
 
-    video#vid {
-      display: none;
-    }
+ iframe{
+      width: 50%;
+      height: 100vh;
+      border: none; 
+ }
   </style>
 </head>
 
 <body>
-  <iframe src="https://nourshady.github.io/Hackoro/test.html" frameborder="0"></iframe>
-  <iframe src="https://nourshady.github.io/Hackoro/test.html" frameborder="0"></iframe>
+  <iframe id="frame1" src="https://nourshady.github.io/Hackoro/test.html" frameborder="0"></iframe>
+  <iframe id="frame2" src="https://nourshady.github.io/Hackoro/test.html" frameborder="0"></iframe>
 
   <script>
     const firebaseConfig = {
