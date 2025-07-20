@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Mic to Speaker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #111;
+      color: white;
+      padding: 2em;
+    }
+    button {
+      font-size: 1.5em;
+      padding: 1em 2em;
+      margin-top: 2em;
+      cursor: pointer;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    #status {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎤 Live Mic to Speaker</h1>
+  <p>Click below to start broadcasting your mic to speakers:</p>
+  <button id="startBtn" onclick="startMic()">Start Mic</button>
+  <div id="status"></div>
+
+  <script>
+    // Polyfill for older browsers
+    if (!navigator.mediaDevices) navigator.mediaDevices = {};
+    if (!navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia = function(constraints) {
+        const getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        if (!getUserMedia) {
+          return Promise.reject(new Error('getUserMedia not supported on this browser.'));
+        }
+        return new Promise((resolve, reject) => getUserMedia.call(navigator, constraints, resolve, reject));
+      };
+    }
+
+    async function startMic() {
+      const btn = document.getElementById("startBtn");
+      const statusEl = document.getElementById("status");
+      btn.disabled = true;
+      statusEl.textContent = "Requesting microphone access...";
+
+      if (location.protocol !== "https:" && location.hostname !== "localhost") {
+        alert("Warning: getUserMedia() only works on HTTPS or localhost!");
+      }
+
+      try {
+        console.log("Requesting mic...");
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaStreamSource(stream);
+        const gainNode = audioContext.createGain();
+        gainNode.gain.value = 2.0; // Increase volume
+
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        statusEl.textContent = "Microphone is now live!";
+        console.log("Microphone started.");
+      } catch (err) {
+        console.error("getUserMedia error:", err);
+        alert("Error accessing microphone: " + err.message);
+
+        // Fallback test sound
+        playTestSound();
+        statusEl.textContent = "Microphone failed. Playing test sound.";
+      }
+    }
+
+    function playTestSound() {
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4 note
+        oscillator.connect(audioContext.destination);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 1); // 1 second
+        console.log("Test sound played.");
+      } catch (e) {
+        console.error("Error playing test sound:", e);
+      }
+    }
+  </script>
+</body>
+</html>
