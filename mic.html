@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Live Mic to Speaker (Low Latency)</title>
+  <title>Live Mic to Speaker</title>
   <style>
     body {
       font-family: sans-serif;
@@ -11,119 +11,33 @@
       color: white;
       padding: 2em;
     }
-    button, select {
-      font-size: 1.2em;
-      padding: 0.5em 1em;
-      margin-top: 1em;
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-    }
     button {
-      background: #007bff;
-      color: #fff;
-    }
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    select {
-      background: #222;
-      color: white;
-      margin-left: 0.5em;
-    }
-    #status {
-      margin-top: 20px;
-      font-size: 1.2em;
-      color: #0f0;
+      font-size: 1.5em;
+      padding: 1em 2em;
+      margin-top: 2em;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>🎤 Live Mic to Speaker (Low Latency)</h1>
-  <p>Select output speaker:</p>
-  <select id="speakers"></select>
-  <br>
-  <button id="startBtn" onclick="startMic()">Start Mic</button>
-  <div id="status"></div>
-
+  <h1>🎤 Live Mic to Speaker</h1>
+  <p>Click below to start broadcasting your mic to speakers:</p>
+  <button onclick="startMic()">Start Mic</button>
   <script>
-    let audioElement;
-
-    // Polyfill for older browsers
-    if (!navigator.mediaDevices) navigator.mediaDevices = {};
-    if (!navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia = function(constraints) {
-        const getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-        if (!getUserMedia) {
-          return Promise.reject(new Error('getUserMedia not supported on this browser.'));
-        }
-        return new Promise((resolve, reject) => getUserMedia.call(navigator, constraints, resolve, reject));
-      };
-    }
-
-    // List available speakers
-    async function listSpeakers() {
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const speakers = devices.filter(d => d.kind === 'audiooutput');
-        const select = document.getElementById('speakers');
-        select.innerHTML = '';
-        speakers.forEach(speaker => {
-          const option = document.createElement('option');
-          option.value = speaker.deviceId;
-          option.textContent = speaker.label || `Speaker ${select.length + 1}`;
-          select.appendChild(option);
-        });
-      } catch (err) {
-        console.error('Error listing devices:', err);
-      }
-    }
-
-    // Start mic streaming to selected speaker
     async function startMic() {
-      const btn = document.getElementById("startBtn");
-      const statusEl = document.getElementById("status");
-      btn.disabled = true;
-      statusEl.textContent = "Requesting microphone access...";
-
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-        // Create low-latency audio context
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
+        const audioContext = new AudioContext();
         const source = audioContext.createMediaStreamSource(stream);
-
-        // Direct connection (no extra buffering)
-        const destination = audioContext.createMediaStreamDestination();
-        source.connect(audioContext.destination);
-
-        // For speaker selection, we use an <audio> element
-        audioElement = document.createElement('audio');
-        audioElement.autoplay = true;
-        audioElement.srcObject = stream;
-
-        const selectedSpeaker = document.getElementById('speakers').value;
-        if (audioElement.setSinkId) {
-          await audioElement.setSinkId(selectedSpeaker);
-          console.log('Speaker set to:', selectedSpeaker);
-        } else {
-          console.warn('Speaker selection is not supported on this browser.');
-        }
-
-        statusEl.textContent = "Microphone is now live!";
-        console.log("Microphone started with low latency.");
+        const gainNode = audioContext.createGain();
+        gainNode.gain.value = 2.0; // Amplify if needed
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        alert("Microphone is now live through speakers!");
       } catch (err) {
-        console.error("getUserMedia error:", err);
-        alert("Error accessing microphone: " + err.message);
-        statusEl.textContent = "Microphone failed.";
+        alert("Error: " + err.message);
       }
     }
-
-    // Ask for permission to get device labels
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(listSpeakers)
-      .catch(err => console.error('Permission denied:', err));
   </script>
 </body>
 </html>
