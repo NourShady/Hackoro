@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sudoku AI Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* ===== GLOBAL ===== */
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 10px;
+        }
+
+        h2 {
+            margin: 10px 0;
+        }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* ===== GRID ===== */
+        /* ===== GRID (iPhone SAFE) ===== */
+        #sudoku {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            width: 95vw;
+            max-width: 450px;
+            gap: 2px;
+            margin-top: 10px;
+        }
+
+        /* Force square cells without aspect-ratio */
+        .cell {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            text-align: center;
+            font-size: clamp(16px, 5vw, 22px);
+            border: 1px solid #334155;
+            background: #1e293b;
+            color: white;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* prevent iOS zoom */
+        .cell,
+        input {
+            font-size: 16px;
+        }
+
+        /* ===== DISABLED CELLS ===== */
+        /* IMPORTANT: don't override highlight colors */
+        .cell:disabled:not(.working):not(.placed) {
+            background: #475569;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* ===== AI HIGHLIGHTS ===== */
+        .working {
+            background: #f59e0b !important;
+            color: black !important;
+        }
+
+        .placed {
+            background: #22c55e !important;
+            color: black !important;
+        }
+
+        /* ===== 3x3 BORDERS ===== */
+        .box-border {
+            border-right: 3px solid white !important;
+        }
+
+        .row-border {
+            border-bottom: 3px solid white !important;
+        }
+
+        /* ===== BUTTONS ===== */
+        button {
+            width: 90%;
+            max-width: 400px;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* ===== LOG PANEL ===== */
+        #log {
+            width: 95vw;
+            max-width: 450px;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
+            padding: 10px;
+            background: #020617;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* ===== DESKTOP TWEAK ===== */
+        @media (min-width: 600px) {
+            .cell {
+                font-size: 20px;
+            }
+        }
+    </style>
+      <style>
+                /* ===== IFRAME MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 95%;
+            max-width: 700px;
+            height: 80%;
+            background-color: #0f172a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            width: 50px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            background: #dc2626;
+        }
+        .btn-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Sudoku Game</h2>
+
+    <div id="sudoku"></div>
+
+    <button onclick="validateBoard()">✅ Validate</button>
+    <button onclick="startAISolve()" id="ai">🤖 Solve with AI</button>
+    <button onclick="loadRandomPuzzle()">🎲 New Puzzle</button>
+
+    <div id="log">AI ready…</div>
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModalBtn">&times;</button>
+            <iframe title="Sudoku AI Game" src="./doc.html"></iframe>
+        </div>
+    </div>
+    <button class="btn-float" id="openModalBtn">?</button>
+  <script>
+        // ===== MODAL LOGIC =====
+        const modal = document.getElementById('gameModal');
+        const openBtn = document.getElementById('openModalBtn');
+        const closeBtn = document.getElementById('closeModalBtn');
+
+        openBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside content
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+    </script>
+    <script>
+
+        // ================= INITIAL PUZZLE =================
+        const puzzle = Array.from({ length: 9 }, () => Array(9).fill(0));
+
+        const grid = document.getElementById("sudoku");
+        const log = document.getElementById("log");
+
+        // ================= HELPERS =================
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        function getCell(r, c) {
+            return document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+        }
+
+        function getBoard() {
+            const board = Array.from({ length: 9 }, () => Array(9).fill(0));
+            document.querySelectorAll(".cell").forEach(cell => {
+                board[cell.dataset.row][cell.dataset.col] = cell.value ? +cell.value : 0;
+            });
+            return board;
+        }
+
+        function isValid(board, row, col, num) {
+            for (let i = 0; i < 9; i++) {
+                if (board[row][i] === num) return false;
+                if (board[i][col] === num) return false;
+            }
+
+            const sr = row - row % 3;
+            const sc = col - col % 3;
+
+            for (let r = 0; r < 3; r++)
+                for (let c = 0; c < 3; c++)
+                    if (board[sr + r][sc + c] === num) return false;
+
+            return true;
+        }
+
+        // ================= MRV (FAST CELL PICK) =================
+        function findBestCell(board) {
+            let best = null;
+            let minOptions = 10;
+
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    if (board[r][c] === 0) {
+                        let options = 0;
+
+                        for (let n = 1; n <= 9; n++)
+                            if (isValid(board, r, c, n)) options++;
+
+                        if (options < minOptions) {
+                            minOptions = options;
+                            best = { r, c };
+                        }
+                    }
+                }
+            }
+            return best;
+        }
+
+        // ================= FAST AI SOLVER =================
+        async function solve(board) {
+            const best = findBestCell(board);
+            if (!best) return true;
+
+            const { r, c } = best;
+            const cell = getCell(r, c);
+            cell.classList.add("working");
+
+            for (let num = 1; num <= 9; num++) {
+                if (isValid(board, r, c, num)) {
+
+                    log.innerHTML = `AI chose ${num} for row ${r + 1}, col ${c + 1}<br>` + log.innerHTML;
+                    await sleep(15);
+
+                    board[r][c] = num;
+                    cell.value = num;
+                    cell.classList.remove("working");
+                    cell.classList.add("placed");
+
+                    await sleep(20);
+
+                    if (await solve(board)) return true;
+
+                    // backtrack
+                    board[r][c] = 0;
+                    cell.value = "";
+                    cell.classList.remove("placed");
+                    cell.classList.add("working");
+
+                    log.innerHTML = `Backtracking at row ${r + 1}, col ${c + 1}<br>` + log.innerHTML;
+                    await sleep(15);
+                }
+            }
+
+            cell.classList.remove("working");
+            return false;
+        }
+
+        let milliseconds = 0;
+        let seconds = 0;
+        let timerInterval = null;
+
+        function updateDisplay() {
+            const secStr = milliseconds.toString().padStart(2, '0');
+            const minStr = seconds.toString().padStart(2, '0');
+            document.getElementById("ai").textContent = `🤖 ${minStr} S : ${secStr} MS`;
+        }
+
+        function tick() {
+            milliseconds++;
+
+            if (milliseconds === 1000) {
+                milliseconds = 0;
+                seconds++;
+            }
+
+            updateDisplay();
+        }
+
+        function startTimer() {
+            if (timerInterval !== null) return; 
+            timerInterval = setInterval(tick, 1);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            milliseconds = 0;
+            seconds = 0;
+           document.getElementById("ai").textContent = `🤖 Solve with AI`;
+        }
+
+        async function startAISolve() {
+            log.innerHTML = "AI solving… <br>";
+            const board = getBoard();
+            startTimer();
+            await solve(board);
+            stopTimer();
+            log.innerHTML = "AI finished ✅<br>" + log.innerHTML;
+        }
+
+        // ================= RANDOM GENERATOR =================
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function fillBoard(board) {
+            const best = findBestCell(board);
+            if (!best) return true;
+
+            const nums = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+            for (let num of nums) {
+                if (isValid(board, best.r, best.c, num)) {
+                    board[best.r][best.c] = num;
+                    if (fillBoard(board)) return true;
+                    board[best.r][best.c] = 0;
+                }
+            }
+            return false;
+        }
+
+        function generateRandomPuzzle(removeCount = 45) {
+            const board = Array.from({ length: 9 }, () => Array(9).fill(0));
+            fillBoard(board);
+
+            let removed = 0;
+            while (removed < removeCount) {
+                const r = Math.floor(Math.random() * 9);
+                const c = Math.floor(Math.random() * 9);
+                if (board[r][c] !== 0) {
+                    board[r][c] = 0;
+                    removed++;
+                }
+            }
+            return board;
+        }
+
+        function loadRandomPuzzle() {
+            const newPuzzle = generateRandomPuzzle(45);
+
+            for (let r = 0; r < 9; r++)
+                for (let c = 0; c < 9; c++)
+                    puzzle[r][c] = newPuzzle[r][c];
+
+            createGrid();
+            resetTimer();
+            log.textContent = "New puzzle generated 🎲";
+        }
+
+        // ================= GRID =================
+        function createGrid() {
+            grid.innerHTML = "";
+
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    const input = document.createElement("input");
+                    // input.type = "text";
+                    input.type = "tel";
+                    input.inputMode = "numeric";
+
+                    input.maxLength = 1;
+                    input.className = "cell";
+
+                    if ((c + 1) % 3 === 0 && c !== 8) input.classList.add("box-border");
+                    if ((r + 1) % 3 === 0 && r !== 8) input.classList.add("row-border");
+
+                    if (puzzle[r][c] !== 0) {
+                        input.value = puzzle[r][c];
+                        input.disabled = true;
+                    }
+
+                    input.addEventListener("input", () => {
+                        input.value = input.value.replace(/[^1-9]/g, "");
+                    });
+
+                    input.dataset.row = r;
+                    input.dataset.col = c;
+
+                    grid.appendChild(input);
+                }
+            }
+        }
+        function validateBoard() {
+            const board = getBoard();
+
+            // Check for empty cells
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    if (board[r][c] === 0) {
+                        alert("❌ Puzzle not complete.");
+                        return;
+                    }
+                }
+            }
+
+            // Check rows & columns
+            for (let i = 0; i < 9; i++) {
+                let row = new Set();
+                let col = new Set();
+
+                for (let j = 0; j < 9; j++) {
+                    row.add(board[i][j]);
+                    col.add(board[j][i]);
+                }
+
+                if (row.size !== 9 || col.size !== 9) {
+                    alert("❌ Incorrect solution.");
+                    return;
+                }
+            }
+
+            // Check 3x3 boxes
+            for (let boxRow = 0; boxRow < 3; boxRow++) {
+                for (let boxCol = 0; boxCol < 3; boxCol++) {
+                    let box = new Set();
+
+                    for (let r = 0; r < 3; r++) {
+                        for (let c = 0; c < 3; c++) {
+                            box.add(board[boxRow * 3 + r][boxCol * 3 + c]);
+                        }
+                    }
+
+                    if (box.size !== 9) {
+                        alert("❌ Incorrect solution.");
+                        return;
+                    }
+                }
+            }
+
+            alert("✅ Correct! You solved it!");
+        }
+
+        // initial load
+        loadRandomPuzzle();
+    </script>
+  
+
+</body>
+
+</html>
