@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة هبد في هبد 🤫</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- مكتبة توليد الـ QR Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #120b24;
+            --bg-card: #1d1433;
+            --primary-neon: #a855f7;
+            --secondary-neon: #06b6d4;
+            --accent-green: #22c55e;
+            --text-main: #f3e8ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+
+        h1.logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px var(--primary-neon), 0 0 20px var(--primary-neon);
+            color: #fff;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border: 2px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 25px;
+        }
+
+        .lobby-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .lobby-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #fff;
+            border-bottom: 2px solid rgba(168, 85, 247, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #c084fc;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(18, 11, 36, 0.7);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #7e22ce);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 15px var(--primary-neon);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 0 15px var(--secondary-neon);
+            transform: translateY(-2px);
+        }
+
+        .room-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .qr-holder {
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            width: 130px;
+            height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-share {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .room-code-display {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--secondary-neon);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        /* كروت الجيم */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .player-card {
+            background: rgba(29, 20, 51, 0.8);
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .player-card.my-card {
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            margin: 0 auto 12px;
+            border: 2px solid var(--secondary-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .player-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .player-score {
+            font-size: 0.9rem;
+            color: #a7f3d0;
+            margin-bottom: 15px;
+        }
+
+        .card-content {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .card-word {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* تأثير إخفاء كرت اللاعب عن نفسه */
+        .card-hidden {
+            filter: blur(6px);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .hidden-overlay {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 20%;
+            background: linear-gradient(to top, rgba(29, 20, 51, 1), rgba(29, 20, 51, 0.85));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+            font-weight: 700;
+            color: #c084fc;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .admin-controls {
+            margin-top: 15px;
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+            padding: 8px 15px;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 0 10px var(--accent-green);
+            transform: scale(1.02);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <style>
+        /* حاوية أزرار المساعدات أسفل الكارت */
+        .powers-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 12px;
+        }
+
+        .btn-power {
+            flex: 1;
+            padding: 8px 5px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+        }
+
+        /* زر التسهيل (صديق) */
+        .btn-power-help {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+            box-shadow: 0 2px 8px rgba(6, 182, 212, 0.2);
+        }
+
+        .btn-power-help:hover:not(:disabled) {
+            box-shadow: 0 0 10px #06b6d4;
+            transform: translateY(-1px);
+        }
+
+        /* زر التخريب / التضييع (عدو) */
+        .btn-power-sabotage {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-power-sabotage:hover:not(:disabled) {
+            box-shadow: 0 0 10px #ef4444;
+            transform: translateY(-1px);
+        }
+
+        /* حالة الزر المفعل أو المستهلك */
+        .btn-power:disabled {
+            background: #374151 !important;
+            color: #9ca3af !important;
+            cursor: not-allowed;
+            box-shadow: none !important;
+            transform: none !important;
+            opacity: 0.6;
+        }
+
+        /* تأثيرات بصرية للنصوص المنبثقة فوق الكلمة */
+        .power-effect-text {
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+            animation: flash 1s infinite alternate;
+        }
+
+        .effect-help {
+            color: #22c55e;
+            background: rgba(34, 197, 150, 0.15);
+        }
+
+        .effect-sabotage {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        @keyframes flash {
+            from {
+                opacity: 0.6;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 class="logo">هَبْد فِى هَبْد 🤫</h1>
+
+    <div class="container">
+
+        <!-- شاشة البداية -->
+        <div id="lobbyScreen" class="screen active">
+            <div class="lobby-grid">
+                <!-- إنشاء الروم -->
+                <div class="panel">
+                    <h2 class="panel-title">إنشاء غرفة جديدة (أدمن)</h2>
+                    <div class="form-group">
+                        <label for="hostName">اسمك كـ صانع الروم:</label>
+                        <input type="text" id="hostName" placeholder="اكتب اسمك هنا...">
+                    </div>
+                    <div class="form-group">
+                        <label for="categorySelect">اختر تصنيف الكلمات:</label>
+                        <select id="categorySelect">
+                            <option value="movies">🎬 أفلام ومسلسلات</option>
+                            <option value="food">🍔 أكلات وحلويات</option>
+                            <option value="objects">📦 حاجات عشوائية</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" id="btnCreateRoom">إنشاء الروم وانطلاق 🚀</button>
+                </div>
+
+                <!-- انضمام لروم -->
+                <div class="panel">
+                    <h2 class="panel-title">انضمام لغرفة قائمة</h2>
+                    <div class="form-group">
+                        <label for="playerName">اسمك في اللعبة:</label>
+                        <input type="text" id="playerName" placeholder="اكتب اسمك للمنافسة...">
+                    </div>
+                    <div class="form-group">
+                        <label for="roomCodeInput">كود الروم (Room Code):</label>
+                        <input type="text" id="roomCodeInput" placeholder="مثال: X7R2B"
+                            style="text-transform: uppercase;">
+                    </div>
+                    <button class="btn btn-secondary" id="btnJoinRoom">دخول الروم 🏃‍♂️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة اللعبة -->
+        <div id="gameScreen" class="screen">
+            <div class="panel room-details">
+                <div class="info-share">
+                    <div class="room-code-display">روم كود: <span id="roomCodeLabel">------</span></div>
+                    <p style="font-size: 0.9rem; color: #9ca3af; margin-bottom: 15px;">شارك الكود أو الـ QR مع أصحابك
+                        عشان يدخلوا.</p>
+                    <button class="btn btn-secondary" id="btnStartGame" style="max-width: 200px; display: none;">ابدأ
+                        اللعبة باللي دخلوا 🏁</button>
+                </div>
+                <div id="qrcode"></div>
+            </div>
+
+            <h2 style="margin-bottom: 15px; font-size: 1.5rem; color: #fff;">اللاعبين في الروم 👇</h2>
+            <div class="game-grid" id="playersGrid">
+                <!-- جلب اللاعبين حياً من فايربيز -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- مكاتب Firebase الأساسية -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <script>
+        // داتا الـ Firebase الخاصة بيك (املاها من الـ Console عندك)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyKBH0QCRxIbCfhYuKQq0pNjzCvMx1rgs",
+            authDomain: "habd-x-habd.firebaseapp.com",
+            databaseURL: "https://habd-x-habd-default-rtdb.firebaseio.com",
+            projectId: "habd-x-habd",
+            storageBucket: "habd-x-habd.firebasestorage.app",
+            messagingSenderId: "333077338424",
+            appId: "1:333077338424:web:e2bb00ad5b2ab119c9c9cd",
+            measurementId: "G-3H2FKR7XM1"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let currentRoomCode = '';
+        let myPlayerId = '';
+        let isHost = false;
+        let roomDataCache = null;
+
+        // بنك الكلمات المخصصة للعبة
+        const wordsBank = {
+            movies: ["اللمبي", "تيتو", "فول الصين العظيم", "غبي منه فيه", "الكيف", "إشاعة حب", "الناظر", "عسل إسود", "كده رضا", "صعيدي في الجامعة الأمريكية", "بوحة", "Hulk", "Iron Man", "Spiderman", "Batman"],
+            food: ["كشري", "ملوخية بالأرانب", "حواوشي", "كبسة", "فيتوتشيني", "بشاميل", "شاورما دبل", "طعمية سخنة", "أم علي", "كنافة بالمانجو", "سي فود", "محشي كرنب"],
+            objects: ["لمبة مكسورة", "شاحن معلق", "مروحة سقف", "شراب فردة وفردة", "ريموت التلفزيون", "مفتاح أنبوبة", "كوباية شاي مشطوبة", "مخدة فيبر", "سلك مشترك مكعبل", "مطبقة غسيل"]
+        };
+
+        function generateRoomCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 5; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+            return code;
+        }
+
+        function generateQR(text) {
+            document.getElementById("qrcode").innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), {
+                text: text, width: 128, height: 128, colorDark: "#ffffff", colorLight: "#1d1433", correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // الاستماع للتحديثات اللحظية للاعبين وحالة الروم
+        function listenToRoom(roomCode) {
+            database.ref('rooms/' + roomCode).on('value', (snapshot) => {
+                const room = snapshot.val();
+                if (!room) return;
+
+                roomDataCache = room;
+                const players = room.players;
+                const gameStatus = room.status;
+
+                if (gameStatus === 'playing') {
+                    document.getElementById('btnStartGame').style.display = 'none';
+                }
+
+                const playersGrid = document.getElementById('playersGrid');
+                playersGrid.innerHTML = '';
+
+                if (players) {
+                    // جلب داتا اللاعب الحالي (أنت) عشان نعرف هو استخدم كروته ولا لسه
+                    const me = players[myPlayerId];
+
+                    Object.keys(players).forEach((id, index) => {
+                        const player = players[id];
+                        const isMe = (id === myPlayerId);
+                        const hasGuessed = (player.status === 'guessed');
+                        const shouldHide = (gameStatus === 'playing' && isMe && !hasGuessed);
+
+                        const themeIndex = index % 7;
+                        const card = document.createElement('div');
+                        card.className = `player-card card-theme-${themeIndex} ${isMe ? 'my-card' : ''} ${hasGuessed ? 'player-done' : ''}`;
+
+                        let cardContentHtml = '';
+
+                        if (hasGuessed) {
+                            cardContentHtml = `
+                        <div class="avatar">🎉</div>
+                        <div class="player-name">${player.name} ${isMe ? '(أنت)' : ''}</div>
+                        <div class="player-score">النقاط: ${player.score || 0}</div>
+                        <div class="status-guessed-badge" style="background: var(--accent-green); color: white; padding: 8px; border-radius: 8px; margin-top: 10px; font-weight: bold; text-align: center;">
+                            خمن صح وطار! 🚀 <br>
+                            المركز: ${player.rank || 1}
+                        </div>
+                    `;
+                        } else {
+                            // تشيك لو حد فعل عليه وسيلة مساعدة أو مقلب
+                            // تشيك لو حد فعل عليه وسيلة مساعدة أو مقلب واظهار مين اللي عملها
+                            let effectHtml = '';
+                            if (player.underHelp) {
+                                const helper = player.helpedBy || "فاعل خير";
+                                effectHtml = `<div class="power-effect-text effect-help">💡 <b>${helper}</b> سهلها لـ</div>`;
+                            } else if (player.underSabotage) {
+                                const saboteur = player.sabotagedBy || "مجهول";
+                                effectHtml = `<div class="power-effect-text effect-sabotage">💀 <b>${saboteur}</b> مش هيخليك تكلم</div>`;
+                            }
+
+                            // تجهيز أزرار القدرات (تظهر فقط لو اللعبة بدأت، والكارت مش بتاعي، واللاعب المستهدف لسه بيثبت وجوده مخلصش)
+                            let powersHtml = '';
+                            if (gameStatus === 'playing' && !isMe) {
+                                // الأزرار تقفل لو اللاعب الحالي استهلك كروته السابقة
+                                const helpDisabled = me && me.usedHelp ? 'disabled' : '';
+                                const sabotageDisabled = me && me.usedSabotage ? 'disabled' : '';
+
+                                powersHtml = `
+                            <div class="powers-container">
+                                <button class="btn-power btn-power-help" ${helpDisabled} onclick="usePower('${id}', 'help')">
+                                    🤝 سهلها
+                                </button>
+                                <button class="btn-power btn-power-sabotage" ${sabotageDisabled} onclick="usePower('${id}', 'sabotage')">
+                                    🎯 ضيعه
+                                </button>
+                            </div>
+                        `;
+                            }
+
+                            cardContentHtml = `
+                        <div class="avatar">${player.isHost ? '👑' : '🎯'}</div>
+                        <div class="player-name">${player.name} ${isMe ? '(أنت)' : ''}</div>
+                        <div class="player-score">النقاط: ${player.score || 0}</div>
+                        <div class="card-content ${shouldHide ? 'card-hidden' : ''}">
+                            <div class="card-word">${player.currentWord || 'مستني اللعبة تبدأ...'}</div>
+                        </div>
+                        ${effectHtml}
+                        ${shouldHide ? '<div class="hidden-overlay">🤫 ممنوع البص! أصحابك شايفين الكلمة، ابدأ اهبد وخمنها!</div>' : ''}
+                        
+                        ${isHost && gameStatus === 'playing' ? `
+                            <div class="admin-controls" style="margin-top: 10px;">
+                                <button class="btn btn-success" style="width: 100%;" onclick="markAsCorrect('${id}')">خمن صح وعاش! </button>
+                            </div>
+                        ` : ''}
+
+                        ${powersHtml}
+                    `;
+                        }
+
+                        card.innerHTML = cardContentHtml;
+                        playersGrid.appendChild(card);
+                    });
+                }
+            });
+        }
+        function usePower(targetPlayerId, powerType) {
+            if (!currentRoomCode || !myPlayerId || !roomDataCache) return;
+
+            // جلب اسم اللاعب الحالي (أنت) عشان نبعته للـ Firebase
+            const myName = roomDataCache.players[myPlayerId]?.name || "واحد صاحبه";
+            const updates = {};
+
+            if (powerType === 'help') {
+                // قفل الكارت عندك
+                updates[`/rooms/${currentRoomCode}/players/${myPlayerId}/usedHelp`] = true;
+                // وسم اللاعب المستهدف + حفظ اسمك كـ "مساعد"
+                updates[`/rooms/${currentRoomCode}/players/${targetPlayerId}/underHelp`] = true;
+                updates[`/rooms/${currentRoomCode}/players/${targetPlayerId}/helpedBy`] = myName;
+                // مسح التأثير المعاكس
+                updates[`/rooms/${currentRoomCode}/players/${targetPlayerId}/underSabotage`] = null;
+                updates[`/rooms/${currentRoomCode}/players/${targetPlayerId}/sabotagedBy`] = null;
+            }
+            else if (powerType === 'sabotage') {
+                // قفل الكارت عندك
+                updates[`/rooms/${currentRoomCode}/players/${myPlayerId}/usedSabotage`] = true;
+                // وسم اللاعب المستهدف + حفظ اسمك كـ "مخرّب"
+                updates[`/rooms/${currentRoomCode}/players/${targetPlayerId}/underSabotage`] = true;
+                updates[`/rooms/${currentRoomCode}/players/${targetPlayerId}/sabotagedBy`] = myName;
+                // مسح التأثير المعاكس
+                updates[`/rooms/${currentRoomCode}/players/${targetPlayerId}/underHelp`] = null;
+                updates[`/rooms/${currentRoomCode}/players/${targetPlayerId}/helpedBy`] = null;
+            }
+
+            // تحديث فايربيز دفعة واحدة
+            database.ref().update(updates).then(() => {
+                console.log(`تم استخدام ${powerType} بنجاح.`);
+            }).catch((err) => {
+                console.error("خطأ:", err);
+            });
+        }
+        function markAsGuessedCorrect(roomId, playerId) {
+            const roomRef = database.ref('rooms/' + roomId);
+
+            // بنقرا الداتا الحالية للروم عشان نحسب الترتيب صح
+            roomRef.once('value').then((snapshot) => {
+                const roomData = snapshot.val();
+                if (!roomData) return;
+
+                const players = roomData.players || {};
+
+                // 1. احسب كام لاعب خمن صح لحد دلوقتي عشان نعرف الترتيب
+                let guessedCount = 0;
+                Object.keys(players).forEach((id) => {
+                    if (players[id].status === 'guessed') {
+                        guessedCount++;
+                    }
+                });
+
+                // الترتيب الجديد هيكون عدد اللي خمنوا + 1
+                const currentRank = guessedCount + 1;
+
+                // 2. حدّث حالة اللاعب ده بالذات في الـ Firebase
+                const playerRef = database.ref(`rooms/${roomId}/players/${playerId}`);
+                playerRef.update({
+                    status: 'guessed',
+                    rank: currentRank,
+                    currentWord: `تم التخمين بنجاح! 🎉`
+                });
+            });
+        }
+
+        // 1. زرار إنشاء الروم (الأدمن)
+        document.getElementById('btnCreateRoom').addEventListener('click', () => {
+            const hostName = document.getElementById('hostName').value.trim();
+            const category = document.getElementById('categorySelect').value;
+
+            if (!hostName) { alert('اكتب اسمك الأول يا هبّاد!'); return; }
+
+            currentRoomCode = generateRoomCode();
+            myPlayerId = 'player_' + Math.random().toString(36).substr(2, 9);
+            isHost = true;
+
+            const roomData = {
+                hostId: myPlayerId,
+                status: 'waiting',
+                category: category,
+                players: {}
+            };
+
+            roomData.players[myPlayerId] = {
+                name: hostName, score: 0, currentWord: "في الانتظار..", isHost: true
+            };
+
+            // تحديد مسار الروم في متغير عشان نستخدمه في المسح برضه
+            const roomRef = database.ref('rooms/' + currentRoomCode);
+
+            roomRef.set(roomData).then(() => {
+
+                // 🚀 هنا المكان الصح للـ onDisconnect
+                // بنقول للفايربيز: لو الـ Host قفل الصفحة أو فصل، امسح الروم دي فوراً
+                roomRef.onDisconnect().remove().catch((err) => {
+                    console.error("فشل تعيين أمر الحذف التلقائي:", err);
+                });
+
+                document.getElementById('lobbyScreen').classList.remove('active');
+                document.getElementById('gameScreen').classList.add('active');
+                document.getElementById('roomCodeLabel').innerText = currentRoomCode;
+                document.getElementById('btnStartGame').style.display = 'block';
+
+                const shareLink = window.location.origin + window.location.pathname + '?room=' + currentRoomCode;
+                generateQR(shareLink);
+
+                listenToRoom(currentRoomCode);
+            });
+        });
+
+        // 2. زرار انضمام لاعب للروم
+        document.getElementById('btnJoinRoom').addEventListener('click', () => {
+            const playerName = document.getElementById('playerName').value.trim();
+            const roomCode = document.getElementById('roomCodeInput').value.trim().toUpperCase();
+
+            if (!playerName || !roomCode) { alert('املا اسمك وكود الروم الأول!'); return; }
+
+            database.ref('rooms/' + roomCode).once('value', (snapshot) => {
+                if (!snapshot.exists()) { alert('الكود ده مش موجود!'); return; }
+
+                currentRoomCode = roomCode;
+                myPlayerId = 'player_' + Math.random().toString(36).substr(2, 9);
+                isHost = false;
+
+                const playerData = {
+                    name: playerName, score: 0, currentWord: "مستني الأدمن يبدأ..", isHost: false
+                };
+
+                database.ref('rooms/' + roomCode + '/players/' + myPlayerId).set(playerData).then(() => {
+                    document.getElementById('lobbyScreen').classList.remove('active');
+                    document.getElementById('gameScreen').classList.add('active');
+                    document.getElementById('roomCodeLabel').innerText = currentRoomCode;
+
+                    const shareLink = window.location.origin + window.location.pathname + '?room=' + currentRoomCode;
+
+                    generateQR(shareLink);
+
+                    listenToRoom(currentRoomCode);
+                });
+            });
+        });
+
+        // 3. منطق زرار "ابدأ اللعبة" (للأدمن بس)
+        document.getElementById('btnStartGame').addEventListener('click', () => {
+            if (!currentRoomCode || !roomDataCache) return;
+
+            const category = roomDataCache.category || 'movies';
+            const availableWords = wordsBank[category];
+            const updates = {};
+
+            // تغيير حالة الروم لـ playing وتوزيع الكلمات العشوائية على اللاعبين
+            updates['/rooms/' + currentRoomCode + '/status'] = 'playing';
+
+            Object.keys(roomDataCache.players).forEach((id) => {
+                const randomWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+                updates['/rooms/' + currentRoomCode + '/players/' + id + '/currentWord'] = randomWord;
+            });
+
+            // تحديث الكل دفعة واحدة في فايربيز
+            database.ref().update(updates).then(() => {
+                console.log("Game Started! Words distributed.");
+            });
+        });
+
+        // دالة فارغة مؤقتاً للجزء الخامس (التحكيم)
+        function markAsCorrect(playerId) {
+            if (!currentRoomCode) return;
+
+            const roomRef = database.ref('rooms/' + currentRoomCode);
+
+            // بنجيب داتا الروم الحالية مرة واحدة عشان نحسب الترتيب صح
+            roomRef.once('value').then((snapshot) => {
+                const room = snapshot.val();
+                if (!room || !room.players) return;
+
+                const players = room.players;
+
+                // 1. بنعد كام واحد في الروم دي حالته بقت "guessed" عشان نعرف ترتيب اللاعب الحالي
+                let guessedCount = 0;
+                Object.keys(players).forEach((id) => {
+                    if (players[id].status === 'guessed') {
+                        guessedCount++;
+                    }
+                });
+
+                // الترتيب الجديد هو عدد الناس اللي خمنت + 1
+                const nextRank = guessedCount + 1;
+
+                // 2. بنحدث داتا اللاعب ده بالذات في الـ Firebase
+                database.ref(`rooms/${currentRoomCode}/players/${playerId}`).update({
+                    status: 'guessed',
+                    rank: nextRank,
+                    currentWord: 'خمن صح 🎉'
+                }).then(() => {
+                    console.log(`تم تسجيل خروج اللاعب ${playerId} بالترتيب: ${nextRank}`);
+                }).catch((err) => {
+                    console.error("حصل مشكلة وأنت بتحدث حالة التخمين:", err);
+                });
+            });
+        }
+
+        // تشيك تلقائي لكود الروم من اللينك
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomParam = urlParams.get('room');
+        if (roomParam) {
+            document.getElementById('roomCodeInput').value = roomParam.toUpperCase();
+            document.getElementsByClassName('panel')[0].style.display = 'none'; // إخفاء جزء إنشاء الروم
+        }
+        document.getElementsByClassName('logo')[0].addEventListener('click', () => {
+            window.location.href = window.location.origin + window.location.pathname;
+        });
+    </script>
+</body>
+
+</html>
