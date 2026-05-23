@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logo.png" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
 
     <!-- مكتبة توليد الـ QR Code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -139,6 +141,7 @@
 
         .btn-primary {
             background: linear-gradient(135deg, #a855f7, #7e22ce);
+            margin: 5px;
         }
 
         .btn-primary:hover {
@@ -148,6 +151,11 @@
 
         .btn-secondary {
             background: linear-gradient(135deg, #06b6d4, #0891b2);
+            margin: 5px;
+        }
+
+        .btn-leave {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
         }
 
         .btn-secondary:hover {
@@ -160,7 +168,7 @@
             flex-wrap: wrap;
             gap: 20px;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
         }
 
         .qr-holder {
@@ -256,27 +264,24 @@
 
         /* تأثير إخفاء كرت اللاعب عن نفسه */
         .card-hidden {
-            filter: blur(6px);
+            filter: blur(10px);
             user-select: none;
             pointer-events: none;
         }
 
         .hidden-overlay {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 20%;
-            background: linear-gradient(to top, rgba(29, 20, 51, 1), rgba(29, 20, 51, 0.85));
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(231, 76, 60, 0.15);
+            /* خلفية حمراء خفيفة تعبر عن القفل */
+            color: #e74c3c;
+            /* لون الخط أحمر تحذيري */
+            border: 1px dashed #e74c3c;
+            /* إطار منقط عشان يبان إنها منطقة محجوبة */
+            padding: 12px 8px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
             text-align: center;
-            padding: 10px;
-            font-weight: 700;
-            color: #c084fc;
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(168, 85, 247, 0.3);
+            box-sizing: border-box;
         }
 
         .admin-controls {
@@ -454,10 +459,16 @@
                     <div class="room-code-display">روم كود: <span id="roomCodeLabel">------</span></div>
                     <p style="font-size: 0.9rem; color: #9ca3af; margin-bottom: 15px;">شارك الكود أو الـ QR مع أصحابك
                         عشان يدخلوا.</p>
-                    <button class="btn btn-secondary" id="btnStartGame" style="max-width: 200px; display: none;">ابدأ
+                    <div id="newRound"></div>
+                    <button id="btnLeaveRoom" style="max-width: 300px;" class="btn btn-primary btn-leave">خروج من
+                        الروم</button>
+                    <button class="btn btn-secondary" id="btnStartGame" style="max-width: 300px; display: none;">ابدأ
                         اللعبة باللي دخلوا 🏁</button>
                 </div>
-                <div id="qrcode"></div>
+                <div>
+                    <div id="qrcode"></div>
+                    <div id="shareButton"></div>
+                </div>
             </div>
 
             <h2 style="margin-bottom: 15px; font-size: 1.5rem; color: #fff;">اللاعبين في الروم 👇</h2>
@@ -473,6 +484,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
     <script>
+        
         // داتا الـ Firebase الخاصة بيك (املاها من الـ Console عندك)
         const firebaseConfig = {
             apiKey: "AIzaSyAyKBH0QCRxIbCfhYuKQq0pNjzCvMx1rgs",
@@ -492,13 +504,119 @@
         let myPlayerId = '';
         let isHost = false;
         let roomDataCache = null;
+        let wordsBank = {};
 
+        window.addEventListener('load', () => {
+    const savedRoomCode = localStorage.getItem('savedRoomCode');
+    const savedPlayerId = localStorage.getItem('savedPlayerId');
+    const savedIsHost = localStorage.getItem('savedIsHost');
+
+    // 🚀 الحل السحري: بنملا المتغيرات فوراً هنا قبل أي كلام مع الفايربيز
+    // عشان لو دالة الرسم اشتغلت وقت الريفرش تلاقيهم جاهزين ومستحيل تسرب الكلمة
+    if (savedRoomCode && savedPlayerId) {
+        currentRoomCode = savedRoomCode;
+        myPlayerId = savedPlayerId;
+        isHost = (savedIsHost === 'true');
+        
+        // لو تحب تعمل لودينج خفيف هنا أو تسيبها لحد ما يتأكد
+        database.ref('rooms/' + savedRoomCode).once('value').then((snapshot) => {
+            const room = snapshot.val();
+
+            // نتأكد إن الروم موجودة وأن اللاعب لسه متسجل جواها في الفايربيز
+            if (room && room.players && room.players[savedPlayerId]) {
+                
+                // تحويل المستخدم لشاشة اللعبة فوراً
+                document.getElementById('lobbyScreen').classList.remove('active');
+                document.getElementById('gameScreen').classList.add('active');
+                document.getElementById('roomCodeLabel').innerText = currentRoomCode;
+
+                // توليد رابط المشاركة والـ QR كود
+                const shareLink = window.location.origin + window.location.pathname + '?room=' + currentRoomCode;
+                generateQR(shareLink);
+
+                // ارجع اسمع للروم تاني 
+                listenToRoom(currentRoomCode);
+                console.log("تمت استعادة الجلسة بنجاح للدخول بنفس الشخصية والنقاط!");
+            } else {
+                // لو الروم اتمسحت أو اللاعب مش فيها، صفر المتغيرات ونظف الـ localStorage
+                myPlayerId = null;
+                currentRoomCode = null;
+                isHost = false;
+                
+                localStorage.removeItem('savedRoomCode');
+                localStorage.removeItem('savedPlayerId');
+                localStorage.removeItem('savedIsHost');
+                
+                // لو كان دخل شاشة الجيم ارجعه اللوبي
+                document.getElementById('gameScreen').classList.remove('active');
+                document.getElementById('lobbyScreen').classList.add('active');
+            }
+        }).catch((error) => {
+            console.error("خطأ أثناء محاولة استعادة الجلسة:", error);
+        });
+    }
+});
+
+        function loadWordsBank() {
+            fetch('words.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('فشل في تحميل ملف الكلمات');
+                    return response.json();
+                })
+                .then(data => {
+                    // تصفير البنك
+                    wordsBank = {};
+
+                    // تحويل الهيكل عشان يرجع زي القديم بالظبط
+                    Object.keys(data).forEach(key => {
+                        // بنخلي المفتاح عبارة عن مصفوفة الكلمات علطول (زي القديم)
+                        wordsBank[key] = data[key].words;
+
+                        // وبنربط معاها الاسم العربي في خاصية جانبية مخفية
+                        wordsBank[key].title = data[key].title;
+                    });
+
+                    console.log('تم تحميل بنك الكلمات بالهيكل القديم بنجاح!', wordsBank);
+
+                    // بناء السيلكت
+                    renderCategorySelect();
+                })
+                .catch(error => {
+                    console.error('حدثت مشكلة، جاري تشغيل الخطة البديلة:', error);
+                    // خطة بديلة بنفس الاستراتيجية
+                    wordsBank = {
+                        movies: ["اللمبي", "تيتو", "فول الصين العظيم", "غبي منه فيه", "الكيف", "إشاعة حب", "الناظر", "عسل إسود", "كده رضا", "صعيدي في الجامعة الأمريكية", "بوحة", "Hulk", "Iron Man", "Spiderman", "Batman"],
+                        food: ["كشري", "ملوخية بالأرانب", "حواوشي", "كبسة", "فيتوتشيني", "بشاميل", "شاورما دبل", "طعمية سخنة", "أم علي", "كنافة بالمانجو", "سي فود", "محشي كرنب"],
+                        objects: ["لمبة مكسورة", "شاحن معلق", "مروحة سقف", "شراب فردة وفردة", "ريموت التلفزيون", "مفتاح أنبوبة", "كوباية شاي مشطوبة", "مخدة فيبر", "سلك مشترك مكعبل", "مطبقة غسيل"]
+                    };
+
+                    wordsBank.movies.title = "🎬 أفلام ومسلسلات";
+                    wordsBank.food.title = "🍔 أكلات وحلويات";
+                    wordsBank.objects.title = "📦 أشياء مختلفة";
+                    renderCategorySelect();
+                });
+        }
+
+        // دالة بناء خيارات الـ Select ديناميكياً
+        function renderCategorySelect() {
+            const selectEl = document.getElementById('categorySelect');
+            if (!selectEl) return;
+
+            selectEl.innerHTML = '';
+
+            Object.keys(wordsBank).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key; // القيمة الإنجليزي (movies)
+                option.innerText = wordsBank[key].title || key; // الاسم العربي المتخزن جوه المصفوفة
+                selectEl.appendChild(option);
+            });
+        }
+
+
+        // استدعاء الدالة فوراً عند تشغيل السكريبت
+        loadWordsBank();
         // بنك الكلمات المخصصة للعبة
-        const wordsBank = {
-            movies: ["اللمبي", "تيتو", "فول الصين العظيم", "غبي منه فيه", "الكيف", "إشاعة حب", "الناظر", "عسل إسود", "كده رضا", "صعيدي في الجامعة الأمريكية", "بوحة", "Hulk", "Iron Man", "Spiderman", "Batman"],
-            food: ["كشري", "ملوخية بالأرانب", "حواوشي", "كبسة", "فيتوتشيني", "بشاميل", "شاورما دبل", "طعمية سخنة", "أم علي", "كنافة بالمانجو", "سي فود", "محشي كرنب", "مسقعة باللحمة المفرومة", "فتة مصرية بالخل والثوم", "ممبار محشي", "كفتة حاتي مشوية", "شيش طاووق", "سجق شرقي", "شوربة عدس", "كبدة إسكندراني", "رقاق باللحمة المفرومة", "بامية باللحمة الضأن", "محشي ورق عنب", "حمام محشي فريك", "بيتزا شرقي", "برجر جامبو", "بسبوسة بالقشطة", "بقلاوة", "عزيزية دمياطي", "رز باللبن في الفرن", "زلابية", "بلح الشام", "مولتن كيك", "وافل بالنوتيلا", "تيراميسو", "سينابون", "قطايف بالقشطة", "غريبة", "حواوشي إسكندراني", "كفتة داوود باشا", "فراخ مشوية على الفحم", "قلقاس بالسلق", "فطير مشلتت", "طاجن عكاوي", "شركسية بالفراخ", "فتة شاورما", "كنافة نابلسية", "أم علي بالمكسرات", "رز بلبن باللوتس", "صوابع زينب", "رموش الست", "لينزا دمياطي", "كنافة خشنة", "جلاش بالمهلبية", "أرز باللبن والمكسرات", "كوكيز شيكولاتة", "كيكة برتقال", "كيكة التايجر", "بسكويت شاي", "بودينج شوكولاتة", "شاورما لحمة", "مكرونة محمرة", "شوربة خضار بالفراخ", "كفتة فراخ", "أرز صيادية", "سمك بلطي مقلي", "سمك بورى سنجاري", "طاجن سبيط", "صينية سردين", "أرز معمر سادة", "حواوشي سجق", "فراخ تكا", "صينية جلاش باللحمة المفرومة", "أرز بسمتي بالخلطة", "كبدة مشوية على الجريل", "شيش برك", "كوسة بالبشاميل", "كفتة كباب حلة", "بيلت أند ميلت", "أرز ريزو", "بطاطس محشية لحمة مفرومة", "تورتة شيكولاتة", "كيكة قدرة قادر", "كوبيبة شامي", "بسكويت بالنشادر", "مربى تين", "كنافة قشطة وبندق"],
-            objects: ["لمبة مكسورة", "شاحن معلق", "مروحة سقف", "شراب فردة وفردة", "ريموت التلفزيون", "مفتاح أنبوبة", "كوباية شاي مشطوبة", "مخدة فيبر", "سلك مشترك مكعبل", "مطبقة غسيل"]
-        };
+
 
         function generateRoomCode() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -510,110 +628,158 @@
         function generateQR(text) {
             document.getElementById("qrcode").innerHTML = "";
             new QRCode(document.getElementById("qrcode"), {
-                text: text, width: 128, height: 128, colorDark: "#ffffff", colorLight: "#1d1433", correctLevel: QRCode.CorrectLevel.H
+                text: text, width: 256, height: 256, colorDark: "#ffffff", colorLight: "#1d1433", correctLevel: QRCode.CorrectLevel.H
             });
+            document.getElementById("shareButton").innerHTML = `<button id="shareButton" class="btn btn-primary" style="width: 256px;" data-text="${text}">
+  Share This
+</button>`;
+
         }
 
         // الاستماع للتحديثات اللحظية للاعبين وحالة الروم
-        function listenToRoom(roomCode) {
-            database.ref('rooms/' + roomCode).on('value', (snapshot) => {
-                const room = snapshot.val();
-                if (!room) return;
+        // متغير بره الدالة عشان نحتفظ بالتايمر ونقدر نلغيه لو الأدمن رجع
+        let reconnectionTimeout = null;
 
-                roomDataCache = room;
-                const players = room.players;
-                const gameStatus = room.status;
+      function listenToRoom(roomCode) {
+    const roomRef = database.ref('rooms/' + roomCode);
 
-                if (gameStatus === 'playing') {
-                    document.getElementById('btnStartGame').style.display = 'none';
-                }
+    roomRef.on('value', (snapshot) => {
+        const room = snapshot.val();
+        if (!room) return;
 
-                const playersGrid = document.getElementById('playersGrid');
-                playersGrid.innerHTML = '';
-
-                if (players) {
-                    // جلب داتا اللاعب الحالي (أنت) عشان نعرف هو استخدم كروته ولا لسه
-                    const me = players[myPlayerId];
-
-                    Object.keys(players).forEach((id, index) => {
-                        const player = players[id];
-                        const isMe = (id === myPlayerId);
-                        const hasGuessed = (player.status === 'guessed');
-                        const shouldHide = (gameStatus === 'playing' && isMe && !hasGuessed);
-
-                        const themeIndex = index % 7;
-                        const card = document.createElement('div');
-                        card.className = `player-card card-theme-${themeIndex} ${isMe ? 'my-card' : ''} ${hasGuessed ? 'player-done' : ''}`;
-
-                        let cardContentHtml = '';
-
-                        if (hasGuessed) {
-                            cardContentHtml = `
-                        <div class="avatar">🎉</div>
-                        <div class="player-name">${player.name} ${isMe ? '(أنت)' : ''}</div>
-                        <div class="player-score">النقاط: ${player.score || 0}</div>
-                        <div class="status-guessed-badge" style="background: var(--accent-green); color: white; padding: 8px; border-radius: 8px; margin-top: 10px; font-weight: bold; text-align: center;">
-                            خمن صح وطار! 🚀 <br>
-                            المركز: ${player.rank || 1}
-                        </div>
-                    `;
-                        } else {
-                            // تشيك لو حد فعل عليه وسيلة مساعدة أو مقلب
-                            // تشيك لو حد فعل عليه وسيلة مساعدة أو مقلب واظهار مين اللي عملها
-                            let effectHtml = '';
-                            if (player.underHelp) {
-                                const helper = player.helpedBy || "فاعل خير";
-                                effectHtml = `<div class="power-effect-text effect-help">💡 <b>${helper}</b> سهلها لـ</div>`;
-                            } else if (player.underSabotage) {
-                                const saboteur = player.sabotagedBy || "مجهول";
-                                effectHtml = `<div class="power-effect-text effect-sabotage">💀 <b>${saboteur}</b> مش هيخليك تكلم</div>`;
-                            }
-
-                            // تجهيز أزرار القدرات (تظهر فقط لو اللعبة بدأت، والكارت مش بتاعي، واللاعب المستهدف لسه بيثبت وجوده مخلصش)
-                            let powersHtml = '';
-                            if (gameStatus === 'playing' && !isMe) {
-                                // الأزرار تقفل لو اللاعب الحالي استهلك كروته السابقة
-                                const helpDisabled = me && me.usedHelp ? 'disabled' : '';
-                                const sabotageDisabled = me && me.usedSabotage ? 'disabled' : '';
-
-                                powersHtml = `
-                            <div class="powers-container">
-                                <button class="btn-power btn-power-help" ${helpDisabled} onclick="usePower('${id}', 'help')">
-                                    🤝 سهلها
-                                </button>
-                                <button class="btn-power btn-power-sabotage" ${sabotageDisabled} onclick="usePower('${id}', 'sabotage')">
-                                    🎯 ضيعه
-                                </button>
-                            </div>
-                        `;
-                            }
-
-                            cardContentHtml = `
-                        <div class="avatar">${player.isHost ? '👑' : '🎯'}</div>
-                        <div class="player-name">${player.name} ${isMe ? '(أنت)' : ''}</div>
-                        <div class="player-score">النقاط: ${player.score || 0}</div>
-                        <div class="card-content ${shouldHide ? 'card-hidden' : ''}">
-                            <div class="card-word">${player.currentWord || 'مستني اللعبة تبدأ...'}</div>
-                        </div>
-                        ${effectHtml}
-                        ${shouldHide ? '<div class="hidden-overlay">🤫 ممنوع البص! أصحابك شايفين الكلمة، ابدأ اهبد وخمنها!</div>' : ''}
-                        
-                        ${isHost && gameStatus === 'playing' ? `
-                            <div class="admin-controls" style="margin-top: 10px;">
-                                <button class="btn btn-success" style="width: 100%;" onclick="markAsCorrect('${id}')">خمن صح وعاش! </button>
-                            </div>
-                        ` : ''}
-
-                        ${powersHtml}
-                    `;
-                        }
-
-                        card.innerHTML = cardContentHtml;
-                        playersGrid.appendChild(card);
+        // ---- منطق فحص انفصال وعودة الأدمن ----
+        if (room.status === 'host_disconnected') {
+            if (!reconnectionTimeout) {
+                console.log("الأدمن فصل! بدء مهلة الدقيقتين قبل حذف الروم...");
+                reconnectionTimeout = setTimeout(() => {
+                    roomRef.remove().then(() => {
+                        console.log("تم حذف الروم لعدم عودة الأدمن.");
+                        reconnectionTimeout = null;
+                    }).catch((err) => {
+                        console.error("فشل حذف الروم بعد انتهاء المهلة:", err);
                     });
-                }
-            });
+                }, 120000);
+            }
+        } else {
+            if (reconnectionTimeout) {
+                clearTimeout(reconnectionTimeout);
+                reconnectionTimeout = null;
+                console.log("عاش، الأدمن رجع بنجاح وتم إلغاء أمر الحذف!");
+            }
         }
+        // ----------------------------------------
+
+        roomDataCache = room;
+        const players = room.players;
+        const gameStatus = room.status;
+
+        if (gameStatus === 'playing') {
+            document.getElementById('btnStartGame').style.display = 'none';
+        }
+
+        const playersGrid = document.getElementById('playersGrid');
+        
+        // 🚨 حماية الريفريش: لو البيانات لسه بتحمل ومش لاقي الـ ID بتاعي جوه اللاعبين، استنى اللفة الجاية ومترسمش حاجة غلط
+        if (!players || !myPlayerId || !players[myPlayerId]) {
+            console.log("جاري تحميل بيانات اللاعب الحالي بعد الريفريش...");
+            return; 
+        }
+
+        // طالما وصلنا هنا، يبقى البيانات حية وجاهزة 100% وعارفين إحنا مين
+        playersGrid.innerHTML = '';
+        const me = players[myPlayerId];
+        const amITheHost = me.isHost === true; // قراءة صريحة ومؤكدة
+
+        Object.keys(players).forEach((id, index) => {
+            const player = players[id];
+            
+            // المقارنة هنا هتم بدقة لأن الطرفين جاهزين
+            const isMe = (id === myPlayerId);
+            const hasGuessed = (player.status === 'guessed');
+            
+            // 🎯 شرط الإخفاء: لو الكارت بتاعي واللعبة شغالة، اخفي الكلمة فوراً (حتى لو أنا الأدمن)
+            const shouldHide = (gameStatus === 'playing' && isMe && !hasGuessed);
+
+            const themeIndex = index % 7;
+            const card = document.createElement('div');
+            card.className = `player-card card-theme-${themeIndex} ${isMe ? 'my-card' : ''} ${hasGuessed ? 'player-done' : ''}`;
+
+            let cardContentHtml = '';
+
+            if (hasGuessed) {
+                cardContentHtml = `
+                    <div class="avatar">🎉</div>
+                    <div class="player-name">${player.name} ${isMe ? '(أنت)' : ''}</div>
+                    <div class="player-score">النقاط: ${player.score || 0}</div>
+                    <div class="status-guessed-badge" style="background: var(--accent-green); color: white; padding: 8px; border-radius: 8px; margin-top: 10px; font-weight: bold; text-align: center;">
+                        خمن صح وطار! 🚀 <br>
+                        المركز: ${player.rank || 1}
+                    </div>
+                `;
+            } else {
+                let effectHtml = '';
+                if (player.underHelp) {
+                    const helper = player.helpedBy || "فاعل خير";
+                    effectHtml = `<div class="power-effect-text effect-help">💡 <b>${helper}</b> سهلها لـ</div>`;
+                } else if (player.underSabotage) {
+                    const saboteur = player.sabotagedBy || "مجهول";
+                    effectHtml = `<div class="power-effect-text effect-sabotage">💀 <b>${saboteur}</b> مش هيخليك تكلم</div>`;
+                }
+
+                let powersHtml = '';
+                if (gameStatus === 'playing' && !isMe) {
+                    const helpDisabled = me && me.usedHelp ? 'disabled' : '';
+                    const sabotageDisabled = me && me.usedSabotage ? 'disabled' : '';
+
+                    powersHtml = `
+                        <div class="powers-container">
+                            <button class="btn-power btn-power-help" ${helpDisabled} onclick="usePower('${id}', 'help')">
+                                🤝 سهلها
+                            </button>
+                            <button class="btn-power btn-power-sabotage" ${sabotageDisabled} onclick="usePower('${id}', 'sabotage')">
+                                🎯 ضيعه
+                            </button>
+                        </div>
+                    `;
+                }
+
+                cardContentHtml = `
+                    <div class="avatar">${player.isHost ? '👑' : '🎯'}</div>
+                    <div class="player-name">${player.name} ${isMe ? '(أنت)' : ''}</div>
+                    <div class="player-score">النقاط: ${player.score || 0}</div>
+                    <div class="card-content">
+                       ${shouldHide ?
+                            '<div class="hidden-overlay">🤫 ممنوع البص! أصحابك شايفين الكلمة، ابدأ اهبد وخمنها!</div>' :
+                            `<div class="visible-word">${player.currentWord || 'مستني اللعبة تبدأ...'}</div>`
+                        }
+                    </div>
+                    ${effectHtml}
+                    
+                    <!-- الأدمن بيشوف زرار التحكم على كروت اللاعبين التانيين بس -->
+                    ${amITheHost && gameStatus === 'playing' && !isMe ? `
+                        <div class="admin-controls" style="margin-top: 10px;">
+                            <button class="btn btn-success" style="width: 100%;" onclick="markAsCorrect('${id}')">خمن صح وعاش! </button>
+                        </div>
+                    ` : ''}
+
+                    ${powersHtml}
+                `;
+            }
+
+            card.innerHTML = cardContentHtml;
+            playersGrid.appendChild(card);
+        });
+
+        // زرار الجولة الجديدة للأدمن
+        document.getElementById('newRound').innerHTML = amITheHost ? `
+            <div class="admin-controls" style="margin-top: 10px;">
+                <button class="btn btn-primary" style="max-width: 300px; background: var(--accent-cyan);" onclick="startNewRound('${roomCode}')">
+                    🔄 جولة جديدة (تغيير الكلمات)
+                </button>
+            </div>
+        ` : '';
+    });
+}
         function usePower(targetPlayerId, powerType) {
             if (!currentRoomCode || !myPlayerId || !roomDataCache) return;
 
@@ -699,17 +865,23 @@
             };
 
             roomData.players[myPlayerId] = {
-                name: hostName, score: 0, currentWord: "في الانتظار..", isHost: true
+                name: hostName, score: 0, currentWord: "وانا الادمن ☝️", isHost: true
             };
 
-            // تحديد مسار الروم في متغير عشان نستخدمه في المسح برضه
             const roomRef = database.ref('rooms/' + currentRoomCode);
 
             roomRef.set(roomData).then(() => {
 
-                // 🚀 هنا المكان الصح للـ onDisconnect
-                // بنقول للفايربيز: لو الـ Host قفل الصفحة أو فصل، امسح الروم دي فوراً
-                roomRef.onDisconnect().remove().catch((err) => {
+                // 🚀 حفظ بيانات الجلسة في متصفح الأدمن عشان لو عمل ريفريش يرجع علطول
+                localStorage.setItem('savedRoomCode', currentRoomCode);
+                localStorage.setItem('savedPlayerId', myPlayerId);
+                localStorage.setItem('savedIsHost', 'true');
+
+                // 🚀 تعديل الـ onDisconnect: لما الأدمن يفصل، بنغيّر الحالة فقط ونسيب الروم عشان ندي له مهلة يرجع
+                roomRef.onDisconnect().update({
+                    status: 'host_disconnected',
+                    disconnectedAt: firebase.database.ServerValue.TIMESTAMP
+                }).catch((err) => {
                     console.error("فشل تعيين أمر الحذف التلقائي:", err);
                 });
 
@@ -724,36 +896,117 @@
                 listenToRoom(currentRoomCode);
             });
         });
+        function startNewRound(roomCode) {
+            const roomRef = database.ref('rooms/' + roomCode);
 
+            // 1. نجيب الداتا الحالية للروم عشان نعرف القسم المختار ونغير كلمات اللعيبة
+            roomRef.once('value').then((snapshot) => {
+                const room = snapshot.val();
+                if (!room || !room.players) return;
+
+                // تحديد بنك الكلمات بناءً على القسم المختار للروم (لو مش موجود يختار movies كافتراضي)
+                const category = room.category || 'movies';
+                const availableWords = wordsBank[category];
+
+                const updatedPlayers = {};
+
+                // 2. نلف على كل لاعب ونحدث كلمته ونصفر حالته مع الحفاظ على النقط الحالية
+                Object.keys(room.players).forEach((id) => {
+                    const player = room.players[id];
+
+                    // اختيار كلمة عشوائية من القسم الحالي للروم
+                    const randomWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+
+                    updatedPlayers[id] = {
+                        ...player,
+                        currentWord: randomWord,
+                        status: 'waiting', // تصفير الحالة عشان يقدروا يخمنوا من جديد
+                        rank: null,        // مسح المركز القديم للجولة السابقة
+                        underHelp: false,  // تصفير المقالب والمساعدات لجولة جديدة نظيفة
+                        underSabotage: false,
+                        usedHelp: null,    // فتح كروت المساعدات والمقالب تاني للاعبين لو استخدموها
+                        usedSabotage: null
+                    };
+                });
+
+                // 3. نرفع التحديثات الجديدة للفايربيز ونرجع حالة الروم لـ playing
+                return roomRef.update({
+                    status: 'playing',
+                    players: updatedPlayers
+                });
+            }).then(() => {
+                console.log("تم بدء جولة جديدة وتحديث الكلمات بنجاح!");
+            }).catch((err) => {
+                console.error("فشل بدء جولة جديدة:", err);
+            });
+        }
         // 2. زرار انضمام لاعب للروم
         document.getElementById('btnJoinRoom').addEventListener('click', () => {
+            document.getElementById('btnJoinRoom').disabled = true;
             const playerName = document.getElementById('playerName').value.trim();
             const roomCode = document.getElementById('roomCodeInput').value.trim().toUpperCase();
 
-            if (!playerName || !roomCode) { alert('املا اسمك وكود الروم الأول!'); return; }
+            if (!playerName || !roomCode) {
+                alert('املا اسمك وكود الروم الأول!');
+                document.getElementById('btnJoinRoom').disabled = false;
+                return;
+            }
 
             database.ref('rooms/' + roomCode).once('value', (snapshot) => {
-                if (!snapshot.exists()) { alert('الكود ده مش موجود!'); return; }
+                if (!snapshot.exists()) {
+                    alert('الكود ده مش موجود!');
+                    document.getElementById('btnJoinRoom').disabled = false;
+                    return;
+                }
 
+                const room = snapshot.val();
                 currentRoomCode = roomCode;
-                myPlayerId = 'player_' + Math.random().toString(36).substr(2, 9);
                 isHost = false;
 
-                const playerData = {
-                    name: playerName, score: 0, currentWord: "مستني الأدمن يبدأ..", isHost: false
-                };
+                // 🧠 تشيك ذكي: هل اللاعب ده كان موجود في الروم دي قبل كده وعمل ريفريش؟
+                const savedRoomCode = localStorage.getItem('savedRoomCode');
+                const savedPlayerId = localStorage.getItem('savedPlayerId');
 
-                database.ref('rooms/' + roomCode + '/players/' + myPlayerId).set(playerData).then(() => {
+                if (savedRoomCode === roomCode && savedPlayerId && room.players && room.players[savedPlayerId]) {
+                    // لو ليه مكان قديم، يرجع يمسك نفس الـ ID القديم بتاعه بنقطه
+                    myPlayerId = savedPlayerId;
+                    proceedToGame();
+                } else {
+                    // لو لاعب جديد تماماً، نصنع له ID عشوائي ونرفعه للفايربيز
+                    myPlayerId = 'player_' + Math.random().toString(36).substr(2, 9);
+
+                    const playerData = {
+                        name: playerName,
+                        score: 0,
+                        currentWord: "مستني الأدمن يبدأ..",
+                        isHost: false,
+                        status: 'waiting'
+                    };
+
+                    database.ref('rooms/' + roomCode + '/players/' + myPlayerId).set(playerData).then(() => {
+                        proceedToGame();
+                    });
+                }
+
+                // دالة داخلية عشان م نكررش الكود بتاع نقل الشاشات وحفظ الـ LocalStorage
+                function proceedToGame() {
+                    // حفظ بيانات الجلسة في متصفح اللاعب
+                    localStorage.setItem('savedRoomCode', currentRoomCode);
+                    localStorage.setItem('savedPlayerId', myPlayerId);
+                    localStorage.setItem('savedIsHost', 'false');
+
                     document.getElementById('lobbyScreen').classList.remove('active');
                     document.getElementById('gameScreen').classList.add('active');
                     document.getElementById('roomCodeLabel').innerText = currentRoomCode;
 
                     const shareLink = window.location.origin + window.location.pathname + '?room=' + currentRoomCode;
-
                     generateQR(shareLink);
 
+                    // فتح الزرار تاني للاستخدام المستقبلي
+                    document.getElementById('btnJoinRoom').disabled = false;
+
                     listenToRoom(currentRoomCode);
-                });
+                }
             });
         });
 
@@ -825,6 +1078,84 @@
         }
         document.getElementsByClassName('logo')[0].addEventListener('click', () => {
             window.location.href = window.location.origin + window.location.pathname;
+        });
+        // تفعيل إعادة الدخول التلقائي عند الريفرش أو العودة
+       
+        document.getElementById('btnLeaveRoom').addEventListener('click', () => {
+            // تأكيد الخروج من المستخدم الأول عشان محدش يدوس بالغلط
+            const confirmMsg = isHost ? "أنت الأدمن، لو خرجت الروم هتتقفل خالص.. متأكد؟" : "متأكد عايز تخرج من الروم؟";
+            if (!confirm(confirmMsg)) return;
+
+            const roomRef = database.ref('rooms/' + currentRoomCode);
+
+            if (isHost) {
+                // 1. لو أدمن: امسح الروم بالكامل من الفايربيز
+                roomRef.remove().then(() => {
+                    cleanLocalSessionAndExit();
+                }).catch((err) => {
+                    console.error("فشل إغلاق الروم:", err);
+                });
+            } else {
+                // 2. لو لاعب عادي: امسح اللاعب ده بس من جوه الروم
+                roomRef.child('players/' + myPlayerId).remove().then(() => {
+                    cleanLocalSessionAndExit();
+                }).catch((err) => {
+                    console.error("فشل الخروج من الروم:", err);
+                });
+            }
+        });
+
+        // دالة تنظيف الذاكرة المحلية والعودة لشاشة البداية
+        function cleanLocalSessionAndExit() {
+            // تنظيف المتصفح عشان الجلسة ماترscaleـش تاني عند الريفرش
+            localStorage.removeItem('savedRoomCode');
+            localStorage.removeItem('savedPlayerId');
+            localStorage.removeItem('savedIsHost');
+
+            // تصفير المتغيرات في الكود
+            currentRoomCode = null;
+            myPlayerId = null;
+            isHost = false;
+
+            // نقل المستخدم لشاشة اللوبي الرئيسية
+            document.getElementById('gameScreen').classList.remove('active');
+            document.getElementById('lobbyScreen').classList.add('active');
+
+            // إخفاء زرار بدء اللعبة احتياطياً لو كان ظاهر
+            if (document.getElementById('btnStartGame')) {
+                document.getElementById('btnStartGame').style.display = 'none';
+            }
+
+            console.log("تم الخروج بنجاح وتنظيف بيانات الجلسة.");
+        }
+
+        document.getElementById('shareButton').addEventListener('click', async function () {
+            // 'this' refers to the button that was clicked
+            const textToShare = this.getAttribute('data-text');
+
+            const shareData = {
+                title: 'خش يلا الروم اتعملت',
+                text: textToShare
+            };
+
+            // Try native sharing
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    return;
+                } catch (error) {
+                    if (error.name === 'AbortError') return;
+                    console.log('Error sharing:', error);
+                }
+            }
+
+            // Fallback: Copy to clipboard
+            try {
+                await navigator.clipboard.writeText(shareData.text);
+                alert('Copied to clipboard!');
+            } catch (err) {
+                alert('Failed to share or copy.');
+            }
         });
     </script>
 </body>
