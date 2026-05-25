@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة تحكم إحصائيات اللعبة 📊</title>
+    <style>
+        body { font-family: sans-serif; background: #1a252f; color: white; padding: 40px; text-align: center; }
+        .dashboard { display: flex; justify-content: center; gap: 20px; margin-top: 40px; }
+        .card { background: #2c3e50; padding: 30px; border-radius: 12px; width: 220px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 2px solid #3498db; }
+        .card.active { border-color: #2ecc71; }
+        .card h3 { margin: 0 0 15px 0; font-size: 18px; color: #bdc3c7; }
+        .card .number { font-size: 36px; font-weight: bold; color: #fff; }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+
+    <h1>📊 إحصائيات لعبة هبد × هبد الحية</h1>
+    <p>تحديث مباشر وتلقائي بدون ريفرش</p>
+
+    <div class="dashboard">
+        <div class="card">
+            <h3>👀 اللعبة اتفتحت كام مرة؟</h3>
+            <div class="number" id="totalViews">0</div>
+        </div>
+
+        <div class="card">
+            <h3>👥 إجمالي اللاعبين (بدون تكرار)</h3>
+            <div class="number" id="totalUnique">0</div>
+        </div>
+
+        <div class="card active">
+            <h3>🟢 متصلين حالاً (Active)</h3>
+            <div class="number" style="color: #2ecc71;" id="activeNow">0</div>
+        </div>
+    </div>
+
+    <script>
+        // دمج الـ config بتاع الفايربيز بتاعك هنا
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyKBH0QCRxIbCfhYuKQq0pNjzCvMx1rgs",
+            authDomain: "habd-x-habd.firebaseapp.com",
+            databaseURL: "https://habd-x-habd-default-rtdb.firebaseio.com",
+            projectId: "habd-x-habd",
+            storageBucket: "habd-x-habd.firebasestorage.app",
+            messagingSenderId: "333077338424",
+            appId: "1:333077338424:web:e2bb00ad5b2ab119c9c9cd",
+            measurementId: "G-3H2FKR7XM1"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // قراء الداتا وعرضها لايف
+        database.ref('game_analytics').on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            
+            // 1. حساب الزيارات الكلية
+            document.getElementById('totalViews').innerText = data.total_views || 0;
+            
+            // 2. حساب اللاعبين بدون تكرار
+            const totalUniqueCount = data.total_unique_players ? Object.keys(data.total_unique_players).length : 0;
+            document.getElementById('totalUnique').innerText = totalUniqueCount;
+            
+            // 3. حساب المتصلين حالاً
+            const activeCount = data.active_now ? Object.keys(data.active_now).length : 0;
+            document.getElementById('activeNow').innerText = activeCount;
+        });
+    </script>
+</body>
+</html>
