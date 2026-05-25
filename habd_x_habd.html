@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="logo.png" sizes="32x32">
-    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+    <link rel="icon" type="image/png" href="https://nourshady.github.io/Hackoro/habd_x_habd_logo.png" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://nourshady.github.io/Hackoro/habd_x_habd_logo.png">
 
     <!-- مكتبة توليد الـ QR Code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -406,6 +406,99 @@
             }
         }
     </style>
+    <Style>
+        /* زرار علامة الاستفهام الصغير */
+        .btn-search-hint {
+            background: #f39c12;
+            border: none;
+            min-height: 30px;
+            min-width: 30px;
+            width: 12%;
+            height: 12%;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .btn-search-hint:hover {
+            transform: scale(1.2);
+        }
+
+        /* البوب أب الأساسية مخفية في العادي */
+        .search-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        /* تفعيل البوب أب */
+        .search-modal.modal-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* جسم البوب أب الداخلي */
+        .search-modal-content {
+            background: #2c3e50;
+            width: 90%;
+            max-width: 700px;
+            height: 80vh;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 2px solid #3498db;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+        }
+
+        /* الجزء العلوي للبوب أب */
+        .search-modal-header {
+            background: #1a252f;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .close-modal-btn {
+            background: #e74c3c;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* منطقة الشاشة والسيرش */
+        .search-modal-body {
+            flex: 1;
+            background: white;
+        }
+
+        .search-modal-body iframe {
+            width: 100%;
+            height: 100%;
+        }
+    </Style>
 </head>
 
 <body>
@@ -479,6 +572,17 @@
 
     </div>
 
+    <div id="searchModal" class="search-modal">
+        <div class="search-modal-content">
+            <div class="search-modal-header">
+                <h3>🔍 غش سريع من جوجل</h3>
+                <button class="close-modal-btn" onclick="closeSearchModal()">❌ اقفل</button>
+            </div>
+            <div class="search-modal-body">
+                <iframe id="googleSearchFrame" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
     <!-- مكاتب Firebase الأساسية -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -506,6 +610,34 @@
         let roomDataCache = null;
         let wordsBank = {};
 
+// دالة تسجيل الإحصائيات الشاملة
+function trackGameAnalytics() {
+    // 1. عداد الزيارات الكلي (بيزيد مع كل فتحة صفحة أو ريفرش)
+    database.ref('game_analytics/total_views').transaction((currentValue) => {
+        return (currentValue || 0) + 1;
+    });
+
+    // 2. تسجيل اللاعبين الإجمالي (بدون تكرار) + الـ Active حالا
+    if (myPlayerId) {
+        // أ) بضيفه في لستة الـ Active حالا وتتمسح لما يقفل الصفحة
+        const activeRef = database.ref('game_analytics/active_now/' + myPlayerId);
+        database.ref('.info/connected').on('value', (snapshot) => {
+            if (snapshot.val() === true) {
+                activeRef.set(true);
+                activeRef.onDisconnect().remove();
+            }
+        });
+
+        // ب) بضيفه في لستة الإجمالي التاريخي (الفايربيز هيمنع التكرار لأن الـ ID ثابت للجهاز)
+        database.ref('game_analytics/total_unique_players/' + myPlayerId).set({
+            lastSeen: firebase.database.ServerValue.TIMESTAMP
+        });
+    }
+}
+
+// تشغيل التتبع أول ما الـ myPlayerId يجهز عندك في الكود
+// (تأكد من مناداة الدالة trackGameAnalytics() فوراً بعد ما الـ myPlayerId تاخد قيمتها جوه كود الـ load أو بره)
+
         window.addEventListener('load', () => {
             const savedRoomCode = localStorage.getItem('savedRoomCode');
             const savedPlayerId = localStorage.getItem('savedPlayerId');
@@ -518,6 +650,8 @@
                 myPlayerId = savedPlayerId;
                 isHost = (savedIsHost === 'true');
 
+                trackGameAnalytics();
+                
                 // لو تحب تعمل لودينج خفيف هنا أو تسيبها لحد ما يتأكد
                 database.ref('rooms/' + savedRoomCode).once('value').then((snapshot) => {
                     const room = snapshot.val();
@@ -558,7 +692,7 @@
         });
 
         function loadWordsBank() {
-            fetch('words.json')
+            fetch('https://nourshady.github.io/Hackoro/habd_x_habd_words.json')
                 .then(response => {
                     if (!response.ok) throw new Error('فشل في تحميل ملف الكلمات');
                     return response.json();
@@ -746,27 +880,30 @@
                         }
 
                         cardContentHtml = `
-                    <div class="avatar">${player.isHost ? '👑' : '🎯'}</div>
-                    <div class="player-name">${player.name} ${isMe ? '(أنت)' : ''}</div>
-                    <div class="player-score">النقاط: ${player.score || 0}</div>
-                    <div class="card-content">
-                       ${shouldHide ?
+    <div class="avatar">${player.isHost ? '👑' : '🎯'}</div>
+    <div class="player-name">${player.name} ${isMe ? '(أنت)' : ''}</div>
+    <div class="player-score">النقاط: ${player.score || 0}</div>
+    <div class="card-content">
+       ${shouldHide ?
                                 '<div class="hidden-overlay">🤫 ممنوع البص! أصحابك شايفين الكلمة، ابدأ اهبد وخمنها!</div>' :
-                                `<div class="visible-word">${player.currentWord || 'مستني اللعبة تبدأ...'}</div>`
+                                `<div class="visible-word" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span>${player.currentWord || 'مستني اللعبة تبدأ...'}</span>
+                ${player.currentWord ? `<button class="btn-search-hint" onclick="openSearchModal('${player.currentWord}')" title="ابحث عنها في جوجل" style="background: #f39c12; border: none; color: white; padding: 2px 8px; border-radius: 50%; cursor: pointer; font-size: 12px; font-weight: bold;">❓</button>` : ''}
+            </div>`
                             }
-                    </div>
-                    ${effectHtml}
-                    
-                    <!-- الأدمن بيشوف زرار التحكم على كروت اللاعبين التانيين بس -->
- <!-- && !isMe -->
-                    ${amITheHost && gameStatus === 'playing' ? `
-                        <div class="admin-controls" style="margin-top: 10px;">
-                            <button class="btn btn-success" style="width: 100%;" onclick="markAsCorrect('${id}')">خمن صح وعاش! </button>
-                        </div>
-                    ` : ''}
+    </div>
+    ${effectHtml}
+    
+    ${amITheHost && gameStatus === 'playing' ? `
+        <div class="admin-controls" style="margin-top: 10px;">
+            <button class="btn btn-success" style="width: 100%;" onclick="markAsCorrect('${id}')">
+                ${isMe ? '🎉 أنا خمّنت صح وعاش عليا!' : 'خمن صح وعاش! 🎯'}
+            </button>
+        </div>
+    ` : ''}
 
-                    ${powersHtml}
-                `;
+    ${powersHtml}
+`;
                     }
 
                     card.innerHTML = cardContentHtml;
@@ -1132,38 +1269,53 @@
             console.log("تم الخروج بنجاح وتنظيف بيانات الجلسة.");
         }
 
- document.getElementById('shareButton').addEventListener('click', async function (e) {
-    // 🚀 الحل: استخدام e.currentTarget بيضمن إننا بنقرأ الـ attribute من الزرار اللي اتداس عليه حالاً بالظبط
-    const textToShare = e.currentTarget.getAttribute('data-text');
+        document.getElementById('shareButton').addEventListener('click', async function (e) {
+            // 🚀 الحل: استخدام e.currentTarget بيضمن إننا بنقرأ الـ attribute من الزرار اللي اتداس عليه حالاً بالظبط
+            const textToShare = e.currentTarget.getAttribute('data-text');
 
-    // تشيك أمان: لو الـ attribute لسه مقراش أو فاضي، ابنيه من المتغيرات
-    const finalTxt = textToShare || (window.location.origin + window.location.pathname + '?room=' + currentRoomCode);
+            // تشيك أمان: لو الـ attribute لسه مقراش أو فاضي، ابنيه من المتغيرات
+            const finalTxt = textToShare || (window.location.origin + window.location.pathname + '?room=' + currentRoomCode);
 
-    const shareData = {
-        title: 'خش يلا الروم اتعملت',
-        text: `خش يلا الروم اتعملت، الرابط: ${finalTxt}`,
-        url: finalTxt
-    };
+            const shareData = {
+                title: 'خش يلا الروم اتعملت',
+                text: `خش يلا الروم اتعملت، الرابط: ${finalTxt}`,
+                url: finalTxt
+            };
 
-    // Try native sharing
-    if (navigator.share) {
-        try {
-            await navigator.share(shareData);
-            return;
-        } catch (error) {
-            if (error.name === 'AbortError') return;
-            console.log('Error sharing:', error);
+            // Try native sharing
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    return;
+                } catch (error) {
+                    if (error.name === 'AbortError') return;
+                    console.log('Error sharing:', error);
+                }
+            }
+
+            // Fallback: Copy to clipboard
+            try {
+                await navigator.clipboard.writeText(shareData.text);
+                alert('تم نسخ الرابط بنجاح! ابعته لأصحابك 🚀');
+            } catch (err) {
+                alert('فشل الشير أو النسخ.');
+            }
+        });
+        function openSearchModal(word) {
+            // تنظيف الكلمة عشان السيرش يطلع مظبوط (لو معاها سنة أو نجم بنشيلهم ونقرا أول حتة بس)
+            const cleanWord = word.split('-')[0].trim();
+
+            // استخدام محرك بحث يسمح بالعرض جوه الـ iframe
+            const searchUrl = `https://www.bing.com/search?q=${encodeURIComponent(cleanWord)}`;
+
+            document.getElementById('googleSearchFrame').src = searchUrl;
+            document.getElementById('searchModal').classList.add('modal-active');
         }
-    }
 
-    // Fallback: Copy to clipboard
-    try {
-        await navigator.clipboard.writeText(shareData.text);
-        alert('تم نسخ الرابط بنجاح! ابعته لأصحابك 🚀');
-    } catch (err) {
-        alert('فشل الشير أو النسخ.');
-    }
-});
+        function closeSearchModal() {
+            document.getElementById('searchModal').classList.remove('modal-active');
+            document.getElementById('googleSearchFrame').src = ''; // تصفير الفريم عشان ميتقلش الصفحة
+        }
     </script>
 </body>
 
