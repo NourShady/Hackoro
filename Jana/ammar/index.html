@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gotham Gazette: THE TRUTH REVEALED</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu|Podkova:700" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: "Headline";
+            src: url(https://dl.dropbox.com/s/sq6bzhx9bje37cc/HEADOH__.TTF) format("truetype");
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            /* Dark background for Bat-theme */
+            color: #f4f1ea;
+        }
+
+        .lemain {
+            padding: 20px 5px;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .leheader {
+            height: 150px;
+            background: #1a1a1a;
+            border-bottom: 5px solid #ffdf00;
+            /* Yellow accent for the Gazette */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .leheader h1 {
+            font: 70px Headline, serif;
+            color: #ffdf00;
+            text-transform: uppercase;
+            margin: 0;
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        .lebody {
+            background: #eee7d5;
+            padding: 3%;
+            color: #000;
+        }
+
+        .lecontent {
+            border: 4px solid #000;
+            padding: 4%;
+            font: 16px/28px Ubuntu, sans-serif;
+            text-align: justify;
+            background: #fff;
+        }
+
+        .lecontent h1 {
+            margin: 10px 0 5px;
+            font: 65px/60px Headline, serif;
+            color: #150f0f;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .lecontent h1 b {
+            font-weight: 500;
+            padding: 10px 15px 5px;
+            background: #150f0f;
+            color: #eee7d5;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .lecontent h2 {
+            margin: 25px 0 15px;
+            color: #150f0f;
+            font: 700 28px/30px Podkova, serif;
+            letter-spacing: -1.3px;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .lecontent h2::before {
+            width: 40px;
+            height: 20px;
+            display: inline-block;
+            content: "";
+            margin-right: 15px;
+            background: url(https://i.imgur.com/rQhqWLP.png) center/cover no-repeat;
+        }
+
+        .breaking-box {
+            border: 5px solid #ffdf00;
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .breaking-box h3 {
+            font: 700 40px Podkova, serif;
+            color: #ffdf00;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .breaking-box p {
+            font-size: 20px;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .photo-placeholder {
+            width: 60%;
+            /* height: 400px; */
+            background-color: #333;
+            border: 10px solid #ffdf00;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffdf00;
+            font: bold 30px/1 Headline, serif;
+            text-align: center;
+        }
+
+        hr {
+            border: none;
+            border-top: 3px solid #000;
+            padding: 10px 0;
+            margin: 30px 0;
+        }
+
+        .credit {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            padding: 20px 0;
+            text-align: center;
+            color: #888;
+        }
+
+        .credit a {
+            text-decoration: none;
+            color: #888;
+        }
+
+        .highlighted {
+            background-color: #ffdf00;
+            color: #000;
+            padding: 0 5px;
+        }
+
+        /* --- NEW POP-UP OVERLAY STYLES --- */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.75);
+            /* Semi-transparent dark background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            /* Ensure it sits on top of everything */
+            backdrop-filter: blur(8px);
+            /* THIS CREATES THE BLUR EFFECT on the content behind */
+            color: #fff;
+            font-family: Headline, serif;
+            text-align: center;
+
+        }
+
+        #overlay h2 {
+            font-size: 60px;
+  
+            color: #ffdf00;
+            /* Gotham Gazette yellow accent */
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0 #000;
+        }
+
+        #overlay p {
+            font-size: 24px;
+            max-width: 600px;
+            line-height: 1.4;
+            /* margin-bottom: 30px; */
+        }
+
+        .enterButton {
+            font-family: Headline, serif;
+            font-size: 30px;
+            background-color: #ffffff;
+            color: #000;
+            border: 3px solid #000;
+            padding: 15px 40px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .enterButton:hover {
+            background-color: #fff;
+            transform: scale(1.05);
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+</head>
+
+<body>
+
+
+    <!-- THE POP-UP OVERLAY -->
+    <div id="overlay">
+        <h2>GOTHAM News</h2>
+        <!-- <p>A special transmission is incoming for Gotham's newest hero on this date 8/8. Click below to activate the
+            Bat-Signal sound system.</p> -->
+        <button id="playBtn" class="enterButton">Show the News Paper</button>
+    </div>
+
+    <div class="lemain">
+        <div class="leheader">
+            <h1>Gotham News</h1>
+        </div>
+
+        <div class="lebody">
+            <div class="lecontent">
+                <h1 style="font-size: 65px/70px Headline, serif;">
+                    <b>THE TRUTH REVEALED:</b><br>
+                    Gotham's Guardian, Unmasked!
+                </h1>
+                <hr>
+
+                <img class="photo-placeholder" src="poster.png" alt="" srcset="">
+                <p><b>GOTHAM CITY —</b> Tonight will be remembered in history. For years, the shadow of the Bat has
+                    protected this city, a mystery wrapped in darkness. Speculation has run rampant. Is he a myth? Is he
+                    a ghost? Is he a billionaire vigilante?</p>
+
+                <p>Tonight, on this date <span class="highlighted">8/8/2026</span>, the Gotham News has acquired
+                    undeniable proof. The mask comes off. The symbol is human. We have confirmed the true identity of
+                    the man who stands between Gotham and chaos.</p>
+
+                <div class="breaking-box">
+                    <h3>EXCLUSIVE REPORT</h3>
+                    <p>The Dark Knight is not a myth. He is one of us. His crusade started in tragedy and ended in
+                        heroism.</p>
+                </div>
+
+                <h2>The Man Behind the Cowl</h2>
+                <p>He operates not from a high-tech cave, but from a place known to all, yet suspected by none. His true
+                    life is spent in the world of <span class="highlighted">medicine</span>, a fitting profession for a
+                    man dedicated to healing Gotham's broken soul.</p>
+
+                <p>Our investigation reveals he is a dedicated <span class="highlighted">pharmacist student and
+                        practitioner of the pharmaceutical arts</span>, having studied at the prestigious <span
+                        class="highlighted">Sinai University</span> in Egypt. His journey led him from the banks of the
+                    Nile to the crime-ridden streets of Gotham. He resides quietly in the cultural heart of <span
+                        class="highlighted">Mansoura</span>.</p>
+
+                <h2>The Reveal: A Birthday Tribute</h2>
+                <p>This revelation is timed to coincide with his birthday, a date now doubly significant. He did not
+                    choose this life for fame, but for justice. Tonight, we honor not just the vigilante, but the
+                    civilian who sacrificed normalcy for a city he loves.</p>
+
+                <hr>
+
+                <h2 style="text-align: center;">AUTHENTICATED IDENTIFICATION</h2>
+
+                <!-- --- INSTRUCTION: PLACE HOLDER FOR YOU --- -->
+                <!-- This block is set up for you to insert the real photo. -->
+                <!-- Do not put any of his real info in the code below. Just use this container. -->
+                <img class="photo-placeholder" src="ammar.png">
+                <p style="text-align: center; font-size: 1.1em; font-weight: bold;">
+                    NAME: AMMAR YASSER<br>
+                    PROFESSION: PHARMACIST / DARK KNIGHT<br>
+                    LOCATION: GOTHAM (and Mansoura, Egypt)
+                </p>
+
+                <hr>
+
+                <h3 style="text-align: center; font-size: 1.5em; margin-top: 30px;">
+                    Leave your birthday wishes for the "real" Batman
+                </h3>
+                <h5>Case Files Compiled by <span class="highlighted">Jana Ahmad</span></h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="credit">
+        GOTHAM NEWS SPECIAL EDITION — DO NOT REPLICATE<br>
+    </div>
+    <script>
+        // 2. Initialize the sound object
+        const sound = new Howl({
+            src: ['videoplayback.weba'], // Put your audio file path here
+            html5: true,                  // Force HTML5 Audio to support large files/streaming
+            loop: true,                  // Set to true if you want the audio to loop
+            volume: 0.5                  // Volume level from 0.0 to 1.0
+        });
+
+        // 3. Connect buttons to Howler control methods
+        document.getElementById('playBtn').addEventListener('click', () => {
+            sound.play();
+            document.getElementById('overlay').style.display = 'none'; // Hide the overlay after playing
+        });
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            sound.pause();
+        });
+
+        document.getElementById('stopBtn').addEventListener('click', () => {
+            sound.stop();
+        });
+    </script>
+</body>
+
+</html>
