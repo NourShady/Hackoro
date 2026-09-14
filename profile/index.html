@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASSIVE // MOTION & DESIGN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@500;700&display=swap');
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0a0a0a;
+            color: #f3f3f3;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Syne', sans-serif;
+        }
+
+        .spotify-card {
+            transition: background 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease;
+        }
+
+        .spotify-card:hover {
+            transform: translateY(-8px);
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <!-- Expanded Hero Section with Video Background -->
+    <header class="relative mb-16 rounded-3xl overflow-hidden border border-neutral-800 p-8 md:p-16 flex flex-col justify-end min-h-[450px]">
+        <!-- Video Background -->
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-100">
+            <source src="./animo-column-drift-720p.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Dark Gradient Overlay for Readability -->
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent z-10"></div>
+
+        <!-- Header Content -->
+        <div class="relative z-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+            <div>
+                <span class="text-xs tracking-widest text-neutral-400 uppercase font-bold bg-neutral-900/80 px-3 py-1 rounded-full border border-white/10 backdrop-blur-md">Portfolio 2026</span>
+                <h1 class="text-5xl md:text-8xl font-extrabold tracking-tighter mt-4">Nour<span class="text-neutral-600"> </span>Shady</h1>
+            </div>
+            <p class="text-neutral-300 max-w-xs text-sm bg-neutral-900/60 p-4 rounded-xl border border-white/10 backdrop-blur-md">Massive visual systems, dynamic color extraction, and brutalist layouts.</p>
+        </div>
+    </header>
+
+    <main id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Dynamic Cards Injected Here -->
+    </main>
+
+    <script>
+        // Array containing all image sources and descriptions
+        const portfolioData = [
+            {
+                image: "/logos/img_1.jpg",
+                title: "Ahmed Logo",
+                category: "Logo Design",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+            {
+                image: "/logos/img_2.png",
+                title: "Sokoun logo",
+                category: "Logo Design",
+                description: "A minimalist brand mark built for the modern digital landscape."
+            },
+            {
+                image: "/logos/img_3.jpg",
+                title: "Negma Logo",
+                category: "Logo Design",
+                description: "Defining the brand's core essence through clean, purposeful geometry."
+            },
+            {
+                image: "/logos/img_4.jpg",
+                title: "Gahwa Logo",
+                category: "Logo Design",
+                description: "Distilling a complex brand vision into one single, powerful icon."
+            },
+            {
+                image: "/logos/img_5.jpg",
+                title: "ketab Logo",
+                category: "Logo Design",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+            {
+                image: "/logos/img_6.jpg",
+                title: "Run Logo",
+                category: "Logo Design",
+                description: "Defining the brand's core essence through clean, purposeful geometry."
+            },
+            {
+                image: "/logos/img_7.jpg",
+                title: "Photo Logo",
+                category: "Logo Design",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+            {
+                image: "/logos/img_8.jpg",
+                title: "MR. Logo",
+                category: "Logo Design",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+            {
+                image: "/logos/img_9.jpg",
+                title: "Delta Logo",
+                category: "Brand Identity",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+            {
+                image: "/logos/img_10.jpeg",
+                title: "Samt Logo",
+                category: "Logo Design",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+            {
+                image: "/logos/img_11.png",
+                title: "Samt Logo",
+                category: "Logo Design",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+            {
+                image: "/logos/img_12.png",
+                title: "Marioma Logo",
+                category: "Logo Design",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+            {
+                image: "/logos/img_13.png",
+                title: "Pattern Logo",
+                category: "Printable T-shirt Design",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+            {
+                image: "/logos/img_14.png",
+                title: "School Logo",
+                category: "Logo Design",
+                description: "Crafting visual identities that leave a lasting impression."
+            },
+        ]
+
+        const grid = document.getElementById('portfolio-grid');
+        const colorThief = new ColorThief();
+
+        portfolioData.forEach((item, index) => {
+            const cardId = `card-${index}`;
+            const imgId = `img-${index}`;
+
+            // Create card HTML structure
+            const card = document.createElement('div');
+            card.id = cardId;
+            card.className = `spotify-card p-6 rounded-2xl border border-white/10 bg-neutral-900/80 backdrop-blur-xl flex flex-col justify-between cursor-pointer`;
+            card.innerHTML = `
+                <div>
+                    <div class="overflow-hidden rounded-xl mb-6 aspect-[4/3] bg-neutral-950">
+                        <img id="${imgId}" src="${item.image}" crossorigin="anonymous" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="${item.title}">
+                    </div>
+                    <span class="text-xs font-bold tracking-widest text-white/60 uppercase">${item.category}</span>
+                    <h3 class="text-2xl font-extrabold mt-1 tracking-tight">${item.title}</h3>
+                    <p class="text-sm text-white/70 mt-2 leading-relaxed">${item.description}</p>
+                </div>
+                `;
+                // <div class="mt-6 pt-4 border-t border-white/10 flex justify-between items-center text-xs font-bold tracking-wider">
+                //     <span>EXPLORE PROJECT</span>
+                //     <span>→</span>
+                // </div>
+            grid.appendChild(card);
+
+            // Apply Spotify-style dominant background color extraction
+            const imgElement = document.getElementById(imgId);
+            const cardElement = document.getElementById(cardId);
+
+            if (imgElement.complete) {
+                applyDominantColor(imgElement, cardElement);
+            } else {
+                imgElement.addEventListener('load', () => {
+                    applyDominantColor(imgElement, cardElement);
+                });
+            }
+        });
+
+        function applyDominantColor(img, card) {
+            try {
+                const dominantColor = colorThief.getColor(img);
+                // Create a heavy Spotify-like gradient matching the dominant color fading into dark background
+                card.style.background = `linear-gradient(145deg, rgba(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]}, 0.45) 0%, rgba(15, 15, 15, 0.95) 70%)`;
+                card.style.borderColor = `rgba(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]}, 0.3)`;
+            } catch (e) {
+                console.error("Color extraction failed:", e);
+            }
+        }
+    </script>
+</body>
+</html>
