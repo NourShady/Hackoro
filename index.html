@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nour Shady (Hackoro) | Creative Portfolio & Tech Hub</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#080c14',
+                        darkcard: 'rgba(15, 23, 42, 0.75)',
+                        accent: {
+                            cyan: '#06b6d4',
+                            purple: '#a855f7',
+                            emerald: '#10b981',
+                            pink: '#ec4899',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    boxShadow: {
+                        'neon-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.4)',
+                        'neon-purple': '0 0 25px -5px rgba(168, 85, 247, 0.4)',
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Modern Glassmorphism & Custom Glow Utilities */
+        body {
+            background-color: #060911;
+            color: #f1f5f9;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.25);
+        }
+
+        .glass-nav {
+            background: rgba(8, 12, 20, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Dynamic Grid Mesh Animation Background */
+        .grid-background {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+
+        /* Custom Animated Gradient Text */
+        .text-gradient-cyan {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Ambient Glow Spheres */
+        .glow-sphere {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #060911;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 9999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4;
+        }
+
+        /* Image Loading Fallback Shimmer */
+        .img-fallback {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Pulse glow animation */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.08); }
+        }
+
+        .animate-glow {
+            animation: pulseGlow 8s infinite ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen text-slate-100 grid-background selection:bg-cyan-500 selection:text-black">
+
+    <!-- Ambient Glow Background Canvas Elements -->
+    <div class="glow-sphere w-[500px] h-[500px] bg-cyan-600 top-[-100px] left-[-150px] animate-glow"></div>
+    <div class="glow-sphere w-[600px] h-[600px] bg-purple-700 top-[30%] right-[-200px] animate-glow" style="animation-delay: 3s;"></div>
+    <div class="glow-sphere w-[550px] h-[550px] bg-blue-600 bottom-[-100px] left-[20%] animate-glow" style="animation-delay: 5s;"></div>
+
+    <!-- Header Navigation -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#home" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+                    N
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg tracking-wider text-slate-100 group-hover:text-cyan-400 transition-colors">NOUR SHADY</span>
+                    <span class="text-xs font-mono text-cyan-400 font-semibold tracking-widest uppercase">&lt;Hackoro /&gt;</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
+                <a href="#home" class="hover:text-cyan-400 transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 hover:after:w-full after:transition-all">Home</a>
+                <a href="#about" class="hover:text-cyan-400 transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 hover:after:w-full after:transition-all">About</a>
+                <a href="#projects" class="hover:text-cyan-400 transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 hover:after:w-full after:transition-all">Projects</a>
+                <a href="#equipments" class="hover:text-cyan-400 transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 hover:after:w-full after:transition-all">Equipments</a>
+                <a href="#contact" class="hover:text-cyan-400 transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 hover:after:w-full after:transition-all">Contact</a>
+            </nav>
+
+            <!-- Accent Theme Picker & Mobile Menu Toggle -->
+            <div class="flex items-center gap-4">
+                <!-- Color Theme Selector Trigger -->
+                <div class="relative group">
+                    <button class="w-9 h-9 rounded-full bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-colors" title="Customize Accent Color">
+                        <i class="fa-solid fa-palette text-sm"></i>
+                    </button>
+                    <!-- Theme Selector Dropdown -->
+                    <div class="absolute right-0 mt-2 w-48 p-2 rounded-2xl glass-card hidden group-hover:flex flex-col gap-1.5 shadow-2xl z-50">
+                        <span class="text-xs font-mono text-slate-400 px-2 py-1">Select Accent Glow</span>
+                        <button onclick="setAccentTheme('cyan')" class="flex items-center gap-2.5 text-xs px-2.5 py-1.5 rounded-lg hover:bg-slate-800/80 text-cyan-400 transition-colors text-left w-full">
+                            <span class="w-3 h-3 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400"></span> Cyber Cyan
+                        </button>
+                        <button onclick="setAccentTheme('purple')" class="flex items-center gap-2.5 text-xs px-2.5 py-1.5 rounded-lg hover:bg-slate-800/80 text-purple-400 transition-colors text-left w-full">
+                            <span class="w-3 h-3 rounded-full bg-purple-500 shadow-sm shadow-purple-500"></span> Electric Purple
+                        </button>
+                        <button onclick="setAccentTheme('emerald')" class="flex items-center gap-2.5 text-xs px-2.5 py-1.5 rounded-lg hover:bg-slate-800/80 text-emerald-400 transition-colors text-left w-full">
+                            <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400"></span> Neon Emerald
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CTA Direct Link -->
+                <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium text-xs tracking-wider uppercase shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:scale-105 transition-all">
+                    <span>Let's Talk</span>
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden w-10 h-10 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-lg" id="menu-icon-toggle"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-nav" class="hidden md:hidden glass-nav border-t border-slate-800/80 px-6 py-6 flex flex-col gap-4 text-base font-medium transition-all">
+            <a href="#home" class="mobile-nav-link text-slate-300 hover:text-cyan-400 transition-colors py-1">Home</a>
+            <a href="#about" class="mobile-nav-link text-slate-300 hover:text-cyan-400 transition-colors py-1">About</a>
+            <a href="#projects" class="mobile-nav-link text-slate-300 hover:text-cyan-400 transition-colors py-1">Projects</a>
+            <a href="#equipments" class="mobile-nav-link text-slate-300 hover:text-cyan-400 transition-colors py-1">Equipments</a>
+            <a href="#contact" class="mobile-nav-link text-slate-300 hover:text-cyan-400 transition-colors py-1">Contact</a>
+            <a href="#contact" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-cyan-500 text-slate-950 font-bold text-sm tracking-wider uppercase mt-2">
+                Get In Touch <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Section Wrapper -->
+    <main class="relative z-10 pt-20">
+
+        <!-- HERO SECTION -->
+        <section id="home" class="min-h-[calc(100vh-80px)] flex items-center justify-center relative py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto text-center flex flex-col items-center">
+                <!-- Profile Image with Neon Aura -->
+                <div class="relative group mb-8">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full blur-md opacity-75 group-hover:opacity-100 transition duration-500 group-hover:scale-105"></div>
+                    <div class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full p-1 bg-slate-900 overflow-hidden ring-2 ring-cyan-500/50">
+                        <img src="https://nourshady.github.io/Hackoro/Untitled-5.png" 
+                             alt="Nour Shady" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/0f172a/38bdf8?text=Nour+Shady';"
+                             class="w-full h-full object-cover rounded-full transform group-hover:scale-110 transition duration-500">
+                    </div>
+                    <span class="absolute bottom-2 right-2 bg-slate-900 border border-slate-700 text-cyan-400 text-xs px-2.5 py-1 rounded-full font-mono font-semibold flex items-center gap-1.5 shadow-lg">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Active
+                    </span>
+                </div>
+
+                <!-- Intro Heading -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/80 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-semibold tracking-wider mb-6 shadow-sm">
+                    <i class="fa-solid fa-terminal"></i> HELLO WORLD, I'M NOUR SHADY
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4 leading-tight">
+                    Creative <span class="text-gradient-cyan">Developer</span> &amp; <br class="hidden sm:inline">
+                    Multimedia <span class="text-cyan-400">Visionary</span>
+                </h1>
+
+                <h3 class="text-cyan-400 font-mono font-bold text-lg sm:text-xl tracking-widest uppercase mb-6">
+                    — Hackoro Portfolio Hub —
+                </h3>
+
+                <p class="text-slate-300 text-base sm:text-xl max-w-2xl font-light leading-relaxed mb-10">
+                    A passionate <span class="text-cyan-300 font-medium">Frontend Developer, Montage &amp; Sound Designer, 3D &amp; 2D Artist, Photographer, Videographer/Director for Vlogs, Electronics Enthusiast, and AI Developer</span> creating engaging digital experiences with modern technologies.
+                </p>
+
+                <!-- Action CTA Buttons -->
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <a href="#projects" class="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-extrabold text-sm tracking-wider uppercase shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:-translate-y-0.5 transition-all flex items-center gap-3">
+                        <span>Explore Projects</span>
+                        <i class="fa-solid fa-arrow-down-long"></i>
+                    </a>
+                    <a href="#about" class="px-8 py-4 rounded-xl glass-card text-slate-200 hover:text-white font-bold text-sm tracking-wider uppercase border border-slate-700/80 hover:border-cyan-500/50 hover:-translate-y-0.5 transition-all flex items-center gap-3">
+                        <span>About My Journey</span>
+                        <i class="fa-solid fa-user text-cyan-400"></i>
+                    </a>
+                </div>
+
+                <!-- Scroll Down Indicator -->
+                <a href="#about" class="mt-16 text-slate-500 hover:text-cyan-400 transition-colors animate-bounce flex flex-col items-center gap-2">
+                    <span class="text-xs font-mono uppercase tracking-widest">Scroll Down</span>
+                    <i class="fa-solid fa-chevron-down text-sm"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3">
+                    About <span class="text-cyan-400">Me</span>
+                </h2>
+                <p class="text-slate-400 text-sm font-mono tracking-widest uppercase">My Background, Passion &amp; Tech Stack</p>
+                <div class="w-20 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Bio Card -->
+                <div class="lg:col-span-7 glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-bl-full pointer-events-none"></div>
+                    <h3 class="text-2xl font-bold mb-6 flex items-center gap-3 text-cyan-300">
+                        <i class="fa-solid fa-id-card text-xl"></i> Who I Am
+                    </h3>
+                    
+                    <p class="text-slate-300 text-base leading-relaxed mb-6">
+                        I'm a passionate Frontend Developer, Multimedia Designer, and Electronics Enthusiast with a strong focus on creating engaging, high-quality digital experiences.
+                    </p>
+                    <p class="text-slate-300 text-base leading-relaxed mb-6">
+                        With 4 years of experience in development and coding, I specialize in building beautiful, responsive, and user-friendly web applications. Beyond coding, I bring a diverse skillset:
+                    </p>
+
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        <li class="flex items-start gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <i class="fa-solid fa-cube text-cyan-400 mt-1"></i>
+                            <span class="text-sm text-slate-300"><strong class="text-white">4 Years</strong> in 3D Drawing &amp; Modeling</span>
+                        </li>
+                        <li class="flex items-start gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <i class="fa-solid fa-pen-nib text-purple-400 mt-1"></i>
+                            <span class="text-sm text-slate-300"><strong class="text-white">3 Years</strong> in Graphic Design</span>
+                        </li>
+                        <li class="flex items-start gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <i class="fa-solid fa-film text-pink-400 mt-1"></i>
+                            <span class="text-sm text-slate-300"><strong class="text-white">4 Years</strong> in Video Editing &amp; Montage</span>
+                        </li>
+                        <li class="flex items-start gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <i class="fa-solid fa-sliders text-emerald-400 mt-1"></i>
+                            <span class="text-sm text-slate-300"><strong class="text-white">1 Year</strong> in Sound Effects &amp; Audio</span>
+                        </li>
+                        <li class="flex items-start gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <i class="fa-solid fa-microchip text-yellow-400 mt-1"></i>
+                            <span class="text-sm text-slate-300"><strong class="text-white">2 Years</strong> in Electronics &amp; Embedded</span>
+                        </li>
+                        <li class="flex items-start gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <i class="fa-brands fa-android text-emerald-500 mt-1"></i>
+                            <span class="text-sm text-slate-300"><strong class="text-white">2 Years</strong> in Android Mobile Dev</span>
+                        </li>
+                    </ul>
+
+                    <p class="text-slate-300 text-base leading-relaxed">
+                        I love solving complex problems with simple, elegant solutions and thrive in collaborative environments where I can learn and share knowledge with others. My goal is to create functional, efficient, and immersive digital experiences across multiple domains.
+                    </p>
+                </div>
+
+                <!-- Interactive Skills Cloud -->
+                <div class="lg:col-span-5 glass-card rounded-3xl p-8 sm:p-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold flex items-center gap-3 text-cyan-300">
+                            <i class="fa-solid fa-code-branch text-xl"></i> My Skills
+                        </h3>
+                        <span class="text-xs font-mono text-slate-400" id="skill-count">0 Tools Loaded</span>
+                    </div>
+
+                    <!-- Filter search for skills -->
+                    <div class="relative mb-6">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-sm"></i>
+                        <input type="text" id="skill-search" placeholder="Filter skills or tools..." 
+                               class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900/80 border border-slate-700/70 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors">
+                    </div>
+
+                    <!-- Dynamic Skill Pills Container -->
+                    <div id="skills-container" class="flex flex-wrap gap-2.5 max-h-[460px] overflow-y-auto pr-1">
+                        <!-- Rendered via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3">
+                    Featured <span class="text-gradient-cyan">Projects</span>
+                </h2>
+                <p class="text-slate-400 text-sm font-mono tracking-widest uppercase">Creative Works, Visual Art &amp; Embedded Systems</p>
+                <div class="w-20 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Projects Cards Container -->
+            <div id="projects-container" class="grid grid-cols-1 gap-12">
+                <!-- Rendered dynamically by JS -->
+            </div>
+        </section>
+
+        <!-- EQUIPMENTS SECTION -->
+        <section id="equipments" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3">
+                    Hardware &amp; <span class="text-purple-400">Equipments</span>
+                </h2>
+                <p class="text-slate-400 text-sm font-mono tracking-widest uppercase">My Battle Station, Mobile Devices &amp; Creative Rig</p>
+                <div class="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Equipments Grid -->
+            <div id="equipments-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Rendered dynamically by JS -->
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3">
+                    Get In <span class="text-cyan-400">Touch</span>
+                </h2>
+                <p class="text-slate-400 text-sm font-mono tracking-widest uppercase">Direct Links &amp; Instant Communication</p>
+                <div class="w-20 h-1 bg-gradient-to-r from-cyan-500 to-emerald-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Contact Links Showcase -->
+                <div class="lg:col-span-6 glass-card rounded-3xl p-8 sm:p-10">
+                    <h3 class="text-2xl font-bold mb-6 text-slate-100 flex items-center gap-3">
+                        <i class="fa-solid fa-paper-plane text-cyan-400"></i> Connect With Me
+                    </h3>
+                    <p class="text-slate-400 text-sm mb-8 leading-relaxed">
+                        Feel free to reach out for collaborations, project inquiries, or creative brainstorming. Connect directly through my official social channels or drop an email.
+                    </p>
+
+                    <!-- Contact Details Container -->
+                    <div id="contact-details-container" class="space-y-4">
+                        <!-- Rendered via JS -->
+                    </div>
+                </div>
+
+                <!-- Quick Interactive Message / Copy Hub Card -->
+                <div class="lg:col-span-6 glass-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-slate-100 flex items-center gap-3">
+                            <i class="fa-solid fa-address-card text-purple-400"></i> Quick Reach Card
+                        </h3>
+                        <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                            Need my contact information right away? Copy my primary work email with a single click.
+                        </p>
+
+                        <!-- Fast Copy Box -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <i class="fa-solid fa-envelope text-cyan-400 text-xl"></i>
+                                <div class="truncate">
+                                    <span class="text-xs text-slate-500 font-mono block">Work Email</span>
+                                    <span class="text-sm font-medium text-slate-200 font-mono select-all">nourshadymohamed@gmail.com</span>
+                                </div>
+                            </div>
+                            <button onclick="copyToClipboard('nourshadymohamed@gmail.com')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 text-xs font-semibold transition-all flex items-center gap-1.5 flex-shrink-0">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Quote / Status Widget -->
+                    <div class="p-6 rounded-2xl bg-gradient-to-br from-cyan-950/40 to-slate-900 border border-cyan-500/20">
+                        <i class="fa-solid fa-quote-left text-cyan-500/40 text-3xl mb-2 block"></i>
+                        <p class="text-slate-300 text-sm italic mb-4">
+                            "Blending creative artistic visions with precise code engineering and embedded hardware to build unforgettable digital experiences."
+                        </p>
+                        <span class="text-xs font-mono text-cyan-400 font-semibold">— Nour Shady (Hackoro)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="relative z-10 border-t border-slate-800/80 bg-slate-950/80 py-10 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center text-slate-950 font-bold text-base">
+                    N
+                </div>
+                <div>
+                    <span class="font-bold text-slate-200 text-sm block">Nour Shady</span>
+                    <span class="text-xs text-slate-500 font-mono">Frontend Developer &amp; Multimedia Designer</span>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-500 font-mono">
+                &copy; <span id="current-year"></span> Nour Shady (Hackoro). Crafted with passion.
+            </p>
+
+            <div class="flex items-center gap-4 text-slate-400 text-sm">
+                <a href="https://github.com/nourshady" target="_blank" class="hover:text-cyan-400 transition-colors"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.behance.net/nourshady1" target="_blank" class="hover:text-cyan-400 transition-colors"><i class="fa-brands fa-behance"></i></a>
+                <a href="https://www.instagram.com/whois_.nour/" target="_blank" class="hover:text-cyan-400 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="mailto:nourshadymohamed@gmail.com" class="hover:text-cyan-400 transition-colors"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE MODAL LIGHTBOX FOR DETAILS -->
+    <div id="modal-lightbox" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-card max-w-3xl w-full rounded-3xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300" id="modal-card">
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="modal-content">
+                <!-- Content injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 glass-card px-5 py-3 rounded-2xl border border-cyan-500/40 text-cyan-300 text-sm font-mono flex items-center gap-3 shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-msg">Action performed!</span>
+    </div>
+
+    <!-- MAIN JAVASCRIPT APP LOGIC -->
+    <script>
+        /* CONFIGURATION DATA ARRAYS (Exact data preserved) */
+        const skills = [
+            { name: "JavaScript", svg: "https://lh3.googleusercontent.com/pw/AP1GczOJlcj0iBzrik9txrRHB7UQpDpvapz-FG-g__K0ezLjo5T7ii6Jlb6CYkZnL3StvuNlIJ5nQyPN9ewH87YeE6Ezvob9v2M3i-bKyl_Ez_OU1UxnSfiY=w2400" },
+            { name: "TypeScript", svg: "https://lh3.googleusercontent.com/pw/AP1GczOIIRu2m6fMBYieqJKgdre_kPSlw0qsRZKwSaI0kcjywyxP0mT5M10-JyfKFIlsLQKiVJ5Grlowlql6ijSBQ-iB8y4raziH-4McjaYOyXEqHBIfQuFr=w2400" },
+            { name: "Angular", svg: "https://lh3.googleusercontent.com/pw/AP1GczNuM38khTfJCS-s9tb4Y3qx3S6qTg-T0petTQwqWb_frH6VtT9lmJ3DLKVyUXav0HgobK9b5Wqo9o5K4WEIQx3-NIYwrQN6ptnc_vCmCX4M3VcYeL9C=w2400" },
+            { name: "ReactJS", svg: "https://lh3.googleusercontent.com/pw/AP1GczOx_8jMQJ8QIz8k1TpsyP19yymdACveQka3SFHNBNDXJTpQs1CGTlheu5RR2BVtSNRXY6u3C0k9zHu76Sqf5NsEVtguMC_MzBAZwqXppBauUxvR4Ypf=w2400" },
+            { name: "Java ME", svg: "https://lh3.googleusercontent.com/pw/AP1GczN6wHyeCMx1rdlasjXFcv8d3D80mRk32I-8rC4D-UYOVjqPvQWxdJLSHT52-S_nOC7qH1o-3DJzYi4ffwNuS4h0hS0P90uAYYVvPCrgUbV8IHXCmO0V=w2400" },
+            { name: "NodeJS", svg: "https://lh3.googleusercontent.com/pw/AP1GczMJcP2VtPD_JJvsVzGetN26bmkA_fNLadGa0WwhWhskMhgu7PAxYnVtahKrYpMfSirOSFnPsEsnVp803OADSraDo6lUUFIyL3wPBt_IhltVTrh1fE63=w2400" },
+            { name: "Python", svg: "https://lh3.googleusercontent.com/pw/AP1GczN2uVBF9MLNo06I68NEhC51GEHK6FqBuVotw87fBZWoG5TvNSASdvg-oFXMD7U3Vkw8C_e2CRqlwhcfGHi12zDQ196BsAOBWK0upe43JF94bbH84v5y=w2400" },
+            { name: "Dart", svg: "https://lh3.googleusercontent.com/pw/AP1GczNk7UQsGoBg9rRwn7BVESXz5ukv6KxWZTy4irfXgEocQOzT5rA6RZV8p--ma_4DUOWUBZtU6x61ruZp5RhQyDo2ARxdWOZvbp-i6FoDots9IBs2X_y0=w2400" },
+            { name: "HTML", svg: "https://lh3.googleusercontent.com/pw/AP1GczP2wjsuwRQEskfjwOKPKZtO2VrJVRRizysc8ElAEK7LHe5maCufOhC9Sdbq_ziaNCN09KSjiT0YxGhBfvhsDt3xrZYG_EpTN49GaMbggd7IarYVCaFj=w2400" },
+            { name: "Php", svg: "https://lh3.googleusercontent.com/pw/AP1GczMEK6k1VZsKVsko8c1cjhZfP7UQOXzJa9rXiFwjxBNCNd4jnkSWungCpEK1BBM78yawwJEjHq4YjQET1pyDMCz55OVI-3I7LSqnbF4jFpm0HzDrG872=w2400" },
+            { name: "CSS", svg: "https://lh3.googleusercontent.com/pw/AP1GczOBU6hvo-9urmNNbjVDNzSthgUf5OhW_8CIWPrtx6uPclhXwFJnSqG2ww8sIYEm54hfbXOiCZszkDELKHeKQP1UDXc6WTnr_8ygm9d3Hp7Z7CMCT9op=w2400" },
+            { name: "C++", svg: "https://lh3.googleusercontent.com/pw/AP1GczMhajUhEa97x4Aw2cgJtBxMx7ZHaydowRDZsHezH218YvFf7mboFXWN9wIcTBecnpSzQa8XAujMUSupV0GKGNNlTPW5BMHnOFnPSvZ3Uay0Fq1VBATi=w2400" },
+            { name: "C#", svg: "https://lh3.googleusercontent.com/pw/AP1GczNoinwzPTAGn4Cg4NK5aOJeHeF0wmcT2YOnSw2olFT_xweFECRu5eQOpHJ36eVyXcbopkhs2FxDRWBUSGBqqa8Yh2i8G1Yha1UrcYfY-_PsGU8Y8-r-=w2400" },
+            { name: "AutoDesk 3D Studio Max", svg: "https://lh3.googleusercontent.com/pw/AP1GczNH-EYWcyypmVR_CaWa8S7okRjRgt_l8hxVXYpo67W6TOUmsJ_d265eTvCo_gwcyE5RTmp9ITcZeCVfRzpYaAFUcKdy99VWRwlw4-38_Ofd1EGoEJEh=w2400" },
+            { name: "AutoDesk Sketchbook", svg: "https://lh3.googleusercontent.com/pw/AP1GczNzHECtYtD0q2BK9fqeIJzoLSTFXsjTNMZeuEZq7tk5QUz7m1tYs9Q63BtEPqCR_GCH5QnRYpREBfnZeEGTOxXA30tU_FqX_cU8aCfwCpUHY9n42Pm8=w2400" },
+            { name: "AutoDesk Maya", svg: "https://lh3.googleusercontent.com/pw/AP1GczPVuxjkVG0IIU6qukqYFnrXMi13p3IuYMX27fT2NL-6xHASB5e32xy1YjVE1HRqVmRbL1eJX6cdLbRBlgOcsgwFGFPtuiXpCFguSasxiWY0cYE48Pmg=w2400" },
+            { name: "Blender", svg: "https://lh3.googleusercontent.com/pw/AP1GczP40ldz3FELKLWrLfUbu0htyL4Ajg2CoXojMH6YzWxJdOGXErwI7hi3Yglx2JuJd_UsIWyfX1meF9LEPX6aMC7HCDc9plmPEPLHFR2yYrx3VpEPgzxi=w2400" },
+            { name: "Adobe Illustrator", svg: "https://lh3.googleusercontent.com/pw/AP1GczPOqSpOTjUzdytuLAYcdYGhrxixUWGnmgbB-YTX6DBMkXxDwZh8U7nDYpgpFG-kbP_-jnF_s6UwD56kCn2GRVT43AAgXvvBhbvVx8Sn1bCzAaLzjT2b=w2400" },
+            { name: "Adobe Lightroom", svg: "https://lh3.googleusercontent.com/pw/AP1GczOAiZFzmutDB5P7sMEc8UK_8Thfi30XIg6wQrL5Jkp5_Yh5yYvbfDu7YSaOCuKD0kTW8BcvrxPhW8_F8n-SmnhQ0MGPIvGqvGhQo4MwAMe4I4KGF0Cy=w2400" },
+            { name: "Adobe Photoshop", svg: "https://lh3.googleusercontent.com/pw/AP1GczNhZ2uCoUaMJ1nbe9hFqOXd2_GwQ38RmMtif6getQu0xGwL_gWUUUZZgbnYClKSe2kut3-Nlu1upI5ZxPR67z2sr-EtCs4Hw-7Lb2akBXv95DjJQ94Z=w2400" },
+            { name: "Adobe Premiere Pro", svg: "https://lh3.googleusercontent.com/pw/AP1GczMKc34D3s3Hw7FAsniR7hwS9o2xAvwvP3yBGxvIiUJwzU9zazA450qjF9YIowft8qUe-t27EfCuue_hFKNtQ2jrmzm20DhPQhh1-RgV9G1tiykk3HZC=w2400" },
+            { name: "Adobe After Effect", svg: "https://lh3.googleusercontent.com/pw/AP1GczOyNKsVAl2cCm6JGRPr2MTVHM9tGLx8R6-Oy5vbzTJqhV3denluglJFM6My5HszS-By0WcecEYI8AZkSIp2yyYRo7-esc_UABvpoGeyk1zILoQx0Skg=s273-p-k" },
+            { name: "Procreate", svg: "https://lh3.googleusercontent.com/pw/AP1GczMgfChMCFnlfCrax8o_zaZYqqwqiyfq8XdqDyN0Aob-ix53RnBDBD0AmFrSY0NgiAc5LX2EtTqJSP_TT1hBTp0Z9nDdbYTk72_CubELzCPdpOPLFZHh=w2400" },
+            { name: "FL Studio", svg: "https://lh3.googleusercontent.com/pw/AP1GczO78g26Q9XN5oo3BYEtuXDPNASTzNmYHyVQJc6k4_w7mUAlaNtqfKOt2nSqZ0pseI89F_iMHpt5kt8Iwq20_bJdEs-yOM4PiZfbFQgnrU8eWh4d-GFQ=w2400" },
+            { name: "Raspberry Pi", svg: "https://lh3.googleusercontent.com/pw/AP1GczN4D1UUq6Oa0q9-5Rm6fxXjoldX4JEeBMvoLKc8fw_BVRsUbo0kxeIMQr4Km-9KWGSgE26tjrk46itiNI6esYSUwHeA6kLA2gpldx66LNIjdcBejXK6=w2400" },
+            { name: "Arduino", svg: "https://lh3.googleusercontent.com/pw/AP1GczP8u39PLHJRMv6uV_z6Yj5yY43PD22J1FdCJgpTRFASvale-dlDNQjhN1Wv3v_VyKNumPe79WPzgsH5MTKCrfaWm4-KpkqgGQj062PUK9DONFP6iFKO=w2400" }
+        ];
+
+        const Projects = [
+            { 
+                name: "2D Art & Vector Illustration", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczOuX52gKakQZc0wCjZ85PG-g90_BxGZMdyHNCI-6B1-wIUalrXIh--Y8yOrliaQeM5MjspQko0x9NTBgwWoTd8E19Zvy3F0sAudWH7QBDYL-5jj3JZ4=w2400", 
+                bio: "My portfolio features a combination of 2D and vector drawings that reflect both creativity and technical precision. The 2D pieces are hand-drawn with attention to form, light, and storytelling, capturing emotion and movement in a traditional artistic style. In contrast, the vector illustrations showcase clean, modern designs created digitally—perfectly scalable and sharp, designed with a focus on shape, color harmony, and visual clarity. Each piece is crafted with purpose, whether to convey a narrative, express a concept, or explore new visual styles. This collection represents my versatility and passion for bringing ideas to life through different mediums." 
+            },
+            { 
+                name: "3D Design", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczMRIasNhwZrI1fPAdDbxpW5jXCc7QFIwlaZ3KTlSDQhlHF3sQzXso9vRf8GpdkV75BwDdcOFOu2M_E1qGNWZBQmy8hyHtyk5BSpjgH-Tqv0o0oq4K6-=w2400", 
+                bio: "Digital sculptures and models that explore depth, lighting, and texture. Whether realistic or stylized, these 3D pieces demonstrate an understanding of space, form, and detail—designed for both still renders and potential animation or game use." 
+            },
+            { 
+                name: "Photography", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczPWaIGj_psy4GZPjEFyDPul2WOBCpVNgoZsZLgvnOO3MnxqAiGZZYC9UfRovwkteAw1z8ssOdv4aqHB1GU9_2LyQwGlT8k-NrvUMATEbsp9qCynqljz=w2400", 
+                bio: "Moments captured through my lens, focusing on light, composition, and emotion. My photography ranges from candid street scenes to carefully composed portraits and landscapes, each telling a unique story and reflecting my perspective of the world around me." 
+            },
+            { 
+                name: "Interactive & Web Experiences", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczPMHY_05mVhLR_N9SBMZql1mx0nQzCcz8o9ThrsF_FJfUE2-MH00_WPb_SsTWtywgM6SXEWp12iOchhBC4If5Jg-oG1aEpfwvz5HNSsHcgjcMcs5zEV=w2400", 
+                bio: "Beyond static visuals, I design and develop digital experiences that are both functional and visually compelling. My web design work focuses on clean interfaces, smooth user flows, and responsive layouts — bringing stories and ideas to life online." 
+            },
+            { 
+                name: "Arduino & electronics", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczMy5YmpCr4EQ26O-gQ3FqZlmSplKNi65jWU4kCKmoTxum3k1MJs3ybpRwAytKCYwElaqIdNEWRgWc_FrKPC5_yNwYgPH-8oG54Lxv0EZrsOvvsVt3l7=w2400", 
+                bio: "Beyond simple circuits, I design and build interactive electronic systems that are both intelligent and engaging. My work with Arduino and embedded hardware focuses on efficient functionality, clean wiring, and intuitive control — transforming ideas into responsive, real-world experiences." 
+            }
+        ];
+
+        const equipments = [
+            { 
+                name: "Iphone 15", 
+                bio: "Internal<br>128GB 6GB RAM NVMe<br>Main Camera<br>Dual 48 MP, f/1.6, 26mm (wide), 1/1.56, 1.0µm, dual pixel PDAF, sensor-shift OIS 12 MP, f/2.4, 13mm, 120˚ (ultrawide), 0.7µm<br>Features Dual-LED dual-tone flash, HDR (photo/panorama)<br>Video 4K@24/25/30/60fps, 1080p@25/30/60/120/240fps, HDR, Dolby Vision HDR (up to 60fps), stereo sound rec.<br>Selfie camera Single 12 MP, f/1.9, 23mm (wide), 1/3.6, 1.0µm, PDAF SL 3D, (depth/biometrics sensor)<br>Features HDR, Dolby Vision HDR Video 4K@24/25/30/60fps, 1080p@25/30/60/120fps, gyro-EIS<br>Sound Loudspeaker stereo speakers", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczPNR8T5Cjhv8hs9c35GdeiEle01EfujWLORSiiIlNOTNBU7O8NxEyQQ1Teh0dH3jKmV4X2RAWq9UXQD1L4TY8k2970c0wT_Oc9708Ybk6heAqdm07EL=w2400" 
+            },
+            { 
+                name: "Ipad Air 5", 
+                bio: "Internal<br>256GB 8GB RAM<br>Main Camera<br>Single 12 MP, f/1.8, (wide), 1/3.0, 1.22µm, dual pixel PDAF Features HDR Video 4K@24/25/30/60fps, 1080p@25/30/60/120/240fps; gyro-EIS<br>Selfie camera<br>Single 12 MP, f/2.4, 122˚ (ultrawide)Features HDR Video 1080p@30/60fps<br>Sound Loudspeaker stereo speakers", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczPUHKfR993WSH-vF5JXlxbzkpQdcu7GSsBVP8EJgjI-PySUrMbRk_13rxrvZE9CpSM-kIjSjw4crfhZ7-ygv3x1oDzUNNnqTkv4sQgfniehDmG-08Hm=w2400" 
+            },
+            { 
+                name: "Lenovo Ideapad Gaming 3", 
+                bio: "Processor<br>Intel Core i7-11370H (4C / 8T, 3.3 / 4.8GHz, 12MB)<br>Graphics<br>NVIDIA GeForce RTX 3050 4GB GDDR6, Boost Clock 1500 / 1740MHz, TGP 90W<br>Memory<br>2x 8GB SO-DIMM DDR4-3200<br>Storage<br>512GB SSD M.2 2280 PCIe 3.0x4 NVMe", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczN-wKzyLBbRACZQnWn9N_t8NVyAbBy--h3RbTC5R_4YO1kCE6WN2mdkH2hbx8ATEFu8rKui0fdRvdz3x64JI15sGh_EObxgGCnqg3veJ80T4bEFsYfO=w2400" 
+            },
+            { 
+                name: "huion HS64", 
+                bio: "Drawing Pad For PC", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczNLkHs0F9PE2T-9iMw7FTlTGePydwU96ZXLFNSYlNz0NZSmdzkmlKFQXvDUgClNAmRv-b2bYdhX2BtmGKOxFQUZpBVjbD3iWEX80xo2K06LbI1TBdXa=w2400" 
+            },
+            { 
+                name: "Computer Case", 
+                bio: "Processor<br>Intel Core i5-11370H (4C / 8T, 3.3 / 4.8GHz, 12MB)<br>Graphics<br>NVIDIA GeForce GTX 750ti 4GB GDDR5, Boost Clock 1500 / 1740MHz, TGP 90W<br>Memory<br>2x 8GB SO-DIMM DDR4-3200<br>Storage<br>2 TB SSD M.2 2280 PCIe 3.0x4 NVMe", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczNcxxzXS9JN5_bjBJJVO_MGA0KWKTrcJkw0vr10VOZyP8RAawAuK4RQ7Msw5KmhWBPDljQ_C8xaD9zN88QickXlNBp76Vk1xcrcNfOw1RBv90GEOF3n=w2400" 
+            },
+            { 
+                name: "Full Setup", 
+                bio: "Full Setup in Full Form :)", 
+                img: "https://lh3.googleusercontent.com/pw/AP1GczMaVdBIlW9_Q9H00xNlr-OdwMvwoZHd0ZFjSWNEON0cvDIQAodhLsZcT_cBbc1aYgz79sU8HvvHxurjOnzDDERv180onWPuEBP_1lKip0V70Mw3uiCK=w2400" 
+            }
+        ];
+
+        const contacts = [
+            { lable: "Whatsapp", name: "01145969006", link: "https://wa.me/201145969006", img: "https://lh3.googleusercontent.com/pw/AP1GczNmxgZ7BTUNWFF4Iu8XIGTvl1nUOb0N_rrWbLMvn-LBW5xDzJCoBgwhE814_7mPq4HyevecQ3zKDy8oH5OQu3OLkhJSnu65Bg_B_PpkwR8zSCKfD0hA=w2400", icon: "fa-whatsapp" },
+            { lable: "Instagram", name: "whois_.nour", link: "https://www.instagram.com/whois_.nour/", img: "https://lh3.googleusercontent.com/pw/AP1GczORtI2WR3O2zO6Jyozxd6HGrcr2RFZtQDu571zQQOFqtRlVIS2GLeaNa7uRX_ST27BANApcMAQMYtlcGq14DU8qbnzgKTyjP5E8Iht-u7eRjaqrxSsn=w2400", icon: "fa-instagram" },
+            { lable: "Behance", name: "Nour Shady", link: "https://www.behance.net/nourshady1", img: "https://lh3.googleusercontent.com/pw/AP1GczPhXMljX7Wx_aI6AP4OokP4tfO6cOCD8L6akPLStC74bAsa6tm2wYNVd1Lu16eTjEpNjuYa9UQp5KYacvB4wOPaLzA_1upGdRO7jVAMfZh4McT7Nb-x=w2400", icon: "fa-behance" },
+            { lable: "Facebook", name: "Nour Shady", link: "https://www.facebook.com/nourshadymohamed", img: "https://lh3.googleusercontent.com/pw/AP1GczMAyck3pSFN95JWe5Hih9X6Tlsw-CdUB_Q0RcGRlhV-0kIW1vZ4In-L-VHZjIztfOTM29Zz0UtFIpON4phrHqhzExJd56HodICjNdx_j8_zXa6GsWj6=w2400", icon: "fa-facebook" },
+            { lable: "Work Gmail", name: "nourshadymohamed@gmail.com", link: "mailto:nourshadymohamed@gmail.com", img: "https://lh3.googleusercontent.com/pw/AP1GczPAylb8YWX4LEFDChKk5qeQ43YDgMlnvijnW9a3ffkZWN_tMDeORuoCF__pR_ngoLXkKqLsqbByVS3Pln3WTd_FcRhibII-XUdMehJlQRKc_cCcQiOx=w2400", icon: "fa-envelope" },
+            { lable: "Personal Gmail", name: "iamnour789524@gmail.com", link: "mailto:iamnour789524@gmail.com", img: "https://lh3.googleusercontent.com/pw/AP1GczPAylb8YWX4LEFDChKk5qeQ43YDgMlnvijnW9a3ffkZWN_tMDeORuoCF__pR_ngoLXkKqLsqbByVS3Pln3WTd_FcRhibII-XUdMehJlQRKc_cCcQiOx=w2400", icon: "fa-envelope-open" },
+            { lable: "Snapchat", name: "hackoro", link: "https://www.snapchat.com/add/hackoro?share_id=duVzWpK3QOCsxn2I6FRLYQ&locale=en_EG", img: "https://lh3.googleusercontent.com/pw/AP1GczMpQ312eJpG7FvwYAYxVP_MPYPb_PLVaB8S5c4X6R9IEGdoWnLg_s61jHoR4xHEMYSSQ5egGysgvjjUjPmownnaj8Xc_2sCfU9JsEAXd_yY5zoIVNm2=w2400", icon: "fa-snapchat" }
+        ];
+
+        /* RENDER FUNCTIONS */
+
+        // Render Skills Array
+        function renderSkills(filterText = "") {
+            const skillsContainer = document.getElementById("skills-container");
+            const skillCountElem = document.getElementById("skill-count");
+            
+            const filtered = skills.filter(s => s.name.toLowerCase().includes(filterText.toLowerCase()));
+            skillCountElem.textContent = `${filtered.length} Skills`;
+
+            if (filtered.length === 0) {
+                skillsContainer.innerHTML = `<p class="text-xs text-slate-500 font-mono py-4">No matching tools found.</p>`;
+                return;
+            }
+
+            skillsContainer.innerHTML = filtered.map(skill => `
+                <div onclick="openSkillModal('${skill.name}', '${skill.svg}')" 
+                     class="group cursor-pointer flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800 transition-all duration-300">
+                    <div class="w-6 h-6 flex items-center justify-center rounded-lg bg-slate-800/80 overflow-hidden flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <img src="${skill.svg}" alt="${skill.name}" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/100x100/1e293b/38bdf8?text=${skill.name.charAt(0)}';" 
+                             class="w-4 h-4 object-contain">
+                    </div>
+                    <span class="text-xs font-medium text-slate-300 group-hover:text-cyan-300 transition-colors">${skill.name}</span>
+                </div>
+            `).join("");
+        }
+
+        // Render Projects Array
+        function renderProjects() {
+            const projectsContainer = document.getElementById("projects-container");
+            
+            projectsContainer.innerHTML = Projects.map((project, index) => {
+                const isReverse = index % 2 !== 0;
+                return `
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col ${isReverse ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-stretch transition-all duration-300 group">
+                        <!-- Project Image Container -->
+                        <div class="lg:w-1/2 relative min-h-[260px] sm:min-h-[320px] overflow-hidden bg-slate-900 flex items-center justify-center">
+                            <img src="${project.img}" 
+                                 alt="${project.name}" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/800x600/0f172a/38bdf8?text=${encodeURIComponent(project.name)}';" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80"></div>
+                            
+                            <!-- Category Badge -->
+                            <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-slate-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-semibold backdrop-blur-md">
+                                Category #${index + 1}
+                            </span>
+
+                            <button onclick="openProjectModal('${project.name}', '${project.img}', \`${project.bio.replace(/`/g, '\\`')}\`)" 
+                                    class="absolute bottom-4 right-4 w-11 h-11 rounded-2xl bg-cyan-500 text-slate-950 flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all shadow-lg shadow-cyan-500/30">
+                                <i class="fa-solid fa-expand text-base"></i>
+                            </button>
+                        </div>
+
+                        <!-- Project Details Container -->
+                        <div class="lg:w-1/2 p-8 sm:p-10 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100 mb-4 group-hover:text-cyan-400 transition-colors">
+                                    ${project.name}
+                                </h3>
+                                <p class="text-slate-300 text-sm leading-relaxed mb-6 font-light">
+                                    ${project.bio}
+                                </p>
+                            </div>
+
+                            <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                                <button onclick="openProjectModal('${project.name}', '${project.img}', \`${project.bio.replace(/`/g, '\\`')}\`)" 
+                                        class="inline-flex items-center gap-2 text-xs font-mono font-bold text-cyan-400 hover:text-cyan-300 tracking-wider uppercase">
+                                    <span>Detailed Overview</span>
+                                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                                </button>
+                                <span class="text-xs text-slate-500 font-mono">Hackoro Original</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        // Render Equipments Array
+        function renderEquipments() {
+            const equipmentsContainer = document.getElementById("equipments-container");
+
+            equipmentsContainer.innerHTML = equipments.map((equip) => {
+                return `
+                    <div class="glass-card rounded-3xl p-6 flex flex-col justify-between group">
+                        <div>
+                            <!-- Equipment Image -->
+                            <div class="relative w-full h-48 rounded-2xl overflow-hidden bg-slate-900 mb-6 flex items-center justify-center">
+                                <img src="${equip.img}" 
+                                     alt="${equip.name}" 
+                                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/0f172a/a855f7?text=${encodeURIComponent(equip.name)}';" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-slate-950/20 group-hover:bg-transparent transition-colors"></div>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="text-xl font-bold text-slate-100 mb-3 group-hover:text-purple-400 transition-colors">
+                                ${equip.name}
+                            </h3>
+
+                            <!-- Specs Preview Box -->
+                            <div class="text-xs text-slate-400 leading-relaxed font-mono bg-slate-900/60 p-3.5 rounded-xl border border-slate-800/80 max-h-36 overflow-y-auto mb-4">
+                                ${equip.bio}
+                            </div>
+                        </div>
+
+                        <button onclick="openEquipModal('${equip.name}', '${equip.img}', \`${equip.bio.replace(/`/g, '\\`')}\`)" 
+                                class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-purple-600/20 border border-slate-800 hover:border-purple-500/50 text-purple-300 text-xs font-mono font-semibold transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-microchip text-xs"></i> Expand Tech Specs
+                        </button>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        // Render Contact Details Array
+        function renderContacts() {
+            const contactContainer = document.getElementById("contact-details-container");
+
+            contactContainer.innerHTML = contacts.map((c) => `
+                <a href="${c.link}" target="_blank" 
+                   class="flex items-center justify-between p-4 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-800/80 transition-all duration-300 group">
+                    <div class="flex items-center gap-4 min-w-0">
+                        <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-cyan-400 flex-shrink-0 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all shadow-md">
+                            <img src="${c.img}" alt="${c.lable}" 
+                                 onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='block';" 
+                                 class="w-6 h-6 object-contain">
+                            <i class="fa-solid ${c.icon || 'fa-link'} text-lg hidden"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-xs font-mono text-slate-500 block uppercase tracking-wider">${c.lable}</span>
+                            <span class="text-sm font-semibold text-slate-200 group-hover:text-cyan-300 transition-colors truncate block">${c.name}</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"></i>
+                </a>
+            `).join("");
+        }
+
+        /* MODAL INTERACTION LOGIC */
+        const modalLightbox = document.getElementById("modal-lightbox");
+        const modalCard = document.getElementById("modal-card");
+        const modalContent = document.getElementById("modal-content");
+
+        function openModal(htmlContent) {
+            modalContent.innerHTML = htmlContent;
+            modalLightbox.classList.remove("opacity-0", "pointer-events-none");
+            modalCard.classList.remove("scale-95");
+            modalCard.classList.add("scale-100");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            modalLightbox.classList.add("opacity-0", "pointer-events-none");
+            modalCard.classList.remove("scale-100");
+            modalCard.classList.add("scale-95");
+            document.body.style.overflow = "auto";
+        }
+
+        function openSkillModal(name, svg) {
+            openModal(`
+                <div class="text-center py-4">
+                    <div class="w-20 h-20 mx-auto rounded-2xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center p-3 mb-6 shadow-xl">
+                        <img src="${svg}" alt="${name}" onerror="this.onerror=null; this.src='https://placehold.co/200x200/0f172a/38bdf8?text=${name.charAt(0)}';" class="w-full h-full object-contain">
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-100 mb-2">${name}</h3>
+                    <p class="text-xs font-mono text-cyan-400 mb-6">Mastered Skill &amp; Creative Tool</p>
+                    <p class="text-sm text-slate-300 leading-relaxed max-w-md mx-auto mb-8">
+                        Experienced in utilizing <strong>${name}</strong> for high-performance development, digital modeling, or production workflows in Nour Shady's creative stack.
+                    </p>
+                    <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs uppercase tracking-wider">Close Preview</button>
+                </div>
+            `);
+        }
+
+        function openProjectModal(name, img, bio) {
+            openModal(`
+                <div>
+                    <div class="w-full h-64 sm:h-80 rounded-2xl overflow-hidden bg-slate-900 mb-6">
+                        <img src="${img}" alt="${name}" onerror="this.onerror=null; this.src='https://placehold.co/800x600/0f172a/38bdf8?text=${encodeURIComponent(name)}';" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">Project Portfolio</span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-100 mb-4">${name}</h3>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 text-sm leading-relaxed mb-6 max-h-48 overflow-y-auto">
+                        ${bio}
+                    </div>
+                    <div class="flex items-center justify-end gap-3">
+                        <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs uppercase tracking-wider">Close</button>
+                    </div>
+                </div>
+            `);
+        }
+
+        function openEquipModal(name, img, bio) {
+            openModal(`
+                <div>
+                    <div class="w-full h-64 rounded-2xl overflow-hidden bg-slate-900 mb-6">
+                        <img src="${img}" alt="${name}" onerror="this.onerror=null; this.src='https://placehold.co/800x600/0f172a/a855f7?text=${encodeURIComponent(name)}';" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xs font-mono text-purple-400 uppercase tracking-widest block mb-1">Hardware & Rig Spec</span>
+                    <h3 class="text-2xl font-bold text-slate-100 mb-4">${name}</h3>
+                    <div class="p-4 rounded-xl bg-slate-900/90 border border-purple-500/20 text-slate-300 text-xs font-mono leading-relaxed mb-6 max-h-56 overflow-y-auto">
+                        ${bio}
+                    </div>
+                    <div class="flex items-center justify-end">
+                        <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase tracking-wider">Done</button>
+                    </div>
+                </div>
+            `);
+        }
+
+        /* UTILITY: COPY TO CLIPBOARD */
+        function copyToClipboard(text) {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast("Email address copied to clipboard!");
+            } catch (err) {
+                showToast("Failed to copy text.");
+            }
+            document.body.removeChild(textarea);
+        }
+
+        /* TOAST NOTIFIER */
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            const toastMsg = document.getElementById("toast-msg");
+            toastMsg.textContent = msg;
+            toast.classList.remove("translate-y-20", "opacity-0");
+            setTimeout(() => {
+                toast.classList.add("translate-y-20", "opacity-0");
+            }, 3000);
+        }
+
+        /* ACCENT THEME DYNAMIC SWITCHER */
+        function setAccentTheme(theme) {
+            const rootSpheres = document.querySelectorAll('.glow-sphere');
+            if (theme === 'cyan') {
+                rootSpheres[0].style.backgroundColor = '#06b6d4';
+                showToast("Theme updated to Cyber Cyan!");
+            } else if (theme === 'purple') {
+                rootSpheres[0].style.backgroundColor = '#a855f7';
+                showToast("Theme updated to Electric Purple!");
+            } else if (theme === 'emerald') {
+                rootSpheres[0].style.backgroundColor = '#10b981';
+                showToast("Theme updated to Neon Emerald!");
+            }
+        }
+
+        /* DOM INIT & EVENT LISTENERS */
+        document.addEventListener("DOMContentLoaded", () => {
+            // Set current year
+            document.getElementById("current-year").textContent = new Date().getFullYear();
+
+            // Render all sections
+            renderSkills();
+            renderProjects();
+            renderEquipments();
+            renderContacts();
+
+            // Skill Search Listener
+            document.getElementById("skill-search").addEventListener("input", (e) => {
+                renderSkills(e.target.value);
+            });
+
+            // Mobile Navigation Toggle
+            const mobileBtn = document.getElementById("mobile-menu-btn");
+            const mobileNav = document.getElementById("mobile-nav");
+            const menuIconToggle = document.getElementById("menu-icon-toggle");
+
+            mobileBtn.addEventListener("click", () => {
+                mobileNav.classList.toggle("hidden");
+                menuIconToggle.classList.toggle("fa-bars");
+                menuIconToggle.classList.toggle("fa-xmark");
+            });
+
+            document.querySelectorAll(".mobile-nav-link").forEach(link => {
+                link.addEventListener("click", () => {
+                    mobileNav.classList.add("hidden");
+                    menuIconToggle.classList.add("fa-bars");
+                    menuIconToggle.classList.remove("fa-xmark");
+                });
+            });
+
+            // Close modal on click backdrop
+            modalLightbox.addEventListener("click", (e) => {
+                if (e.target === modalLightbox) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
