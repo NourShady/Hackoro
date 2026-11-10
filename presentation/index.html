@@ -34,7 +34,6 @@
     /* Slide viewport wrapper */
     .slide-viewport {
       perspective: 1200px;
-    
       transform-style: preserve-3d;
     }
 
@@ -61,14 +60,18 @@
       z-index: 10;
     }
 
-    /* Content styling inside slide */
-    .slide-node img, .slide-node svg {
+    /* Content styling inside slide - pointer-events: none is critical for touch gestures over <object> */
+    .slide-node img, 
+    .slide-node object {
       max-width: 90%;
       max-height: 95vh;
+      width: auto;
+      height: auto;
       object-fit: contain;
       filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
       border-radius: 12px;
       transition: transform 0.3s ease;
+      pointer-events: none;
     }
 
     /* TRANSITION EFFECTS */
@@ -196,23 +199,6 @@
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(255,255,255,0.4);
     }
-
-    /* Pulsing animations for built-in SVGs */
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(3deg); }
-    }
-    @keyframes spinSlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 15px rgba(59,130,246,0.6)); }
-      50% { opacity: 1; filter: drop-shadow(0 0 35px rgba(147,51,234,0.9)); }
-    }
-    .svg-float { animation: floatSlow 6s ease-in-out infinite; }
-    .svg-spin { animation: spinSlow 20s linear infinite; transform-origin: center; }
-    .svg-pulse { animation: pulseGlow 3s ease-in-out infinite; }
   </style>
 </head>
 <body class="bg-slate-950 text-white overflow-hidden select-none">
@@ -238,7 +224,7 @@
 
       <!-- Slide Counter / Indicator -->
       <div id="slide-indicator" class="px-3 py-1 text-xs font-semibold tracking-wider text-slate-200 min-w-[80px] text-center">
-        1 / 4
+        1 / 13
       </div>
 
       <!-- Next Button -->
@@ -274,7 +260,7 @@
       </div>
     </div>
 
-    <!-- Onscreen Touch Swipe Hint (Displays briefly on touch devices) -->
+    <!-- Onscreen Touch Swipe Hint -->
     <div id="touch-hint" class="hidden absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-[11px] tracking-wide text-slate-300 pointer-events-none">
       Swipe left or right to navigate
     </div>
@@ -285,35 +271,29 @@
   <script>
     /**
      * PRESENTATION CONFIGURATION ARRAY
-     * Set up your slides using file URLs (PNG, JPG, SVG, WebP, etc.).
-     * 
-     * Properties:
-     *  - url: Path or web URL to your PNG or SVG slide
-     *  - transition: 'fade' | 'dissolve' | 'morph' | 'zoom-slide' | 'pop'
-     *  - title: Optional display name for drawer / tooltips
      */
     const presentationSlides = [
-         {
+      {
         url: "1.png",
         transition: "dissolve",
         title: "Slide 1 - Fade Transition"
       },
-       {
+      {
         url: "2.png",
         transition: "dissolve",
         title: "Slide 2 - Dissolve Effect"
       },
-       {
+      {
         url: "3.png",
         transition: "dissolve",
         title: "Slide 3 - Zoom Slide"
       },
-       {
+      {
         url: "4.png",
         transition: "dissolve",
         title: "Slide 4 - Pop Effect"
       },
-       {
+      {
         url: "5.png",
         transition: "dissolve",
         title: "Slide 5 - Fade Transition"
@@ -321,47 +301,46 @@
       {
         url: "gemini-svg (2).svg",
         transition: "dissolve",
-        title: "Slide 1 - Fade Transition"
+        title: "Slide 6 - Fade Transition"
       },
       {
         url: "gemini-svg (4).svg",
         transition: "dissolve",
-        title: "Slide 3 - Zoom Slide"
+        title: "Slide 7 - Zoom Slide"
       },
       {
         url: "gemini-svg (5).svg",
         transition: "dissolve",
-        title: "Slide 4 - Pop Effect"
+        title: "Slide 8 - Pop Effect"
       },
       {
         url: "gemini-svg (6).svg",
         transition: "dissolve",
-        title: "Slide 5 - Fade Transition"
+        title: "Slide 9 - Fade Transition"
       },
       {
         url: "gemini-svg (7).svg",
         transition: "dissolve",
-        title: "Slide 6 - Dissolve Effect"
+        title: "Slide 10 - Dissolve Effect"
       },
       {
         url: "gemini-svg (8).svg",
         transition: "dissolve",
-        title: "Slide 7 - Zoom Slide"
+        title: "Slide 11 - Zoom Slide"
       },
       {
         url: "gemini-svg (9).svg",
         transition: "dissolve",
-        title: "Slide 8 - Pop Effect"
+        title: "Slide 12 - Pop Effect"
       },
       {
         url: "gemini-svg (10).svg",
         transition: "dissolve",
-        title: "Slide 9 - Fade Transition"
-      },
-
+        title: "Slide 13 - Fade Transition"
+      }
     ];
 
-    // Presentation Controller State
+    // Presentation Controller Engine
     class PresentationEngine {
       constructor(slides) {
         this.slides = slides;
@@ -411,18 +390,33 @@
           node.className = `slide-node slide-${idx}`;
           node.dataset.index = idx;
 
-          const img = document.createElement('img');
-          img.src = slide.url;
-          img.alt = slide.title || `Slide ${idx + 1}`;
-          img.crossOrigin = "Anonymous"; // Enable canvas sampling for CORS images
-          
-          // Fallback graphic generator if URL fails to load
-          img.onerror = () => {
-            img.onerror = null;
-            img.src = `https://placehold.co/1200x800/1e293b/f8fafc?text=Slide+${idx + 1}+(${encodeURIComponent(slide.transition || 'Fade')})`;
-          };
+          const isSvg = slide.url.toLowerCase().endsWith('.svg');
 
-          node.appendChild(img);
+          if (isSvg) {
+            // Use <object> tag for SVGs to fix iOS Safari animation freezes
+            const obj = document.createElement('object');
+            obj.data = slide.url;
+            obj.type = "image/svg+xml";
+            obj.className = "slide-content";
+            obj.setAttribute('aria-label', slide.title || `Slide ${idx + 1}`);
+
+            node.appendChild(obj);
+          } else {
+            // Standard <img> for PNG / JPG / WebP
+            const img = document.createElement('img');
+            img.src = slide.url;
+            img.alt = slide.title || `Slide ${idx + 1}`;
+            img.crossOrigin = "Anonymous";
+            img.className = "slide-content";
+
+            img.onerror = () => {
+              img.onerror = null;
+              img.src = `https://placehold.co/1200x800/1e293b/f8fafc?text=Slide+${idx + 1}+(${encodeURIComponent(slide.transition || 'Fade')})`;
+            };
+
+            node.appendChild(img);
+          }
+
           this.viewport.appendChild(node);
         });
       }
@@ -571,6 +565,8 @@
 
       extractAndApplyBgColor(slideNode) {
         const img = slideNode.querySelector('img');
+        const obj = slideNode.querySelector('object');
+
         if (img) {
           if (img.complete && img.naturalWidth > 0) {
             this.sampleImageColor(img);
@@ -578,6 +574,13 @@
             img.onload = () => this.sampleImageColor(img);
             img.onerror = () => this.setThemeBg('#0f172a');
           }
+        } else if (obj) {
+          // For <object> SVGs, sample using a hidden Image instance
+          const sampler = new Image();
+          sampler.crossOrigin = "Anonymous";
+          sampler.src = obj.data;
+          sampler.onload = () => this.sampleImageColor(sampler);
+          sampler.onerror = () => this.setThemeBg('#0f172a');
         }
       }
 
