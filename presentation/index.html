@@ -374,11 +374,40 @@
 
         this.init();
       }
+initMediaSessionControls() {
+  if (!('mediaSession' in navigator)) return;
+
+  // إنشاء صوت ساكت جداً لربط الـ AirPods بالصفحة
+  const silentAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+  silentAudio.loop = true;
+
+  // تفعيل الصوت بعد أول ضغطة للمستخدم في الصفحة
+  const enableAudio = () => {
+    silentAudio.play().then(() => {
+      navigator.mediaSession.playbackState = "playing";
+    }).catch(() => {});
+    window.removeEventListener('click', enableAudio);
+    window.removeEventListener('touchstart', enableAudio);
+  };
+  
+  window.addEventListener('click', enableAudio);
+  window.addEventListener('touchstart', enableAudio);
+
+  // ربط أزرار الـ AirPods (Next / Prev) بالسلايدز
+  navigator.mediaSession.setActionHandler('nexttrack', () => {
+    this.next();
+  });
+
+  navigator.mediaSession.setActionHandler('previoustrack', () => {
+    this.prev();
+  });
+}
 
       init() {
         this.renderSlides();
         this.renderThumbnails();
         this.bindEvents();
+        this.initMediaSessionControls();
         this.updateSlide(0, 'next', true);
 
         // Detect touch device to display gesture hint
