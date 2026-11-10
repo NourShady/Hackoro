@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bg-grad" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#0b101d" />
+      <stop offset="60%" stop-color="#05070e" />
+      <stop offset="100%" stop-color="#010204" />
+    </radialGradient>
+
+    <!-- Node Glows -->
+    <radialGradient id="cyan-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="amber-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffb74d" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#ffb74d" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Glow Filters -->
+    <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-amber" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-intense" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Continuous Animations */
+    @keyframes spinClockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spinCounter {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.08); }
+    }
+    @keyframes floatParticle {
+      0% { transform: translateY(0px); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-40px); opacity: 0; }
+    }
+
+    .spin-cw { transform-origin: center; animation: spinClockwise 12s linear infinite; }
+    .spin-ccw { transform-origin: center; animation: spinCounter 16s linear infinite; }
+    .pulse-amber { animation: pulseGlow 4s ease-in-out infinite; }
+    .pulse-cyan { animation: pulseGlow 4s ease-in-out infinite 2s; }
+  </style>
+
+  <!-- Deep Space Grid Background -->
+  <rect width="1000" height="650" fill="url(#bg-grad)" />
+  
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500 M 0,600 L 1000,600" />
+    <path d="M 100,0 L 100,650 M 200,0 L 200,650 M 300,0 L 300,650 M 400,0 L 400,650 M 500,0 L 500,650 M 600,0 L 600,650 M 700,0 L 700,650 M 800,0 L 800,650 M 900,0 L 900,650" />
+  </g>
+
+  <!-- Main Dual Title -->
+  <text x="500" y="55" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="22" font-weight="800" letter-spacing="4" fill="#ffffff" filter="url(#glow-cyan)">SCIENTIFIC EXPERIMENTS &amp;HISTORICAL RESEARCH</text>
+
+  <!-- Center Bridge Line -->
+  <line x1="500" y1="120" x2="500" y2="480" stroke="#1d2e4a" stroke-width="2" stroke-dasharray="6 6" />
+  
+  <!-- Central Convergence Emblem -->
+  <g transform="translate(500, 300)">
+    <circle cx="0" cy="0" r="32" fill="#05070e" stroke="#1d2e4a" stroke-width="2" />
+    <path d="M -12,-12 L 12,12 M 12,-12 L -12,12" stroke="#ffffff" stroke-width="2" opacity="0.6" />
+    <circle cx="0" cy="0" r="6" fill="#ffffff" filter="url(#glow-intense)" />
+  </g>
+
+  <!-- ================= LEFT: HISTORICAL RESEARCH (AMBER / VINTAGE TECH) ================= -->
+  <g transform="translate(250, 300)">
+    <!-- Base Glow -->
+    <circle cx="0" cy="0" r="140" fill="url(#amber-glow)" class="pulse-amber" />
+
+    <!-- Astrolabe / Compass Outer Rings -->
+    <circle cx="0" cy="0" r="105" fill="none" stroke="#ffb74d" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.5" class="spin-cw" />
+    <circle cx="0" cy="0" r="85" fill="none" stroke="#ffb74d" stroke-width="1" stroke-dasharray="4 4" opacity="0.3" class="spin-ccw" />
+
+    <!-- Parchment Scroll &amp;Compass Emblem Icon -->
+    <!-- Scroll Base -->
+    <path d="M -45,-30 C -45,-45 -25,-45 -25,-30 L -25,40 C -25,55 -45,55 -45,40 Z" fill="#241607" stroke="#ffb74d" stroke-width="1.5" />
+    <rect x="-25" y="-40" width="60" height="80" fill="#170e05" stroke="#ffb74d" stroke-width="1.5" />
+    <path d="M 35,-30 C 35,-45 55,-45 55,-30 L 55,40 C 55,55 35,55 35,40 Z" fill="#241607" stroke="#ffb74d" stroke-width="1.5" />
+    
+    <!-- Text Lines on Scroll -->
+    <line x1="-15" y1="-25" x2="25" y2="-25" stroke="#ffb74d" stroke-width="2" opacity="0.6" />
+    <line x1="-15" y1="-10" x2="25" y2="-10" stroke="#ffb74d" stroke-width="1.5" opacity="0.4" />
+    <line x1="-15" y1="5" x2="25" y2="5" stroke="#ffb74d" stroke-width="1.5" opacity="0.4" />
+    
+    <!-- Historical Compass / Divider Instrument -->
+    <g transform="translate(5, 15)">
+      <path d="M -15,15 L 0,-20 L 15,15" fill="none" stroke="#ffe082" stroke-width="2" filter="url(#glow-amber)" />
+      <circle cx="0" cy="-20" r="4" fill="#ffe082" />
+      <line x1="-8" y1="2" x2="8" y2="2" stroke="#ffe082" stroke-width="1.5" />
+    </g>
+
+    <!-- Column Header -->
+    <rect x="-85" y="-150" width="170" height="28" rx="6" fill="#140b03" stroke="#ffb74d" stroke-width="1.2" />
+    <text x="0" y="-132" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="700" fill="#ffb74d" letter-spacing="1">HISTORICAL RESEARCH</text>
+
+    <!-- Subtext Details -->
+    <g font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" fill="#ffe082" text-anchor="middle">
+      <text x="0" y="140" font-weight="700">Archival Manuscripts &amp;Lore</text>
+      <text x="0" y="160" fill="#c79a5b">Empirical Observations</text>
+      <text x="0" y="178" fill="#c79a5b">Foundational Laws (1600s–1900s)</text>
+    </g>
+  </g>
+
+  <!-- ================= RIGHT: SCIENTIFIC EXPERIMENTS (CYAN / MODERN TECH) ================= -->
+  <g transform="translate(750, 300)">
+    <!-- Base Glow -->
+    <circle cx="0" cy="0" r="140" fill="url(#cyan-glow)" class="pulse-cyan" />
+
+    <!-- Orbital / Atomic Rings -->
+    <ellipse cx="0" cy="0" rx="100" ry="35" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="6 4" class="spin-cw" opacity="0.6" />
+    <ellipse cx="0" cy="0" rx="100" ry="35" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="8 6" class="spin-ccw" opacity="0.6" />
+
+    <!-- Flask &amp;Quantum Atom Emblem Icon -->
+    <g transform="translate(0, 5)">
+      <!-- Laboratory Flask -->
+      <path d="M -12,-45 L 12,-45 L 12,-25 L 35,25 C 40,35 30,45 18,45 L -18,45 C -30,45 -40,35 -35,25 L -12,-25 Z" fill="#041622" stroke="#00f3ff" stroke-width="2" />
+      <!-- Fluid Level -->
+      <path d="M -26,10 C -10,0 10,20 26,10 L 31,20 C 33,26 28,38 18,38 L -18,38 C -28,38 -33,26 -31,20 Z" fill="#00f3ff" fill-opacity="0.3" stroke="#00f3ff" stroke-width="1" />
+      <!-- Bubbles Floating -->
+      <circle cx="-6" cy="18" r="3" fill="#ffffff" style="animation: floatParticle 3s linear infinite;" />
+      <circle cx="8" cy="2" r="2" fill="#00f3ff" style="animation: floatParticle 3s linear infinite 1s;" />
+      <circle cx="-2" cy="-15" r="2.5" fill="#ffffff" style="animation: floatParticle 3s linear infinite 2s;" />
+    </g>
+
+    <!-- Column Header -->
+    <rect x="-95" y="-150" width="190" height="28" rx="6" fill="#03131c" stroke="#00f3ff" stroke-width="1.2" />
+    <text x="0" y="-132" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="700" fill="#00f3ff" letter-spacing="1">SCIENTIFIC EXPERIMENTS</text>
+
+    <!-- Subtext Details -->
+    <g font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" fill="#80fbff" text-anchor="middle">
+      <text x="0" y="140" font-weight="700">Quantum &amp;Physical Rigor</text>
+      <text x="0" y="160" fill="#4fa8b8">Hypothesis Testing &amp;Optics</text>
+      <text x="0" y="178" fill="#4fa8b8">Laboratory Verification</text>
+    </g>
+  </g>
+
+  <!-- ================= BOTTOM SUMMARY PANEL ================= -->
+  <g transform="translate(500, 580)">
+    <rect x="-380" y="-22" width="760" height="42" rx="8" fill="#050a14" stroke="#1a2d48" stroke-width="1.5" />
+    <text x="0" y="-4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="12" fill="#7d9ec0">
+      <tspan fill="#ffb74d">HISTORICAL RESEARCH</tspan>: Formulates Theories — <tspan fill="#00f3ff">SCIENTIFIC EXPERIMENTS</tspan>: Validates Reality
+    </text>
+    <text x="0" y="12" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10" fill="#4a6585">
+      (Bridging Empirical Discovery, Mathematical Proofs &amp;Scientific Progress)
+    </text>
+  </g>
+</svg>

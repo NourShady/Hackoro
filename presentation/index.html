@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Presentation Viewer</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Inter', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #0f172a;
+    }
+
+    /* Dynamic background container transition */
+    #bg-backdrop {
+      transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Slide viewport wrapper */
+    .slide-viewport {
+      perspective: 1200px;
+    
+      transform-style: preserve-3d;
+    }
+
+    /* Slide Container Base */
+    .slide-node {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform, opacity, filter, clip-path;
+      backface-visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .slide-node.active {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    /* Content styling inside slide */
+    .slide-node img, .slide-node svg {
+      max-width: 90%;
+      max-height: 95vh;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    /* TRANSITION EFFECTS */
+
+    /* 1. Fade / Dissolve */
+    .transition-fade-enter {
+      animation: fadeIn 0.7s ease-out forwards;
+    }
+    .transition-fade-exit {
+      animation: fadeOut 0.7s ease-in forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    /* 2. Morph (Blur, Scale & Radial Clip) */
+    .transition-morph-enter {
+      animation: morphIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+    .transition-morph-exit {
+      animation: morphOut 0.8s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+    }
+
+    @keyframes morphIn {
+      0% {
+        opacity: 0;
+        filter: blur(20px) contrast(150%);
+        transform: scale(1.15) rotate(1deg);
+        clip-path: circle(10% at 50% 50%);
+      }
+      60% {
+        filter: blur(5px) contrast(110%);
+        clip-path: circle(75% at 50% 50%);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0px) contrast(100%);
+        transform: scale(1) rotate(0deg);
+        clip-path: circle(150% at 50% 50%);
+      }
+    }
+
+    @keyframes morphOut {
+      0% {
+        opacity: 1;
+        filter: blur(0px);
+        transform: scale(1);
+        clip-path: circle(150% at 50% 50%);
+      }
+      100% {
+        opacity: 0;
+        filter: blur(25px) contrast(200%);
+        transform: scale(0.85) rotate(-2deg);
+        clip-path: circle(0% at 50% 50%);
+      }
+    }
+
+    /* 3. Zoom-Slide */
+    .transition-zoom-slide-next-enter {
+      animation: zoomSlideNextIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .transition-zoom-slide-next-exit {
+      animation: zoomSlideNextOut 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .transition-zoom-slide-prev-enter {
+      animation: zoomSlidePrevIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .transition-zoom-slide-prev-exit {
+      animation: zoomSlidePrevOut 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes zoomSlideNextIn {
+      0% { opacity: 0; transform: translate3d(100%, 0, -200px) scale(0.7); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    }
+    @keyframes zoomSlideNextOut {
+      0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+      100% { opacity: 0; transform: translate3d(-100%, 0, -200px) scale(0.7); }
+    }
+    @keyframes zoomSlidePrevIn {
+      0% { opacity: 0; transform: translate3d(-100%, 0, -200px) scale(0.7); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    }
+    @keyframes zoomSlidePrevOut {
+      0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+      100% { opacity: 0; transform: translate3d(100%, 0, -200px) scale(0.7); }
+    }
+
+    /* 4. Pop (Springy 3D Pop/Scale) */
+    .transition-pop-enter {
+      animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    .transition-pop-exit {
+      animation: popOut 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale3d(0.3, 0.3, 0.3) rotateY(-20deg); }
+      70% { transform: scale3d(1.04, 1.04, 1.04) rotateY(2deg); }
+      100% { opacity: 1; transform: scale3d(1, 1, 1) rotateY(0deg); }
+    }
+    @keyframes popOut {
+      0% { opacity: 1; transform: scale3d(1, 1, 1); }
+      100% { opacity: 0; transform: scale3d(0.5, 0.5, 0.5) translateZ(-300px); }
+    }
+
+    /* Custom Scrollbar for Drawer */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    /* Pulsing animations for built-in SVGs */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(3deg); }
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 15px rgba(59,130,246,0.6)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 35px rgba(147,51,234,0.9)); }
+    }
+    .svg-float { animation: floatSlow 6s ease-in-out infinite; }
+    .svg-spin { animation: spinSlow 20s linear infinite; transform-origin: center; }
+    .svg-pulse { animation: pulseGlow 3s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white overflow-hidden select-none">
+
+  <!-- Main Background Container for Dynamic Color Matching -->
+  <div id="bg-backdrop" class="relative w-full h-full flex flex-col justify-between overflow-hidden bg-slate-900">
+    
+    <!-- Ambient Blur Glow Behind Presentation -->
+    <div id="ambient-glow" class="absolute inset-0 opacity-40 blur-3xl transition-all duration-1000 pointer-events-none"></div>
+
+    <!-- Presentation Viewport -->
+    <main id="viewport" class="slide-viewport relative w-full h-full flex items-center justify-center cursor-pointer">
+      <!-- Slides will be rendered dynamically here -->
+    </main>
+
+    <!-- Overlay Navigation Bar Controls -->
+    <nav id="controls-bar" class="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-2.5 rounded-full bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-2xl transition-opacity duration-300 hover:opacity-100 opacity-90">
+      
+      <!-- Prev Button -->
+      <button id="btn-prev" title="Previous Slide (Left Arrow)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/15 active:scale-95 transition">
+        <i class="fa-solid fa-chevron-left text-sm"></i>
+      </button>
+
+      <!-- Slide Counter / Indicator -->
+      <div id="slide-indicator" class="px-3 py-1 text-xs font-semibold tracking-wider text-slate-200 min-w-[80px] text-center">
+        1 / 4
+      </div>
+
+      <!-- Next Button -->
+      <button id="btn-next" title="Next Slide (Right Arrow / Space)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/15 active:scale-95 transition">
+        <i class="fa-solid fa-chevron-right text-sm"></i>
+      </button>
+
+      <div class="w-px h-5 bg-white/20 mx-1"></div>
+
+      <!-- Drawer / Overview Toggle -->
+      <button id="btn-drawer" title="Toggle Slide Overview" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/15 active:scale-95 transition">
+        <i class="fa-solid fa-border-all text-sm"></i>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button id="btn-fullscreen" title="Toggle Fullscreen (F)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/15 active:scale-95 transition">
+        <i class="fa-solid fa-expand text-sm"></i>
+      </button>
+
+    </nav>
+
+    <!-- Slide Overview / Thumbnail Drawer Overlay -->
+    <div id="drawer" class="absolute inset-x-0 bottom-0 z-40 bg-slate-950/90 backdrop-blur-xl border-t border-white/10 transform translate-y-full transition-transform duration-300 p-6 max-h-[45vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4 max-w-6xl mx-auto">
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Slide Overview</h3>
+        <button id="btn-close-drawer" class="text-slate-400 hover:text-white text-sm flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 transition">
+          <i class="fa-solid fa-xmark"></i> Close
+        </button>
+      </div>
+
+      <div id="thumbnail-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+        <!-- Dynamic Thumbnails -->
+      </div>
+    </div>
+
+    <!-- Onscreen Touch Swipe Hint (Displays briefly on touch devices) -->
+    <div id="touch-hint" class="hidden absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-[11px] tracking-wide text-slate-300 pointer-events-none">
+      Swipe left or right to navigate
+    </div>
+
+  </div>
+
+  <!-- JavaScript Code Section -->
+  <script>
+    /**
+     * PRESENTATION CONFIGURATION ARRAY
+     * Set up your slides using file URLs (PNG, JPG, SVG, WebP, etc.).
+     * 
+     * Properties:
+     *  - url: Path or web URL to your PNG or SVG slide
+     *  - transition: 'fade' | 'dissolve' | 'morph' | 'zoom-slide' | 'pop'
+     *  - title: Optional display name for drawer / tooltips
+     */
+    const presentationSlides = [
+         {
+        url: "1.png",
+        transition: "dissolve",
+        title: "Slide 1 - Fade Transition"
+      },
+       {
+        url: "2.png",
+        transition: "dissolve",
+        title: "Slide 2 - Dissolve Effect"
+      },
+       {
+        url: "3.png",
+        transition: "dissolve",
+        title: "Slide 3 - Zoom Slide"
+      },
+       {
+        url: "4.png",
+        transition: "dissolve",
+        title: "Slide 4 - Pop Effect"
+      },
+       {
+        url: "5.png",
+        transition: "dissolve",
+        title: "Slide 5 - Fade Transition"
+      },
+      {
+        url: "gemini-svg (2).svg",
+        transition: "dissolve",
+        title: "Slide 1 - Fade Transition"
+      },
+      {
+        url: "gemini-svg (4).svg",
+        transition: "dissolve",
+        title: "Slide 3 - Zoom Slide"
+      },
+      {
+        url: "gemini-svg (5).svg",
+        transition: "dissolve",
+        title: "Slide 4 - Pop Effect"
+      },
+      {
+        url: "gemini-svg (6).svg",
+        transition: "dissolve",
+        title: "Slide 5 - Fade Transition"
+      },
+      {
+        url: "gemini-svg (7).svg",
+        transition: "dissolve",
+        title: "Slide 6 - Dissolve Effect"
+      },
+      {
+        url: "gemini-svg (8).svg",
+        transition: "dissolve",
+        title: "Slide 7 - Zoom Slide"
+      },
+      {
+        url: "gemini-svg (9).svg",
+        transition: "dissolve",
+        title: "Slide 8 - Pop Effect"
+      },
+      {
+        url: "gemini-svg (10).svg",
+        transition: "dissolve",
+        title: "Slide 9 - Fade Transition"
+      },
+
+    ];
+
+    // Presentation Controller State
+    class PresentationEngine {
+      constructor(slides) {
+        this.slides = slides;
+        this.currentIndex = 0;
+        this.isAnimating = false;
+        this.drawerOpen = false;
+
+        // DOM elements
+        this.viewport = document.getElementById('viewport');
+        this.bgBackdrop = document.getElementById('bg-backdrop');
+        this.ambientGlow = document.getElementById('ambient-glow');
+        this.slideIndicator = document.getElementById('slide-indicator');
+        this.drawer = document.getElementById('drawer');
+        this.thumbnailGrid = document.getElementById('thumbnail-grid');
+
+        // Touch Tracking State
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+
+        // Canvas for dynamic color extraction
+        this.colorCanvas = document.createElement('canvas');
+        this.colorCtx = this.colorCanvas.getContext('2d', { willReadFrequently: true });
+
+        this.init();
+      }
+
+      init() {
+        this.renderSlides();
+        this.renderThumbnails();
+        this.bindEvents();
+        this.updateSlide(0, 'next', true);
+
+        // Detect touch device to display gesture hint
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+          const hint = document.getElementById('touch-hint');
+          if (hint) {
+            hint.classList.remove('hidden');
+            setTimeout(() => hint.classList.add('hidden'), 5000);
+          }
+        }
+      }
+
+      renderSlides() {
+        this.viewport.innerHTML = '';
+        this.slides.forEach((slide, idx) => {
+          const node = document.createElement('div');
+          node.className = `slide-node slide-${idx}`;
+          node.dataset.index = idx;
+
+          const img = document.createElement('img');
+          img.src = slide.url;
+          img.alt = slide.title || `Slide ${idx + 1}`;
+          img.crossOrigin = "Anonymous"; // Enable canvas sampling for CORS images
+          
+          // Fallback graphic generator if URL fails to load
+          img.onerror = () => {
+            img.onerror = null;
+            img.src = `https://placehold.co/1200x800/1e293b/f8fafc?text=Slide+${idx + 1}+(${encodeURIComponent(slide.transition || 'Fade')})`;
+          };
+
+          node.appendChild(img);
+          this.viewport.appendChild(node);
+        });
+      }
+
+      renderThumbnails() {
+        this.thumbnailGrid.innerHTML = '';
+        this.slides.forEach((slide, idx) => {
+          const thumb = document.createElement('div');
+          thumb.className = `group relative cursor-pointer rounded-xl overflow-hidden border-2 transition-all duration-200 bg-slate-800 aspect-video flex items-center justify-center p-1 ${
+            idx === this.currentIndex ? 'border-indigo-500 shadow-lg shadow-indigo-500/30 scale-105' : 'border-white/10 hover:border-white/30'
+          }`;
+
+          const img = document.createElement('img');
+          img.src = slide.url;
+          img.className = "w-full h-full object-cover rounded-lg pointer-events-none";
+          img.onerror = () => {
+            img.onerror = null;
+            img.src = `https://placehold.co/300x200/1e293b/f8fafc?text=${idx + 1}`;
+          };
+
+          thumb.appendChild(img);
+
+          const badge = document.createElement('span');
+          badge.className = "absolute bottom-1 right-1 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-300";
+          badge.innerText = `${idx + 1}`;
+          thumb.appendChild(badge);
+
+          thumb.addEventListener('click', () => {
+            this.goTo(idx);
+            this.toggleDrawer(false);
+          });
+
+          this.thumbnailGrid.appendChild(thumb);
+        });
+      }
+
+      updateSlide(targetIndex, direction = 'next', immediate = false) {
+        if (this.isAnimating && !immediate) return;
+        if (targetIndex < 0 || targetIndex >= this.slides.length) return;
+
+        const prevIndex = this.currentIndex;
+        this.currentIndex = targetIndex;
+
+        const currentSlideNode = this.viewport.querySelector(`.slide-${prevIndex}`);
+        const nextSlideNode = this.viewport.querySelector(`.slide-${targetIndex}`);
+
+        if (!nextSlideNode) return;
+
+        // Extract background color dynamically from image/svg source
+        this.extractAndApplyBgColor(nextSlideNode);
+
+        // Update Counter
+        this.slideIndicator.innerText = `${this.currentIndex + 1} / ${this.slides.length}`;
+
+        // Highlight active thumbnail
+        Array.from(this.thumbnailGrid.children).forEach((child, i) => {
+          if (i === this.currentIndex) {
+            child.className = child.className.replace(/border-white\/(10|30)/, 'border-indigo-500 shadow-lg shadow-indigo-500/30 scale-105');
+          } else {
+            child.className = child.className.replace(/border-indigo-500 shadow-lg shadow-indigo-500\/30 scale-105/, 'border-white/10');
+          }
+        });
+
+        if (immediate || prevIndex === targetIndex) {
+          if (currentSlideNode) currentSlideNode.classList.remove('active');
+          nextSlideNode.classList.add('active');
+          return;
+        }
+
+        this.isAnimating = true;
+
+        // Resolve Transition Type
+        let transType = (this.slides[targetIndex].transition || 'fade').toLowerCase();
+        if (transType === 'dissolve') transType = 'fade';
+
+        // Prepare Animation Classes
+        let enterClass = '';
+        let exitClass = '';
+
+        if (transType === 'fade') {
+          enterClass = 'transition-fade-enter';
+          exitClass = 'transition-fade-exit';
+        } else if (transType === 'morph') {
+          enterClass = 'transition-morph-enter';
+          exitClass = 'transition-morph-exit';
+        } else if (transType === 'zoom-slide') {
+          enterClass = direction === 'next' ? 'transition-zoom-slide-next-enter' : 'transition-zoom-slide-prev-enter';
+          exitClass = direction === 'next' ? 'transition-zoom-slide-next-exit' : 'transition-zoom-slide-prev-exit';
+        } else if (transType === 'pop') {
+          enterClass = 'transition-pop-enter';
+          exitClass = 'transition-pop-exit';
+        }
+
+        // Trigger Animations
+        if (currentSlideNode) {
+          currentSlideNode.classList.add(exitClass);
+        }
+
+        nextSlideNode.classList.add('active', enterClass);
+
+        setTimeout(() => {
+          if (currentSlideNode) {
+            currentSlideNode.classList.remove('active', exitClass);
+          }
+          nextSlideNode.classList.remove(enterClass);
+          this.isAnimating = false;
+        }, 800);
+      }
+
+      next() {
+        if (this.currentIndex < this.slides.length - 1) {
+          this.updateSlide(this.currentIndex + 1, 'next');
+        }
+      }
+
+      prev() {
+        if (this.currentIndex > 0) {
+          this.updateSlide(this.currentIndex - 1, 'prev');
+        }
+      }
+
+      goTo(index) {
+        if (index === this.currentIndex) return;
+        const dir = index > this.currentIndex ? 'next' : 'prev';
+        this.updateSlide(index, dir);
+      }
+
+      toggleDrawer(forceState = null) {
+        this.drawerOpen = forceState !== null ? forceState : !this.drawerOpen;
+        if (this.drawerOpen) {
+          this.drawer.classList.remove('translate-y-full');
+        } else {
+          this.drawer.classList.add('translate-y-full');
+        }
+      }
+
+      toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
+        }
+      }
+
+      extractAndApplyBgColor(slideNode) {
+        const img = slideNode.querySelector('img');
+        if (img) {
+          if (img.complete && img.naturalWidth > 0) {
+            this.sampleImageColor(img);
+          } else {
+            img.onload = () => this.sampleImageColor(img);
+            img.onerror = () => this.setThemeBg('#0f172a');
+          }
+        }
+      }
+
+      sampleImageColor(img) {
+        try {
+          this.colorCanvas.width = 50;
+          this.colorCanvas.height = 50;
+          this.colorCtx.drawImage(img, 0, 0, 50, 50);
+          const imageData = this.colorCtx.getImageData(0, 0, 50, 50).data;
+
+          let r = 0, g = 0, b = 0, count = 0;
+          for (let i = 0; i < imageData.length; i += 16) {
+            r += imageData[i];
+            g += imageData[i + 1];
+            b += imageData[i + 2];
+            count++;
+          }
+
+          r = Math.floor((r / count) * 0.35);
+          g = Math.floor((g / count) * 0.35);
+          b = Math.floor((b / count) * 0.35);
+
+          this.setThemeBg(`rgb(${r}, ${g}, ${b})`);
+        } catch (e) {
+          this.setThemeBg('#0f172a');
+        }
+      }
+
+      setThemeBg(color) {
+        this.bgBackdrop.style.backgroundColor = color;
+        this.ambientGlow.style.background = `radial-gradient(circle, ${color} 0%, rgba(15,23,42,0) 80%)`;
+      }
+
+      bindEvents() {
+        document.getElementById('btn-prev').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.prev();
+        });
+
+        document.getElementById('btn-next').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.next();
+        });
+
+        document.getElementById('btn-drawer').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.toggleDrawer();
+        });
+
+        document.getElementById('btn-close-drawer').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.toggleDrawer(false);
+        });
+
+        document.getElementById('btn-fullscreen').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.toggleFullscreen();
+        });
+
+        this.viewport.addEventListener('click', (e) => {
+          if (this.drawerOpen) {
+            this.toggleDrawer(false);
+            return;
+          }
+          const rect = this.viewport.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          if (clickX > rect.width / 2) {
+            this.next();
+          } else {
+            this.prev();
+          }
+        });
+
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            this.next();
+          } else if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
+            e.preventDefault();
+            this.prev();
+          } else if (e.key === 'f' || e.key === 'F') {
+            e.preventDefault();
+            this.toggleFullscreen();
+          } else if (e.key === 'Escape') {
+            if (this.drawerOpen) this.toggleDrawer(false);
+          }
+        });
+
+        window.addEventListener('touchstart', (e) => {
+          this.touchStartX = e.changedTouches[0].screenX;
+          this.touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+          const touchEndX = e.changedTouches[0].screenX;
+          const touchEndY = e.changedTouches[0].screenY;
+          const diffX = touchEndX - this.touchStartX;
+          const diffY = touchEndY - this.touchStartY;
+
+          if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX < 0) {
+              this.next();
+            } else {
+              this.prev();
+            }
+          }
+        }, { passive: true });
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.presentationApp = new PresentationEngine(presentationSlides);
+    });
+  </script>
+</body>
+</html>

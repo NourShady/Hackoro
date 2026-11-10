@@ -1,0 +1,245 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <defs>
+    <!-- Dark Sci-Fi Background Gradient -->
+    <radialGradient id="bg-grad" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="60%" stop-color="#04060b" />
+      <stop offset="100%" stop-color="#000205" />
+    </radialGradient>
+
+    <!-- Node Base Glows -->
+    <radialGradient id="qubit-a-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="qubit-b-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ab47bc" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#ab47bc" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Qubit Core Gradients -->
+    <radialGradient id="core-a-grad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#00e5ff" />
+      <stop offset="100%" stop-color="#006064" />
+    </radialGradient>
+
+    <radialGradient id="core-b-grad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#e040fb" />
+      <stop offset="100%" stop-color="#4a148c" />
+    </radialGradient>
+
+    <!-- Entanglement Beam Gradient -->
+    <linearGradient id="entangle-beam-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f3ff" />
+      <stop offset="50%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e040fb" />
+    </linearGradient>
+
+    <!-- Glow Filters -->
+    <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-purple" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-intense" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Synchronized Entangled Spin Rotations */
+    @keyframes spinSpinA {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Entangled Counter-Spin for Qubit B (Instantly Correlated) */
+    @keyframes spinSpinB {
+      0% { transform: rotate(180deg); }
+      50% { transform: rotate(360deg); }
+      100% { transform: rotate(540deg); }
+    }
+
+    /* Waveform Pulse traveling across the Quantum Link */
+    @keyframes wavePulse {
+      0% { stroke-dashoffset: 600; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    /* Synchronized Superposition Ring Rotations */
+    @keyframes orbitClockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes orbitCounter {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* Quantum Field Pulse */
+    @keyframes fieldPulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.85; }
+    }
+
+    /* Spooky Action Teleportation Particle Stream */
+    @keyframes particleFlow {
+      0% { transform: translate(250px, 310px); opacity: 0; scale: 0.5; }
+      20% { opacity: 1; scale: 1; }
+      80% { opacity: 1; scale: 1; }
+      100% { transform: translate(750px, 310px); opacity: 0; scale: 0.5; }
+    }
+
+    .pulse-field-a { transform-origin: center; animation: fieldPulse 4s ease-in-out infinite; }
+    .pulse-field-b { transform-origin: center; animation: fieldPulse 4s ease-in-out infinite 2s; }
+
+    .orbit-cw { transform-origin: center; animation: orbitClockwise 8s linear infinite; }
+    .orbit-ccw { transform-origin: center; animation: orbitCounter 10s linear infinite; }
+
+    .spin-vector-a { transform-origin: center; animation: spinSpinA 5s ease-in-out infinite; }
+    .spin-vector-b { transform-origin: center; animation: spinSpinB 5s ease-in-out infinite; }
+  </style>
+
+  <!-- Deep Space Grid Background -->
+  <rect width="1000" height="650" fill="url(#bg-grad)" />
+  
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500 M 0,600 L 1000,600" />
+    <path d="M 100,0 L 100,650 M 200,0 L 200,650 M 300,0 L 300,650 M 400,0 L 400,650 M 500,0 L 500,650 M 600,0 L 600,650 M 700,0 L 700,650 M 800,0 L 800,650 M 900,0 L 900,650" />
+  </g>
+
+  <!-- Header Title -->
+  <text x="500" y="45" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="22" font-weight="800" letter-spacing="4" fill="#ffffff" filter="url(#glow-cyan)">QUANTUM ENTANGLEMENT STATE</text>
+  <text x="500" y="70" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="2" fill="#7d9ec0">NON-LOCAL INSTANTANEOUS CORRELATION</text>
+
+  <!-- ================= ENTANGLEMENT LINK (CENTER BEAM) ================= -->
+  <g transform="translate(0, 0)">
+    <!-- Outer Glow Wave -->
+    <path d="M 250,310 Q 500,200 750,310" fill="none" stroke="url(#entangle-beam-grad)" stroke-width="3" stroke-linecap="round" opacity="0.3" filter="url(#glow-intense)" />
+    <path d="M 250,310 Q 500,420 750,310" fill="none" stroke="url(#entangle-beam-grad)" stroke-width="3" stroke-linecap="round" opacity="0.3" filter="url(#glow-intense)" />
+    
+    <!-- Central Quantum Wave Function Lines -->
+    <path d="M 250,310 C 350,230 400,390 500,310 C 600,230 650,390 750,310" fill="none" stroke="url(#entangle-beam-grad)" stroke-width="2.5" filter="url(#glow-cyan)" />
+    <path d="M 250,310 C 350,390 400,230 500,310 C 600,390 650,230 750,310" fill="none" stroke="url(#entangle-beam-grad)" stroke-width="2.5" filter="url(#glow-purple)" />
+
+    <!-- Animated Travelling Wavefronts -->
+    <path d="M 250,310 Q 500,240 750,310" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-dasharray="15 45" style="animation: wavePulse 4s linear infinite;" />
+    <path d="M 250,310 Q 500,380 750,310" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-dasharray="15 45" style="animation: wavePulse 4s linear infinite reverse;" />
+
+    <!-- Travelling Quantum State Particles -->
+    <g style="animation: particleFlow 3s ease-in-out infinite;">
+      <circle cx="0" cy="0" r="4" fill="#ffffff" filter="url(#glow-intense)" />
+    </g>
+    <g style="animation: particleFlow 3s ease-in-out infinite 1.5s;">
+      <circle cx="0" cy="0" r="4" fill="#00f3ff" filter="url(#glow-cyan)" />
+    </g>
+
+    <!-- Center Bell State / EPR Label -->
+    <g transform="translate(500, 310)">
+      <rect x="-90" y="-18" width="180" height="36" rx="18" fill="#050a14" stroke="url(#entangle-beam-grad)" stroke-width="1.5" />
+      <text x="0" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="12" font-weight="bold" fill="#ffffff">|Ψ⁺⟩ = (|01⟩ + |10⟩)/√2</text>
+      <text x="0" y="32" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10" font-weight="600" fill="#7d9ec0">EPR PAIR CHANNEL</text>
+    </g>
+  </g>
+
+
+  <!-- ================= QUBIT A (LEFT NODE - CYAN) ================= -->
+  <g transform="translate(250, 310)">
+    <!-- Base Glow -->
+    <circle cx="0" cy="0" r="130" fill="url(#qubit-a-glow)" class="pulse-field-a" />
+
+    <!-- Bloch Sphere Rings -->
+    <ellipse cx="0" cy="0" rx="85" ry="30" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="6 4" class="orbit-cw" opacity="0.6" />
+    <ellipse cx="0" cy="0" rx="85" ry="30" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="8 6" class="orbit-ccw" opacity="0.6" />
+    <circle cx="0" cy="0" r="85" fill="none" stroke="#00f3ff" stroke-width="1" stroke-dasharray="3 5" opacity="0.3" />
+
+    <!-- Rotating Spin Vector Arrow -->
+    <g class="spin-vector-a">
+      <line x1="0" y1="40" x2="0" y2="-65" stroke="#00f3ff" stroke-width="3" stroke-linecap="round" filter="url(#glow-cyan)" />
+      <polygon points="0,-75 -7,-58 7,-58" fill="#00f3ff" filter="url(#glow-intense)" />
+      <circle cx="0" cy="-70" r="3" fill="#ffffff" />
+    </g>
+
+    <!-- Core Particle -->
+    <circle cx="0" cy="0" r="28" fill="url(#core-a-grad)" filter="url(#glow-intense)" />
+    <circle cx="0" cy="0" r="32" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.8" />
+    <text x="0" y="6" text-anchor="middle" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="18" font-weight="bold" fill="#000000">A</text>
+
+    <!-- Node Title Card -->
+    <rect x="-70" y="-140" width="140" height="26" rx="6" fill="#04121a" stroke="#00f3ff" stroke-width="1" />
+    <text x="0" y="-123" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="700" fill="#00f3ff" letter-spacing="1">PARTICLE A</text>
+
+    <!-- State Indicators -->
+    <g font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" text-anchor="middle">
+      <text x="0" y="125" font-weight="700" fill="#00f3ff">Spin: |↑⟩ (UP)</text>
+      <text x="0" y="145" fill="#5faec2">State: Undefined until measured</text>
+    </g>
+  </g>
+
+
+  <!-- ================= QUBIT B (RIGHT NODE - PURPLE) ================= -->
+  <g transform="translate(750, 310)">
+    <!-- Base Glow -->
+    <circle cx="0" cy="0" r="130" fill="url(#qubit-b-glow)" class="pulse-field-b" />
+
+    <!-- Bloch Sphere Rings -->
+    <ellipse cx="0" cy="0" rx="85" ry="30" fill="none" stroke="#ab47bc" stroke-width="1.5" stroke-dasharray="6 4" class="orbit-cw" opacity="0.6" />
+    <ellipse cx="0" cy="0" rx="85" ry="30" fill="none" stroke="#ab47bc" stroke-width="1.5" stroke-dasharray="8 6" class="orbit-ccw" opacity="0.6" />
+    <circle cx="0" cy="0" r="85" fill="none" stroke="#ab47bc" stroke-width="1" stroke-dasharray="3 5" opacity="0.3" />
+
+    <!-- Rotating Spin Vector Arrow (Instantly Opposite/Correlated) -->
+    <g class="spin-vector-b">
+      <line x1="0" y1="40" x2="0" y2="-65" stroke="#e040fb" stroke-width="3" stroke-linecap="round" filter="url(#glow-purple)" />
+      <polygon points="0,-75 -7,-58 7,-58" fill="#e040fb" filter="url(#glow-intense)" />
+      <circle cx="0" cy="-70" r="3" fill="#ffffff" />
+    </g>
+
+    <!-- Core Particle -->
+    <circle cx="0" cy="0" r="28" fill="url(#core-b-grad)" filter="url(#glow-intense)" />
+    <circle cx="0" cy="0" r="32" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.8" />
+    <text x="0" y="6" text-anchor="middle" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="18" font-weight="bold" fill="#ffffff">B</text>
+
+    <!-- Node Title Card -->
+    <rect x="-70" y="-140" width="140" height="26" rx="6" fill="#18041a" stroke="#ab47bc" stroke-width="1" />
+    <text x="0" y="-123" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="700" fill="#e040fb" letter-spacing="1">PARTICLE B</text>
+
+    <!-- State Indicators -->
+    <g font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" text-anchor="middle">
+      <text x="0" y="125" font-weight="700" fill="#e040fb">Spin: |↓⟩ (DOWN)</text>
+      <text x="0" y="145" fill="#b388ff">State: Instant collapse on measurement</text>
+    </g>
+  </g>
+
+
+  <!-- ================= BOTTOM TECHNICAL EXPLANATION PANEL ================= -->
+  <g transform="translate(500, 580)">
+    <rect x="-380" y="-22" width="760" height="42" rx="8" fill="#050a14" stroke="#1a2d48" stroke-width="1.5" />
+    <text x="0" y="-4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="12" fill="#7d9ec0">
+      <tspan fill="#00f3ff">MEASUREMENT ON A</tspan> → INSTANTLY DETERMINES <tspan fill="#e040fb">STATE OF B</tspan> (REGARDLESS OF DISTANCE)
+    </text>
+    <text x="0" y="12" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10" fill="#4a6585">
+      ("Spooky Action at a Distance" — Einstein-Podolsky-Rosen Paradox &amp;Bell's Theorem)
+    </text>
+  </g>
+</svg>

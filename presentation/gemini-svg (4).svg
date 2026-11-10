@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <defs>
+    <!-- Dark Sci-Fi Background Gradient -->
+    <radialGradient id="bg-grad" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="60%" stop-color="#04060b" />
+      <stop offset="100%" stop-color="#000205" />
+    </radialGradient>
+
+    <!-- Node Glows -->
+    <radialGradient id="classical-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff9800" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#ff9800" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="quantum-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Glow Filters -->
+    <filter id="glow-orange" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-intense" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* 1. Classical Bit Flip (0 or 1 State) */
+    @keyframes bitSwitch {
+      0%, 45% { opacity: 1; transform: scale(1); }
+      50%, 95% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes bitSwitchAlt {
+      0%, 45% { opacity: 0; transform: scale(0.8); }
+      50%, 95% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.8); }
+    }
+
+    /* 2. Sequential Binary Data Stream */
+    @keyframes classicalStream {
+      0% { stroke-dashoffset: 400; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    /* 3. Quantum Bloch Sphere &amp;Ring Rotation */
+    @keyframes spinClockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spinCounter {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* 4. Superposition Pulse (Simultaneous 0 &amp;1 states) */
+    @keyframes superpositionPulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 4px #00f3ff); }
+      50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 15px #00f3ff); }
+    }
+
+    /* 5. Parallel Processing Rays */
+    @keyframes parallelRays {
+      0%, 100% { stroke-dashoffset: 200; opacity: 0.3; }
+      50% { stroke-dashoffset: 0; opacity: 0.9; }
+    }
+
+    /* Helper Classes */
+    .spin-cw { transform-origin: center; animation: spinClockwise 8s linear infinite; }
+    .spin-ccw { transform-origin: center; animation: spinCounter 12s linear infinite; }
+    .superposition { transform-origin: center; animation: superpositionPulse 3s ease-in-out infinite; }
+    .bit-0 { animation: bitSwitch 4s steps(1) infinite; }
+    .bit-1 { animation: bitSwitchAlt 4s steps(1) infinite; }
+  </style>
+
+  <!-- Deep Space Grid Background -->
+  <rect width="1000" height="650" fill="url(#bg-grad)" />
+  
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500 M 0,600 L 1000,600" />
+    <path d="M 100,0 L 100,650 M 200,0 L 200,650 M 300,0 L 300,650 M 400,0 L 400,650 M 500,0 L 500,650 M 600,0 L 600,650 M 700,0 L 700,650 M 800,0 L 800,650 M 900,0 L 900,650" />
+  </g>
+
+  <!-- Title &amp;Division Line -->
+  <text x="500" y="45" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="22" font-weight="800" letter-spacing="4" fill="#ffffff" filter="url(#glow-cyan)">COMPUTATIONAL PARADIGMS ARCHITECTURE</text>
+  
+  <line x1="500" y1="90" x2="500" y2="530" stroke="#1e2d42" stroke-width="2" stroke-dasharray="6 6" />
+  <circle cx="500" cy="310" r="24" fill="#04060b" stroke="#1e2d42" stroke-width="2" />
+  <text x="500" y="315" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="800" fill="#7d9ec0">VS</text>
+
+  <!-- ================= CLASSICAL COMPUTING (LEFT - ORANGE) ================= -->
+  <g transform="translate(250, 310)">
+    <!-- Base Glow -->
+    <circle cx="0" cy="0" r="140" fill="url(#classical-glow)" />
+    
+    <!-- Outer Hardware Housing -->
+    <rect x="-100" y="-120" width="200" height="240" rx="16" fill="#0c0a06" stroke="#ff9800" stroke-width="2" opacity="0.9" />
+    <rect x="-85" y="-105" width="170" height="210" rx="8" fill="#140f07" stroke="#ff9800" stroke-width="0.8" opacity="0.5" />
+
+    <!-- Circuit Trace Lines -->
+    <g stroke="#ff9800" stroke-width="1.5" opacity="0.4" fill="none">
+      <path d="M -85,-50 L -40,-50 L -20,-30 M 85,-50 L 40,-50 L 20,-30" />
+      <path d="M -85,50 L -40,50 L -20,30 M 85,50 L 40,50 L 20,30" />
+      <path d="M 250,200 L 250,300" />
+    </g>
+
+    <!-- Transistor Core / Bit Switch Center -->
+    <rect x="-45" y="-45" width="90" height="90" rx="10" fill="#1c1205" stroke="#ff9800" stroke-width="2" filter="url(#glow-orange)" />
+    
+    <!-- Discrete Binary Bit Output (0 or 1 Switch) -->
+    <g class="bit-0" transform="translate(0, 0)">
+      <text x="0" y="14" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="42" font-weight="900" fill="#ff9800" filter="url(#glow-intense)">0</text>
+    </g>
+    <g class="bit-1" transform="translate(0, 0)">
+      <text x="0" y="14" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="42" font-weight="900" fill="#ffb74d" filter="url(#glow-intense)">1</text>
+    </g>
+
+    <!-- Sequential Data Pipelines (Top &amp;Bottom Outputs) -->
+    <g stroke="#ff9800" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.8">
+      <line x1="-70" y1="-75" x2="70" y2="-75" stroke-dasharray="12 12" style="animation: classicalStream 6s linear infinite;" />
+      <line x1="-70" y1="75" x2="70" y2="75" stroke-dasharray="12 12" style="animation: classicalStream 6s linear infinite reverse;" />
+    </g>
+
+    <!-- Station Header &amp;Info -->
+    <rect x="-90" y="-160" width="180" height="26" rx="6" fill="#140b02" stroke="#ff9800" stroke-width="1" />
+    <text x="0" y="-143" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="700" fill="#ff9800" letter-spacing="1">CLASSICAL BIT</text>
+
+    <!-- Feature Bullet points -->
+    <g font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" fill="#d9a779" text-anchor="middle">
+      <text x="0" y="150" font-weight="700">State: Deterministic (0 OR 1)</text>
+      <text x="0" y="170" fill="#8c7056">Processing: Sequential</text>
+      <text x="0" y="188" fill="#8c7056">Scalability: Linear (N bits)</text>
+    </g>
+  </g>
+
+
+  <!-- ================= QUANTUM COMPUTING (RIGHT - CYAN) ================= -->
+  <g transform="translate(750, 310)">
+    <!-- Base Glow -->
+    <circle cx="0" cy="0" r="140" fill="url(#quantum-glow)" />
+
+    <!-- Outer Quantum Cryostat Chamber -->
+    <rect x="-100" y="-120" width="200" height="240" rx="16" fill="#040f14" stroke="#00f3ff" stroke-width="2" opacity="0.9" />
+    <rect x="-85" y="-105" width="170" height="210" rx="8" fill="#06161f" stroke="#00f3ff" stroke-width="0.8" opacity="0.5" />
+
+    <!-- Bloch Sphere Orbit Rings -->
+    <ellipse cx="0" cy="0" rx="55" ry="20" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="6 4" class="spin-cw" opacity="0.7" />
+    <ellipse cx="0" cy="0" rx="55" ry="20" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="8 6" class="spin-ccw" opacity="0.7" />
+    <circle cx="0" cy="0" r="55" fill="none" stroke="#00f3ff" stroke-width="1" stroke-dasharray="2 4" opacity="0.4" />
+
+    <!-- Parallel Entanglement Data Rays (Multi-state Processing) -->
+    <g stroke="#00f3ff" stroke-width="1.5" stroke-linecap="round" fill="none">
+      <line x1="-40" y1="-40" x2="40" y2="40" stroke-dasharray="8 8" style="animation: parallelRays 3s linear infinite;" />
+      <line x1="40" y1="-40" x2="-40" y2="40" stroke-dasharray="8 8" style="animation: parallelRays 3s linear infinite 1.5s;" />
+      <line x1="0" y1="-55" x2="0" y2="55" stroke-dasharray="6 6" style="animation: parallelRays 2s linear infinite;" />
+    </g>
+
+    <!-- Superposition Qubit Core |Ψ⟩ -->
+    <g class="superposition">
+      <circle cx="0" cy="0" r="22" fill="#00f3ff" fill-opacity="0.2" stroke="#00f3ff" stroke-width="2" filter="url(#glow-cyan)" />
+      <text x="0" y="6" text-anchor="middle" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="20" font-weight="bold" fill="#ffffff" filter="url(#glow-intense)">|Ψ⟩</text>
+    </g>
+
+    <!-- Superposition Notation Overlay -->
+    <text x="0" y="-75" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" fill="#00f3ff" opacity="0.9">α|0⟩ + β|1⟩</text>
+    <text x="0" y="83" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#00e5ff" opacity="0.7">2ⁿ States Parallel</text>
+
+    <!-- Station Header &amp;Info -->
+    <rect x="-90" y="-160" width="180" height="26" rx="6" fill="#02141c" stroke="#00f3ff" stroke-width="1" />
+    <text x="0" y="-143" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="700" fill="#00f3ff" letter-spacing="1">QUANTUM QUBIT</text>
+
+    <!-- Feature Bullet points -->
+    <g font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" fill="#9deeff" text-anchor="middle">
+      <text x="0" y="150" font-weight="700">State: Superposition (0 AND 1)</text>
+      <text x="0" y="170" fill="#5faec2">Processing: Parallel (Entangled)</text>
+      <text x="0" y="188" fill="#5faec2">Scalability: Exponential (2ⁿ states)</text>
+    </g>
+  </g>
+
+
+  <!-- ================= BOTTOM COMPARISON TECHNICAL PANEL ================= -->
+  <g transform="translate(500, 580)">
+    <rect x="-380" y="-22" width="760" height="42" rx="8" fill="#050a14" stroke="#1a2d48" stroke-width="1.5" />
+    <text x="0" y="-4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="12" fill="#7d9ec0">
+      <tspan fill="#ff9800">CLASSICAL</tspan>: Transistors switch sequentially — <tspan fill="#00f3ff">QUANTUM</tspan>: Entangled qubits evaluate all possibilities simultaneously
+    </text>
+    <text x="0" y="12" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10" fill="#4a6585">
+      (Binary Logic vs. Quantum Superposition &amp;Interference Mechanics)
+    </text>
+  </g>
+</svg>

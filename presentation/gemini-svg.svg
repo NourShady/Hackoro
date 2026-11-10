@@ -1,0 +1,304 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <radialGradient id="bg-glow" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#0a0d1d" />
+      <stop offset="100%" stop-color="#020308" />
+    </radialGradient>
+    
+    <!-- Node Gradients -->
+    <radialGradient id="alice-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="bob-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ab47bc" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#ab47bc" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Particle Gradients -->
+    <radialGradient id="qubit-unknown" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="40%" stop-color="#ffeb3b" />
+      <stop offset="100%" stop-color="#e65100" />
+    </radialGradient>
+    <radialGradient id="qubit-entangled" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#00e5ff" />
+      <stop offset="100%" stop-color="#006064" />
+    </radialGradient>
+
+    <!-- Glow Filters -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="glow-intense" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+
+    
+    /* Step 1: Input Qubit Approaching */
+    @keyframes inputArrival {
+      0% { transform: translate(-60px, 300px); opacity: 0; }
+      10% { transform: translate(150px, 300px); opacity: 1; }
+      25% { transform: translate(150px, 300px); opacity: 1; scale: 1; }
+      33% { transform: translate(250px, 200px); scale: 1.2; }
+      36% { transform: translate(250px, 200px); scale: 0; opacity: 0; }
+      100% { transform: translate(250px, 200px); scale: 0; opacity: 0; }
+    }
+
+    /* Step 2: Entangled Pair Generation */
+    @keyframes entangleSource {
+      0%, 5% { scale: 0; opacity: 0; }
+      12% { scale: 1.2; opacity: 1; }
+      15% { scale: 0; opacity: 0; }
+      100% { scale: 0; opacity: 0; }
+    }
+    @keyframes entangleSplitA {
+      0%, 5% { transform: translate(500px, 450px); opacity: 0; }
+      12% { transform: translate(500px, 450px); opacity: 1; }
+      22% { transform: translate(250px, 400px); opacity: 1; }
+      33% { transform: translate(250px, 200px); opacity: 1; scale: 1; }
+      36% { transform: translate(250px, 200px); opacity: 0; scale: 1.8; }
+      100% { transform: translate(250px, 200px); opacity: 0; }
+    }
+    @keyframes entangleSplitB {
+      0%, 5% { transform: translate(500px, 450px); opacity: 0; }
+      12% { transform: translate(500px, 450px); opacity: 1; }
+      22% { transform: translate(750px, 300px); opacity: 1; }
+      75% { transform: translate(750px, 300px); opacity: 1; scale: 1; filter: hue-rotate(0deg); }
+      78% { transform: translate(750px, 300px); opacity: 1; scale: 1.4; filter: hue-rotate(-140deg); }
+      85% { transform: translate(750px, 300px); opacity: 1; scale: 1; filter: hue-rotate(-140deg); }
+      92% { transform: translate(870px, 300px); opacity: 1; filter: hue-rotate(-140deg); }
+      98%, 100% { transform: translate(1050px, 300px); opacity: 0; filter: hue-rotate(-140deg); }
+    }
+
+    /* Quantum Entanglement Beam Link */
+    @keyframes QuantumLink {
+      0%, 10% { opacity: 0; stroke-dashoffset: 600; }
+      20% { opacity: 0.8; stroke-dashoffset: 0; }
+      35% { opacity: 1; }
+      36% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    /* Step 3: Bell State Measurement Flash */
+    @keyframes BSMFlash {
+      0%, 33% { transform: scale(0); opacity: 0; }
+      36% { transform: scale(2.5); opacity: 1; }
+      42% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    /* Step 4: Classical Bits Transmission */
+    @keyframes classicalBits {
+      0%, 38% { stroke-dashoffset: 600; opacity: 0; }
+      40% { opacity: 1; }
+      65% { stroke-dashoffset: 0; opacity: 1; }
+      75% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+    @keyframes classicalPacket {
+      0%, 38% { transform: translate(250px, 200px); opacity: 0; }
+      40% { opacity: 1; }
+      65% { transform: translate(750px, 300px); opacity: 1; }
+      68% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    /* Waveform Pulse in Transmission Line */
+    @keyframes waveFlow {
+      0% { stroke-dashoffset: 40; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    /* Rotating Quantum Rings */
+    @keyframes spinClockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spinCounter {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* Text Stage Highlighting */
+    @keyframes highlightStage1 {
+      0%, 25% { fill: #00f3ff; opacity: 1; }
+      30%, 100% { fill: #4a6585; opacity: 0.5; }
+    }
+    @keyframes highlightStage2 {
+      0%, 28% { fill: #4a6585; opacity: 0.5; }
+      33%, 45% { fill: #00f3ff; opacity: 1; }
+      50%, 100% { fill: #4a6585; opacity: 0.5; }
+    }
+    @keyframes highlightStage3 {
+      0%, 48% { fill: #4a6585; opacity: 0.5; }
+      53%, 70% { fill: #00f3ff; opacity: 1; }
+      75%, 100% { fill: #4a6585; opacity: 0.5; }
+    }
+    @keyframes highlightStage4 {
+      0%, 73% { fill: #4a6585; opacity: 0.5; }
+      78%, 95% { fill: #00f3ff; opacity: 1; }
+      100% { fill: #4a6585; opacity: 0.5; }
+    }
+
+    /* Helper Classes */
+    .spin-cw { transform-origin: center; animation: spinClockwise 8s linear infinite; }
+    .spin-ccw { transform-origin: center; animation: spinCounter 12s linear infinite; }
+    .st-stage1 { animation: highlightStage1 10s infinite; }
+    .st-stage2 { animation: highlightStage2 10s infinite; }
+    .st-stage3 { animation: highlightStage3 10s infinite; }
+    .st-stage4 { animation: highlightStage4 10s infinite; }
+  </style>
+
+  <!-- Deep Space Background -->
+  <rect width="1000" height="600" fill="url(#bg-glow)" />
+  
+  <!-- Grid Pattern overlay for tech aesthetic -->
+  <g opacity="0.05" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500" />
+    <path d="M 100,0 L 100,600 M 200,0 L 200,600 M 300,0 L 300,600 M 400,0 L 400,600 M 500,0 L 500,600 M 600,0 L 600,600 M 700,0 L 700,600 M 800,0 L 800,600 M 900,0 L 900,600" />
+  </g>
+
+  <!-- ================= LABELS & STAGE TIMELINE ================= -->
+  <text x="500" y="45" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="24" font-weight="700" letter-spacing="4" fill="#ffffff" filter="url(#glow)">QUANTUM TELEPORTATION PROTOCOL</text>
+  
+  <!-- Step Progress Indicator -->
+  <g font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="1">
+    <text x="150" y="85" text-anchor="middle" class="st-stage1">1. PREPARE QUBIT</text>
+    <text x="380" y="85" text-anchor="middle" class="st-stage2">2. BELL MEASUREMENT</text>
+    <text x="620" y="85" text-anchor="middle" class="st-stage3">3. CLASSICAL TRANSMISSION</text>
+    <text x="850" y="85" text-anchor="middle" class="st-stage4">4. STATE RECOVERY</text>
+  </g>
+
+  <!-- ================= NODES / STATIONS ================= -->
+  
+  <!-- Alice Station (Sender) -->
+  <g id="alice-node">
+    <circle cx="250" cy="200" r="90" fill="url(#alice-glow)" />
+    <circle cx="250" cy="200" r="70" fill="none" stroke="#00f3ff" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.6" class="spin-cw" />
+    <circle cx="250" cy="200" r="55" fill="none" stroke="#00f3ff" stroke-width="1" opacity="0.3" />
+    <!-- Node Label -->
+    <rect x="190" y="105" width="120" height="25" rx="12" fill="#00f3ff" fill-opacity="0.1" stroke="#00f3ff" stroke-width="1" />
+    <text x="250" y="122" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="700" fill="#00f3ff" letter-spacing="1.5">ALICE (SENDER)</text>
+  </g>
+
+  <!-- Bob Station (Receiver) -->
+  <g id="bob-node">
+    <circle cx="750" cy="300" r="90" fill="url(#bob-glow)" />
+    <circle cx="750" cy="300" r="70" fill="none" stroke="#ab47bc" stroke-width="1.5" stroke-dasharray="8 4" opacity="0.6" class="spin-ccw" />
+    <circle cx="750" cy="300" r="55" fill="none" stroke="#ab47bc" stroke-width="1" opacity="0.3" />
+    <!-- Node Label -->
+    <rect x="690" y="185" width="120" height="25" rx="12" fill="#ab47bc" fill-opacity="0.1" stroke="#ab47bc" stroke-width="1" />
+    <text x="750" y="202" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="700" fill="#ab47bc" letter-spacing="1.5">BOB (RECEIVER)</text>
+  </g>
+
+  <!-- Entanglement Source Station -->
+  <g id="entangled-source">
+    <circle cx="500" cy="450" r="45" fill="none" stroke="#00e5ff" stroke-width="1" stroke-dasharray="4 4" opacity="0.4" class="spin-cw" />
+    <text x="500" y="515" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#00e5ff" letter-spacing="1" opacity="0.8">EPR SOURCE</text>
+    <text x="500" y="530" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="9" fill="#8b9bb4">(Entangled Photon Pair)</text>
+  </g>
+
+
+  <!-- ================= CHANNELS & CONNECTIONS ================= -->
+
+  <!-- Quantum Entanglement Link Line (EPR Pair Distribution) -->
+  <path d="M 250,200 L 500,450 L 750,300" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.3" />
+  
+  <!-- Active Entanglement Connection Beam -->
+  <path d="M 250,200 Q 500,100 750,300" fill="none" stroke="url(#qubit-entangled)" stroke-width="3" stroke-linecap="round" filter="url(#glow)" style="stroke-dasharray: 600; animation: QuantumLink 10s infinite;" />
+
+  <!-- Classical Channel (Fiber / Cable) -->
+  <g id="classical-channel">
+    <path d="M 250,200 C 400,260 600,200 750,300" fill="none" stroke="#102a45" stroke-width="8" />
+    <path d="M 250,200 C 400,260 600,200 750,300" fill="none" stroke="#ffb74d" stroke-width="2" stroke-dasharray="6 6" opacity="0.4" />
+    
+    <!-- Animated Classical Data Stream Track -->
+    <path d="M 250,200 C 400,260 600,200 750,300" fill="none" stroke="#ff9800" stroke-width="3" stroke-linecap="round" filter="url(#glow)" style="stroke-dasharray: 600; animation: classicalBits 10s infinite;" />
+    
+    <!-- Channel Label -->
+    <rect x="440" y="225" width="120" height="18" rx="4" fill="#020308" stroke="#ff9800" stroke-width="0.8" opacity="0.9" />
+    <text x="500" y="238" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="9" font-weight="700" fill="#ff9800" letter-spacing="1">CLASSICAL CHANNEL</text>
+    <text x="500" y="252" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="8" fill="#ffb74d">(2 Classical Bits: 00, 01, 10, or 11)</text>
+  </g>
+
+
+  <!-- ================= ANIMATED QUANTUM PARTICLES ================= -->
+
+  <!-- 1. Input Qubit |Ψ⟩ (Unknown State to be Teleported) -->
+  <g style="animation: inputArrival 10s infinite;">
+    <!-- Outer Quantum Cloud -->
+    <circle cx="0" cy="0" r="20" fill="url(#qubit-unknown)" opacity="0.3" filter="url(#glow)" />
+    <!-- Orbital Ring -->
+    <ellipse cx="0" cy="0" rx="22" ry="8" fill="none" stroke="#ffeb3b" stroke-width="1.5" transform="rotate(30)" />
+    <ellipse cx="0" cy="0" rx="22" ry="8" fill="none" stroke="#ffeb3b" stroke-width="1.5" transform="rotate(-30)" />
+    <!-- Core Particle -->
+    <circle cx="0" cy="0" r="9" fill="url(#qubit-unknown)" filter="url(#glow-intense)" />
+    <!-- Qubit Label -->
+    <text x="0" y="-28" text-anchor="middle" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="14" font-weight="bold" fill="#ffeb3b" filter="url(#glow)">|Ψ⟩</text>
+  </g>
+
+  <!-- 2. EPR Source Pulse Flash -->
+  <circle cx="500" cy="450" r="30" fill="#00e5ff" filter="url(#glow-intense)" style="animation: entangleSource 10s infinite;" />
+
+  <!-- 3. Entangled Qubit A (Sent to Alice) -->
+  <g style="animation: entangleSplitA 10s infinite;">
+    <ellipse cx="0" cy="0" rx="16" ry="6" fill="none" stroke="#00e5ff" stroke-width="1.2" transform="rotate(45)" />
+    <circle cx="0" cy="0" r="7" fill="url(#qubit-entangled)" filter="url(#glow)" />
+    <text x="-15" y="-12" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10" font-weight="700" fill="#00e5ff">A</text>
+  </g>
+
+  <!-- 4. Entangled Qubit B (Sent to Bob & Transformed) -->
+  <g style="animation: entangleSplitB 10s infinite;">
+    <ellipse cx="0" cy="0" rx="16" ry="6" fill="none" stroke="#00e5ff" stroke-width="1.2" transform="rotate(-45)" opacity="0.8" />
+    <circle cx="0" cy="0" r="7" fill="url(#qubit-entangled)" filter="url(#glow)" />
+    <!-- Label dynamically changes conceptually, becomes |Ψ⟩ -->
+    <text x="18" y="-12" text-anchor="middle" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="13" font-weight="bold" fill="#ffeb3b" filter="url(#glow)">|Ψ⟩</text>
+  </g>
+
+  <!-- 5. Bell State Measurement (BSM) Detector Flash at Alice -->
+  <g transform="translate(250, 200)">
+    <circle cx="0" cy="0" r="45" fill="#ffffff" filter="url(#glow-intense)" style="animation: BSMFlash 10s infinite;" />
+    <circle cx="0" cy="0" r="60" fill="none" stroke="#00f3ff" stroke-width="3" filter="url(#glow)" style="animation: BSMFlash 10s infinite;" />
+  </g>
+
+  <!-- 6. Classical Data Packet Travelling (Bits Payload) -->
+  <g style="animation: classicalPacket 10s infinite;">
+    <rect x="-16" y="-10" width="32" height="20" rx="5" fill="#ff9800" filter="url(#glow)" />
+    <text x="0" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" fill="#000000">10</text>
+  </g>
+
+
+  <!-- ================= TECHNICAL ANNOTATIONS & FOOTER ================= -->
+  
+  <!-- Bob's Unitary Transformation Gate Device -->
+  <g transform="translate(750, 300)">
+    <rect x="-35" y="45" width="70" height="24" rx="4" fill="#15102a" stroke="#ab47bc" stroke-width="1.5" />
+    <text x="0" y="61" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10" font-weight="700" fill="#e1bee7" letter-spacing="1">GATE (U)</text>
+    <!-- Indicator Line to Qubit -->
+    <path d="M 0,0 L 0,45" fill="none" stroke="#ab47bc" stroke-width="1" stroke-dasharray="2 2" opacity="0.6" />
+  </g>
+
+  <!-- Explanatory State Box at Bottom -->
+  <g transform="translate(500, 565)">
+    <rect x="-300" y="-18" width="600" height="30" rx="6" fill="#050814" stroke="#1e293b" stroke-width="1" />
+    <text x="0" y="2" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="12" fill="#8fb3d9">
+      State Teleported: <tspan fill="#ffeb3b">|Ψ⟩ = α|0⟩ + β|1⟩</tspan>  — [ No matter transferred, only quantum information ]
+    </text>
+  </g>
+</svg>
