@@ -26,6 +26,14 @@
       background-color: #0f172a;
     }
 
+.ios-fullscreen-fallback {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999999 !important;
+}
     /* Dynamic background container transition */
     #bg-backdrop {
       transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -552,16 +560,40 @@
           this.drawer.classList.add('translate-y-full');
         }
       }
+toggleFullscreen() {
+  const elem = document.documentElement;
+  
+  // 1. Standard Fullscreen API (Android, Desktop, iPadOS 16+)
+  if (elem.requestFullscreen) {
+    if (!document.fullscreenElement) {
+      elem.requestFullscreen().catch(() => this.enableIosFallback());
+    } else {
+      document.exitFullscreen();
+    }
+    return;
+  }
+  
+  // 2. WebKit Prefix (Older Safari / Desktop Safari)
+  if (elem.webkitRequestFullscreen) {
+    if (!document.webkitFullscreenElement) {
+      elem.webkitRequestFullscreen();
+    } else {
+      document.webkitExitFullscreen();
+    }
+    return;
+  }
 
-      toggleFullscreen() {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(() => {});
-        } else {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          }
-        }
-      }
+  // 3. iOS Safari Fallback (CSS Hide Address Bar / Standalone style)
+  this.enableIosFallback();
+}
+
+enableIosFallback() {
+  const bgNode = document.getElementById('bg-backdrop');
+  bgNode.classList.toggle('ios-fullscreen-fallback');
+  
+  // Scroll to hide Safari top/bottom navigation bars
+  window.scrollTo(0, 1);
+}
 
       extractAndApplyBgColor(slideNode) {
         const img = slideNode.querySelector('img');
