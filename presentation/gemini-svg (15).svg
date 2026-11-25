@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <defs>
+    
+    <radialGradient id="bg-grad-s16" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="60%" stop-color="#04060b" />
+      <stop offset="100%" stop-color="#000205" />
+    </radialGradient>
+
+    
+    <linearGradient id="qa-grad-s16" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.16" />
+      <stop offset="50%" stop-color="#00ff88" stop-opacity="0.26" />
+      <stop offset="100%" stop-color="#e040fb" stop-opacity="0.16" />
+    </linearGradient>
+
+    
+    <radialGradient id="ref-halo-s16" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    
+    <filter id="glow-cyan-s16" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-green-s16" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes bannerPulseS16 {
+      0%, 100% { stroke-opacity: 0.75; }
+      50% { stroke-opacity: 1; filter: drop-shadow(0 0 12px #00ff88); }
+    }
+    @keyframes scanLineS16 {
+      0% { stroke-dashoffset: 300; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    .qa-banner-s16 { animation: bannerPulseS16 3.5s ease-in-out infinite; }
+    .scan-stream-s16 { stroke-dasharray: 10 6; animation: scanLineS16 6s linear infinite; }
+  </style>
+
+  
+  <rect width="1000" height="650" fill="url(#bg-grad-s16)" />
+  
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500 M 0,600 L 1000,600" />
+    <path d="M 100,0 L 100,650 M 200,0 L 200,650 M 300,0 L 300,650 M 400,0 L 400,650 M 500,0 L 500,650 M 600,0 L 600,650 M 700,0 L 700,650 M 800,0 L 800,650 M 900,0 L 900,650" />
+  </g>
+
+  
+  
+  <g transform="translate(500, 30)">
+    <rect x="-140" y="-12" width="280" height="22" rx="11" fill="#061224" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.6" />
+    <text x="0" y="3" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" letter-spacing="2" fill="#00f3ff">SLIDE 16   |   REFERENCES &amp; Q&amp;A</text>
+  </g>
+
+  
+  <text x="500" y="68" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="26" font-weight="900" letter-spacing="3.5" fill="#ffffff" filter="url(#glow-cyan-s16)">
+    SCIENTIFIC <tspan fill="#00f3ff">REFERENCES</tspan>
+  </text>
+
+  
+  <text x="500" y="90" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11.5" font-weight="600" letter-spacing="2" fill="#7d9ec0">PEER-REVIEWED LITERATURE &amp; HISTORICAL ARCHIVES</text>
+
+  
+  <g transform="translate(500, 294)">
+    <circle cx="0" cy="0" r="260" fill="url(#ref-halo-s16)" />
+
+    
+    <g transform="translate(-225, -124)">
+      <rect x="-215" y="-50" width="430" height="100" rx="12" fill="#050e1c" stroke="#00f3ff" stroke-width="1.5" stroke-opacity="0.8" />
+      <rect x="-198" y="-36" width="32" height="22" rx="6" fill="#042236" stroke="#00f3ff" stroke-width="1.2" />
+      <text x="-182" y="-21" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="900" fill="#00f3ff">01</text>
+
+      <text x="-156" y="-20" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="13" font-weight="900" fill="#ffffff">Bennett et al. (1993)</text>
+      <text x="-156" y="1" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#cde8f5">Teleporting an Unknown Quantum State via Dual</text>
+      <text x="-156" y="17" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#cde8f5">Classical and Einstein-Podolsky-Rosen Channels.</text>
+      <text x="-156" y="36" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" fill="#00f3ff">Physical Review Letters, 70, 1895–1899.</text>
+    </g>
+
+    
+    <g transform="translate(225, -124)">
+      <rect x="-215" y="-50" width="430" height="100" rx="12" fill="#0f0617" stroke="#e040fb" stroke-width="1.5" stroke-opacity="0.8" />
+      <rect x="-198" y="-36" width="32" height="22" rx="6" fill="#250936" stroke="#e040fb" stroke-width="1.2" />
+      <text x="-182" y="-21" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="900" fill="#e040fb">02</text>
+
+      <text x="-156" y="-20" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="13" font-weight="900" fill="#ffffff">Bouwmeester et al. (1997)</text>
+      <text x="-156" y="2" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11.5" font-weight="600" fill="#f3d4fa">Experimental Quantum Teleportation.</text>
+      <text x="-156" y="26" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" fill="#e040fb">Nature, 390, 575–579.</text>
+    </g>
+
+    
+    <g transform="translate(-225, -8)">
+      <rect x="-215" y="-50" width="430" height="100" rx="12" fill="#041612" stroke="#00ff88" stroke-width="1.5" stroke-opacity="0.8" />
+      <rect x="-198" y="-36" width="32" height="22" rx="6" fill="#062b22" stroke="#00ff88" stroke-width="1.2" />
+      <text x="-182" y="-21" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="900" fill="#00ff88">03</text>
+
+      <text x="-156" y="-20" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="13" font-weight="900" fill="#ffffff">Thomas et al. (2024)</text>
+      <text x="-156" y="1" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#ccf7e5">Quantum Teleportation Coexisting with Classical</text>
+      <text x="-156" y="17" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#ccf7e5">Communications in Optical Fiber.</text>
+      <text x="-156" y="36" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" fill="#00ff88">Optica, 11(12), 1700–1707.</text>
+    </g>
+
+    
+    <g transform="translate(225, -8)">
+      <rect x="-215" y="-50" width="430" height="100" rx="12" fill="#050e1c" stroke="#00f3ff" stroke-width="1.5" stroke-opacity="0.8" />
+      <rect x="-198" y="-36" width="32" height="22" rx="6" fill="#042236" stroke="#00f3ff" stroke-width="1.2" />
+      <text x="-182" y="-21" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="900" fill="#00f3ff">04</text>
+
+      <text x="-156" y="-20" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="13" font-weight="900" fill="#ffffff">Brattley, Opatrný &amp; Das (2026)</text>
+      <text x="-156" y="1" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#cde8f5">General Machine-Learning Algorithm for</text>
+      <text x="-156" y="17" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#cde8f5">Quantum Teleportation.</text>
+      <text x="-156" y="36" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" fill="#00f3ff">Physical Review A, 113, 052401.</text>
+    </g>
+
+    
+    <g transform="translate(-225, 108)">
+      <rect x="-215" y="-50" width="430" height="100" rx="12" fill="#0f0617" stroke="#e040fb" stroke-width="1.5" stroke-opacity="0.8" />
+      <rect x="-198" y="-36" width="32" height="22" rx="6" fill="#250936" stroke="#e040fb" stroke-width="1.2" />
+      <text x="-182" y="-21" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="900" fill="#e040fb">05</text>
+
+      <text x="-156" y="-20" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="13" font-weight="900" fill="#ffffff">Iuliano et al. (2026)</text>
+      <text x="-156" y="1" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#f3d4fa">Unconditionally Teleported Quantum Gates</text>
+      <text x="-156" y="17" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#f3d4fa">Between Remote Solid-State Qubit Registers.</text>
+      <text x="-156" y="36" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" fill="#e040fb">Nature Communications, 17, 4694.</text>
+    </g>
+
+    
+    <g transform="translate(225, 108)">
+      <rect x="-215" y="-50" width="430" height="100" rx="12" fill="#170f05" stroke="#ff9800" stroke-width="1.5" stroke-opacity="0.8" />
+      <rect x="-198" y="-36" width="32" height="22" rx="6" fill="#2e1b06" stroke="#ff9800" stroke-width="1.2" />
+      <text x="-182" y="-21" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="900" fill="#ffb74d">06</text>
+
+      <text x="-156" y="-20" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="900" fill="#ffffff">Tesla Science Center at Wardenclyffe</text>
+      <text x="-156" y="1" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#ffe6c2">History of Wardenclyffe: Tesla's wireless</text>
+      <text x="-156" y="17" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="600" fill="#ffe6c2">communication and power-transfer vision.</text>
+      <text x="-156" y="36" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" fill="#ffb74d">Historical background source.</text>
+    </g>
+  </g>
+
+  
+  <g transform="translate(500, 524)">
+    <rect x="-440" y="-36" width="880" height="72" rx="16" fill="url(#qa-grad-s16)" stroke="#00ff88" stroke-width="2" class="qa-banner-s16" />
+    <text x="0" y="2" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="25" font-weight="900" letter-spacing="4" fill="#ffffff" filter="url(#glow-cyan-s16)">
+      THANK YOU — <tspan fill="#00ff88">QUESTIONS?</tspan>
+    </text>
+    <text x="0" y="23" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" letter-spacing="2" fill="#9deeff">
+      OPEN FLOOR FOR DISCUSSION &amp; INQUIRIES
+    </text>
+  </g>
+
+  
+  <g transform="translate(500, 598)">
+    <rect x="-440" y="-17" width="880" height="32" rx="8" fill="#050a14" stroke="#1a2d48" stroke-width="1.4" />
+    <text x="0" y="3" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="bold" letter-spacing="1.5" fill="#7d9ec0">
+      |  FROM NIKOLA TESLA'S VISION TO QUANTUM REALITY 
+    </text>
+  </g>
+</svg>

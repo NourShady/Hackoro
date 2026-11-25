@@ -1,0 +1,222 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <defs>
+    
+    <radialGradient id="bg-grad" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="60%" stop-color="#04060b" />
+      <stop offset="100%" stop-color="#000205" />
+    </radialGradient>
+
+    
+    <radialGradient id="pad-alice-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="pad-bob-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00ff88" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#00ff88" stop-opacity="0" />
+    </radialGradient>
+
+    
+    <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-intense" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    
+    <g id="human-shape">
+      <circle cx="0" cy="-65" r="14" />
+      <path d="M -4,-50 L 4,-50 L 5,-42 L -5,-42 Z" />
+      <path d="M -22,-40 C -22,-40 -12,-42 0,-42 C 12,-42 22,-40 22,-40 L 18,-5 C 18,-5 14,0 12,15 L 15,40 L 8,40 L 5,10 L -5,10 L -8,40 L -15,40 L -12,15 C -14,0 -18,-5 -18,-5 Z" />
+      <path d="M -22,-40 L -26,-15 L -20,-12 L -17,-35 M 22,-40 L 26,-15 L 20,-12 L 17,-35" />
+    </g>
+
+    
+    <linearGradient id="scan-beam" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.8" />
+      <stop offset="30%" stop-color="#00f3ff" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="reconstruct-beam" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00ff88" stop-opacity="0" />
+      <stop offset="70%" stop-color="#00ff88" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#00ff88" stop-opacity="0.8" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    /* Continuous Animation Sequence (8s loop) */
+    @keyframes dematerialize {
+      0% { opacity: 1; filter: drop-shadow(0 0 2px #00f3ff); }
+      15% { opacity: 1; filter: drop-shadow(0 0 15px #00f3ff); }
+      35% { opacity: 0.8; filter: drop-shadow(0 0 25px #00f3ff); }
+      45% { opacity: 0; filter: drop-shadow(0 0 40px #ffffff); transform: scaleY(1.1); }
+      80%, 100% { opacity: 0; }
+    }
+
+    @keyframes scanLaser {
+      0%, 10% { transform: translateY(-70px); opacity: 0; }
+      15% { opacity: 1; }
+      40% { transform: translateY(70px); opacity: 1; }
+      45% { opacity: 0; }
+      100% { transform: translateY(-70px); opacity: 0; }
+    }
+
+    @keyframes particleAscent {
+      0%, 20% { opacity: 0; transform: translate(200px, 340px) scale(0.5); }
+      30% { opacity: 1; }
+      45% { opacity: 0; transform: translate(200px, 200px) scale(1.5); }
+      100% { opacity: 0; }
+    }
+
+    @keyframes dataStream {
+      0%, 35% { stroke-dashoffset: 800; opacity: 0; }
+      40% { opacity: 1; }
+      60% { stroke-dashoffset: 0; opacity: 1; }
+      68% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes packetFly {
+      0%, 38% { transform: translate(200px, 250px); opacity: 0; scale: 0.5; }
+      42% { opacity: 1; scale: 1; }
+      60% { transform: translate(800px, 250px); opacity: 1; scale: 1; }
+      65% { opacity: 0; scale: 0.5; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes materialize {
+      0%, 50% { opacity: 0; filter: drop-shadow(0 0 30px #00ff88); transform: scaleY(0.9); }
+      65% { opacity: 0.4; filter: drop-shadow(0 0 20px #00ff88); }
+      80% { opacity: 0.9; filter: drop-shadow(0 0 10px #00ff88); }
+      90%, 100% { opacity: 1; filter: drop-shadow(0 0 2px #00ff88); transform: scaleY(1); }
+    }
+
+    @keyframes reconstructScan {
+      0%, 50% { opacity: 0; transform: translateY(70px); }
+      55% { opacity: 1; }
+      80% { transform: translateY(-70px); opacity: 1; }
+      85%, 100% { opacity: 0; }
+    }
+  </style>
+
+  
+  <rect width="1000" height="650" fill="url(#bg-grad)" />
+  
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500 M 0,600 L 1000,600" />
+    <path d="M 100,0 L 100,650 M 200,0 L 200,650 M 300,0 L 300,650 M 400,0 L 400,650 M 500,0 L 500,650 M 600,0 L 600,650 M 700,0 L 700,650 M 800,0 L 800,650 M 900,0 L 900,650" />
+  </g>
+
+  
+  
+  <g transform="translate(500, 32)">
+    <rect x="-125" y="-13" width="250" height="24" rx="12" fill="#061224" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.6" />
+    <text x="0" y="3" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" letter-spacing="2" fill="#00f3ff">SLIDE 01   |   SPEAKER 01</text>
+  </g>
+
+  
+  <text x="500" y="75" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="30" font-weight="900" letter-spacing="6" fill="#ffffff" filter="url(#glow-cyan)">TELEPORTATION</text>
+
+  
+  <text x="500" y="102" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#00ff88">FROM NIKOLA TESLA'S VISION TO QUANTUM REALITY</text>
+
+  
+  <text x="500" y="122" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11" font-weight="500" letter-spacing="1" fill="#7d9ec0">A Journey from Scientific Imagination to Quantum Information</text>
+
+  
+  <path d="M 200,260 C 350,165 650,165 800,260" fill="none" stroke="#0a192f" stroke-width="12" />
+  <path d="M 200,260 C 350,165 650,165 800,260" fill="none" stroke="#1e3a5f" stroke-width="4" />
+  
+  
+  <path d="M 200,260 C 350,165 650,165 800,260" fill="none" stroke="#00f3ff" stroke-width="4" stroke-linecap="round" filter="url(#glow-intense)" style="stroke-dasharray: 800; animation: dataStream 8s infinite;" />
+
+  
+  <g style="animation: packetFly 8s infinite;">
+    <circle cx="0" cy="0" r="12" fill="#00f3ff" filter="url(#glow-intense)" />
+    <text x="0" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#000">10110</text>
+  </g>
+
+  
+  <g transform="translate(200, 355)">
+    <ellipse cx="0" cy="105" rx="90" ry="28" fill="url(#pad-alice-glow)" />
+    <ellipse cx="0" cy="105" rx="80" ry="24" fill="#091322" stroke="#00f3ff" stroke-width="2" />
+    <ellipse cx="0" cy="105" rx="60" ry="17" fill="none" stroke="#00f3ff" stroke-width="1" stroke-dasharray="6 4" opacity="0.7" />
+    <ellipse cx="0" cy="-105" rx="70" ry="20" fill="#091322" stroke="#00f3ff" stroke-width="2" />
+    <path d="M -70,-105 L -70,105 M 70,-105 L 70,105" stroke="#00f3ff" stroke-width="1.5" opacity="0.3" />
+    <rect x="-70" y="-105" width="140" height="210" fill="#00f3ff" opacity="0.03" rx="10" />
+
+    
+    <g style="animation: scanLaser 8s infinite;">
+      <polygon points="-65,-20 65,-20 70,10 -70,10" fill="url(#scan-beam)" />
+      <line x1="-70" y1="10" x2="70" y2="10" stroke="#00f3ff" stroke-width="3" filter="url(#glow-intense)" />
+    </g>
+
+    
+    <g style="animation: dematerialize 8s infinite;">
+      <use href="#human-shape" fill="#00f3ff" filter="url(#glow-cyan)" />
+    </g>
+
+    
+    <rect x="-75" y="138" width="150" height="24" rx="5" fill="#061224" stroke="#00f3ff" stroke-width="1" />
+    <text x="0" y="154" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10" font-weight="700" letter-spacing="1" fill="#00f3ff">SCIENTIFIC VISION</text>
+  </g>
+
+  
+  <g style="animation: particleAscent 8s infinite;">
+    <circle cx="-10" cy="0" r="3" fill="#ffffff" filter="url(#glow-intense)" />
+    <circle cx="15" cy="-20" r="2" fill="#00f3ff" />
+    <circle cx="-25" cy="-40" r="4" fill="#00f3ff" filter="url(#glow-cyan)" />
+    <circle cx="8" cy="-60" r="2" fill="#ffffff" />
+    <circle cx="-12" cy="-80" r="3" fill="#00f3ff" />
+  </g>
+
+  
+  <g transform="translate(800, 355)">
+    <ellipse cx="0" cy="105" rx="90" ry="28" fill="url(#pad-bob-glow)" />
+    <ellipse cx="0" cy="105" rx="80" ry="24" fill="#041c14" stroke="#00ff88" stroke-width="2" />
+    <ellipse cx="0" cy="105" rx="60" ry="17" fill="none" stroke="#00ff88" stroke-width="1" stroke-dasharray="6 4" opacity="0.7" />
+    <ellipse cx="0" cy="-105" rx="70" ry="20" fill="#041c14" stroke="#00ff88" stroke-width="2" />
+    <path d="M -70,-105 L -70,105 M 70,-105 L 70,105" stroke="#00ff88" stroke-width="1.5" opacity="0.3" />
+    <rect x="-70" y="-105" width="140" height="210" fill="#00ff88" opacity="0.03" rx="10" />
+
+    
+    <g style="animation: reconstructScan 8s infinite;">
+      <polygon points="-70,-10 70,-10 65,20 -65,20" fill="url(#reconstruct-beam)" />
+      <line x1="-70" y1="-10" x2="70" y2="-10" stroke="#00ff88" stroke-width="3" filter="url(#glow-intense)" />
+    </g>
+
+    
+    <g style="animation: materialize 8s infinite;">
+      <use href="#human-shape" fill="#00ff88" filter="url(#glow-intense)" />
+    </g>
+
+    
+    <rect x="-75" y="138" width="150" height="24" rx="5" fill="#021a10" stroke="#00ff88" stroke-width="1" />
+    <text x="0" y="154" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10" font-weight="700" letter-spacing="1" fill="#00ff88">QUANTUM REALITY</text>
+  </g>
+
+  
+  <g transform="translate(500, 588)">
+    <rect x="-320" y="-22" width="640" height="30" rx="8" fill="#050a14" stroke="#1a2d48" stroke-width="1.5" />
+    
+    <text x="0" y="-5" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" fill="#7d9ec0">
+      Quantum Information &amp; Artificial Intelligence Track
+    </text>
+  </g>
+</svg>

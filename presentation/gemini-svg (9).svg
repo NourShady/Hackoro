@@ -1,0 +1,287 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <defs>
+    
+    <radialGradient id="bg-grad-s10" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="60%" stop-color="#04060b" />
+      <stop offset="100%" stop-color="#000205" />
+    </radialGradient>
+
+    
+    <linearGradient id="timeline-grad-s10" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f3ff" />
+      <stop offset="50%" stop-color="#e040fb" />
+      <stop offset="100%" stop-color="#00ff88" />
+    </linearGradient>
+
+    
+    <radialGradient id="node-1993-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="node-1997-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e040fb" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#e040fb" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="node-2024-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00ff88" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#00ff88" stop-opacity="0" />
+    </radialGradient>
+
+    
+    <filter id="glow-cyan-s10" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-purple-s10" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-green-s10" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-intense-s10" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Timeline Energy Flow */
+    @keyframes timelinePulseFlowS10 {
+      0% { stroke-dashoffset: 680; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes timelineSparkS10 {
+      0% { transform: translate(-310px, 0px) scale(0.8); opacity: 0; }
+      10% { opacity: 1; scale: 1; }
+      50% { transform: translate(0px, 0px) scale(1.15); opacity: 1; }
+      90% { opacity: 1; scale: 1; }
+      100% { transform: translate(310px, 0px) scale(0.8); opacity: 0; }
+    }
+    /* Node Icon Animations */
+    @keyframes spinClockwiseS10 {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes polarizationOscS10 {
+      0%, 100% { transform: rotate(-35deg); }
+      50% { transform: rotate(35deg); }
+    }
+    @keyframes fiberPulseS10 {
+      0% { stroke-dashoffset: 180; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes nodeHaloPulseS10 {
+      0%, 100% { transform: scale(1); opacity: 0.75; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+
+    .timeline-stream-s10 { stroke-dasharray: 14 8; animation: timelinePulseFlowS10 8s linear infinite; }
+    .timeline-spark-s10 { animation: timelineSparkS10 6s ease-in-out infinite; }
+    .orbit-cw-s10 { transform-origin: center; animation: spinClockwiseS10 10s linear infinite; }
+    .polar-vec-s10 { transform-origin: 0px 0px; animation: polarizationOscS10 3s ease-in-out infinite; }
+    .fiber-wave-s10 { stroke-dasharray: 12 6; animation: fiberPulseS10 2.5s linear infinite; }
+    .node-halo-s10 { transform-origin: center; animation: nodeHaloPulseS10 3.5s ease-in-out infinite; }
+  </style>
+
+  
+  <rect width="1000" height="650" fill="url(#bg-grad-s10)" />
+  
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500 M 0,600 L 1000,600" />
+    <path d="M 100,0 L 100,650 M 200,0 L 200,650 M 300,0 L 300,650 M 400,0 L 400,650 M 500,0 L 500,650 M 600,0 L 600,650 M 700,0 L 700,650 M 800,0 L 800,650 M 900,0 L 900,650" />
+  </g>
+
+  
+  
+  <g transform="translate(500, 32)">
+    <rect x="-125" y="-13" width="250" height="24" rx="12" fill="#061224" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.6" />
+    <text x="0" y="3" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" letter-spacing="2" fill="#00f3ff">SLIDE 10   |   SPEAKER 08</text>
+  </g>
+
+  
+  <text x="500" y="76" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="30" font-weight="900" letter-spacing="4" fill="#ffffff" filter="url(#glow-cyan-s10)">FROM THEORY TO EXPERIMENT</text>
+
+  
+  <text x="500" y="102" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="2" fill="#7d9ec0">THREE DECADES OF QUANTUM TELEPORTATION MILESTONES</text>
+
+  
+  <g transform="translate(500, 162)">
+    
+    <line x1="-310" y1="0" x2="310" y2="0" stroke="#162438" stroke-width="6" stroke-linecap="round" />
+    
+    <line x1="-310" y1="0" x2="310" y2="0" stroke="url(#timeline-grad-s10)" stroke-width="2.5" stroke-linecap="round" class="timeline-stream-s10" />
+
+    
+    <g class="timeline-spark-s10">
+      <circle cx="0" cy="0" r="6" fill="#ffffff" filter="url(#glow-intense-s10)" />
+    </g>
+
+    
+    <g transform="translate(-310, 0)">
+      <circle cx="0" cy="0" r="22" fill="none" stroke="#00f3ff" stroke-width="1.4" stroke-dasharray="4 3" class="node-halo-s10" />
+      <circle cx="0" cy="0" r="14" fill="#041926" stroke="#00f3ff" stroke-width="2.2" filter="url(#glow-cyan-s10)" />
+      <circle cx="0" cy="0" r="5" fill="#00f3ff" />
+    </g>
+
+    
+    <g transform="translate(0, 0)">
+      <circle cx="0" cy="0" r="22" fill="none" stroke="#e040fb" stroke-width="1.4" stroke-dasharray="4 3" class="node-halo-s10" />
+      <circle cx="0" cy="0" r="14" fill="#1d0626" stroke="#e040fb" stroke-width="2.2" filter="url(#glow-purple-s10)" />
+      <circle cx="0" cy="0" r="5" fill="#e040fb" />
+    </g>
+
+    
+    <g transform="translate(310, 0)">
+      <circle cx="0" cy="0" r="22" fill="none" stroke="#00ff88" stroke-width="1.4" stroke-dasharray="4 3" class="node-halo-s10" />
+      <circle cx="0" cy="0" r="14" fill="#042117" stroke="#00ff88" stroke-width="2.2" filter="url(#glow-green-s10)" />
+      <circle cx="0" cy="0" r="5" fill="#00ff88" />
+    </g>
+  </g>
+
+  
+  
+  <g transform="translate(190, 375)">
+    <circle cx="0" cy="-20" r="130" fill="url(#node-1993-glow)" />
+    <rect x="-135" y="-175" width="270" height="350" rx="16" fill="#050e1a" stroke="#00f3ff" stroke-width="1.8" stroke-opacity="0.8" />
+
+    
+    <line x1="0" y1="-175" x2="0" y2="-195" stroke="#00f3ff" stroke-width="2" stroke-dasharray="3 3" />
+
+    
+    <rect x="-55" y="-158" width="110" height="30" rx="15" fill="#041c2b" stroke="#00f3ff" stroke-width="1.4" filter="url(#glow-cyan-s10)" />
+    <text x="0" y="-138" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="16" font-weight="900" letter-spacing="2" fill="#00f3ff">1993</text>
+
+    
+    <text x="0" y="-104" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="13" font-weight="800" letter-spacing="1" fill="#ffffff">THEORETICAL PROTOCOL</text>
+
+    
+    <g transform="translate(0, -32)">
+      <rect x="-95" y="-44" width="190" height="88" rx="10" fill="#030a14" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.4" />
+      
+      <line x1="-75" y1="-18" x2="75" y2="-18" stroke="#00f3ff" stroke-width="1.5" />
+      <line x1="-75" y1="18" x2="75" y2="18" stroke="#00f3ff" stroke-width="1.5" />
+      
+      <line x1="-22" y1="-18" x2="-22" y2="18" stroke="#00ff88" stroke-width="1.8" />
+      <circle cx="-22" cy="-18" r="4" fill="#00ff88" />
+      <circle cx="-22" cy="18" r="8" fill="none" stroke="#00ff88" stroke-width="1.6" />
+      <rect x="10" y="-30" width="24" height="24" rx="4" fill="#062236" stroke="#00f3ff" stroke-width="1.5" />
+      <text x="22" y="-14" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="12" font-weight="bold" fill="#ffffff">H</text>
+      
+      <circle cx="58" cy="18" r="10" fill="none" stroke="#00f3ff" stroke-width="1.2" stroke-dasharray="3 2" class="orbit-cw-s10" />
+      <text x="0" y="34" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="8.5" font-weight="bold" fill="#7d9ec0">BENNETT ET AL. (PRL 1993)</text>
+    </g>
+
+    
+    <rect x="-115" y="42" width="230" height="112" rx="10" fill="#041220" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.35" />
+    <circle cx="-96" cy="74" r="4" fill="#00f3ff" filter="url(#glow-cyan-s10)" />
+    <text x="-84" y="78" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">Bennett and colleagues</text>
+    <text x="-84" y="97" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="700" fill="#9deeff">proposed Quantum</text>
+    <text x="-84" y="116" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="700" fill="#00f3ff">Teleportation.</text>
+  </g>
+
+  
+  <g transform="translate(500, 375)">
+    <circle cx="0" cy="-20" r="130" fill="url(#node-1997-glow)" />
+    <rect x="-135" y="-175" width="270" height="350" rx="16" fill="#100617" stroke="#e040fb" stroke-width="1.8" stroke-opacity="0.8" />
+
+    
+    <line x1="0" y1="-175" x2="0" y2="-195" stroke="#e040fb" stroke-width="2" stroke-dasharray="3 3" />
+
+    
+    <rect x="-55" y="-158" width="110" height="30" rx="15" fill="#23082e" stroke="#e040fb" stroke-width="1.4" filter="url(#glow-purple-s10)" />
+    <text x="0" y="-138" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="16" font-weight="900" letter-spacing="2" fill="#e040fb">1997</text>
+
+    
+    <text x="0" y="-104" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="800" letter-spacing="0.8" fill="#ffffff">EXPERIMENTAL DEMONSTRATION</text>
+
+    
+    <g transform="translate(0, -32)">
+      <rect x="-95" y="-44" width="190" height="88" rx="10" fill="#0c0412" stroke="#e040fb" stroke-width="1" stroke-opacity="0.4" />
+      
+      <line x1="-75" y1="-4" x2="75" y2="-4" stroke="#e040fb" stroke-width="1.5" stroke-dasharray="5 3" />
+      
+      <circle cx="0" cy="-4" r="24" fill="#1d0726" stroke="#e040fb" stroke-width="1.4" />
+      <g transform="translate(0, -4)">
+        <g class="polar-vec-s10">
+          <line x1="0" y1="18" x2="0" y2="-18" stroke="#ffffff" stroke-width="2.2" filter="url(#glow-purple-s10)" />
+          <polygon points="0,-22 -4,-14 4,-14" fill="#e040fb" />
+          <polygon points="0,22 -4,14 4,14" fill="#e040fb" />
+        </g>
+      </g>
+      <text x="0" y="34" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="8.5" font-weight="bold" fill="#f3a6ff">PHOTON POLARIZATION QUBIT</text>
+    </g>
+
+    
+    <rect x="-115" y="42" width="230" height="112" rx="10" fill="#170721" stroke="#e040fb" stroke-width="1" stroke-opacity="0.35" />
+    <circle cx="-96" cy="74" r="4" fill="#e040fb" filter="url(#glow-purple-s10)" />
+    <text x="-84" y="78" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">A photon polarization</text>
+    <text x="-84" y="97" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="700" fill="#f3a6ff">state was teleported</text>
+    <text x="-84" y="116" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="700" fill="#e040fb">experimentally.</text>
+  </g>
+
+  
+  <g transform="translate(810, 375)">
+    <circle cx="0" cy="-20" r="130" fill="url(#node-2024-glow)" />
+    <rect x="-135" y="-175" width="270" height="350" rx="16" fill="#041410" stroke="#00ff88" stroke-width="1.8" stroke-opacity="0.8" />
+
+    
+    <line x1="0" y1="-175" x2="0" y2="-195" stroke="#00ff88" stroke-width="2" stroke-dasharray="3 3" />
+
+    
+    <rect x="-55" y="-158" width="110" height="30" rx="15" fill="#042419" stroke="#00ff88" stroke-width="1.4" filter="url(#glow-green-s10)" />
+    <text x="0" y="-138" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="16" font-weight="900" letter-spacing="2" fill="#00ff88">2024</text>
+
+    
+    <text x="0" y="-104" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="800" letter-spacing="0.8" fill="#ffffff">OPTICAL-FIBER DEMONSTRATION</text>
+
+    
+    <g transform="translate(0, -32)">
+      <rect x="-95" y="-44" width="190" height="88" rx="10" fill="#030f0c" stroke="#00ff88" stroke-width="1" stroke-opacity="0.4" />
+      
+      <ellipse cx="0" cy="-6" rx="52" ry="18" fill="none" stroke="#00ff88" stroke-width="1.4" opacity="0.45" />
+      <ellipse cx="0" cy="-2" rx="52" ry="18" fill="none" stroke="#00f3ff" stroke-width="1.6" class="fiber-wave-s10" />
+      <ellipse cx="0" cy="2" rx="52" ry="18" fill="none" stroke="#00ff88" stroke-width="1.4" opacity="0.45" />
+      
+      <rect x="-42" y="-14" width="84" height="20" rx="6" fill="#04261a" stroke="#00ff88" stroke-width="1.2" />
+      <text x="0" y="0" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="900" fill="#ffffff">30.2 KM</text>
+      <text x="0" y="34" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="8.5" font-weight="bold" fill="#00ff88">TELECOM FIBER NETWORK</text>
+    </g>
+
+    
+    <rect x="-115" y="42" width="230" height="112" rx="10" fill="#041c15" stroke="#00ff88" stroke-width="1" stroke-opacity="0.35" />
+    <circle cx="-96" cy="74" r="4" fill="#00ff88" filter="url(#glow-green-s10)" />
+    <text x="-84" y="78" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="700" fill="#ffffff">Quantum Teleportation</text>
+    <text x="-84" y="97" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="700" fill="#9effd2">was demonstrated over</text>
+    <text x="-84" y="116" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12.5" font-weight="800" fill="#00ff88">30.2 km of fiber.</text>
+  </g>
+
+  
+  <g transform="translate(500, 595)">
+    <rect x="-430" y="-20" width="860" height="38" rx="8" fill="#050a14" stroke="#1a2d48" stroke-width="1.5" />
+    <text x="0" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11.5" font-weight="bold" fill="#7d9ec0">
+      <tspan fill="#00f3ff">1993:</tspan> Mathematical Theory  →  <tspan fill="#e040fb">1997:</tspan> Lab Optical Proof  →  <tspan fill="#00ff88">2024:</tspan> <tspan fill="#ffffff">30.2 km Deployed Telecom Fiber</tspan>
+    </text>
+  </g>
+</svg>

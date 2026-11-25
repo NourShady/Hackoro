@@ -1,0 +1,223 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <defs>
+    
+    <radialGradient id="bg-grad-s5" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="60%" stop-color="#04060b" />
+      <stop offset="100%" stop-color="#000205" />
+    </radialGradient>
+
+    
+    <radialGradient id="matter-glow-s5" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff9800" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#ff9800" stop-opacity="0" />
+    </radialGradient>
+
+    
+    <radialGradient id="state-glow-s5" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </radialGradient>
+
+    
+    <radialGradient id="atom-core-s5" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="40%" stop-color="#ffb74d" />
+      <stop offset="100%" stop-color="#e65100" />
+    </radialGradient>
+
+    
+    <filter id="glow-cyan-s5" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-orange-s5" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-intense-s5" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Continuous Animations */
+    @keyframes spinClockwiseS5 {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spinCounterS5 {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes lockedPulseS5 {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    @keyframes stateStreamS5 {
+      0% { stroke-dashoffset: 220; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes psiPacketMoveS5 {
+      0% { transform: translate(-115px, -24px) scale(0.75); opacity: 0; }
+      18% { opacity: 1; transform: translate(-115px, -24px) scale(1); }
+      50% { transform: translate(0px, -46px) scale(1.12); opacity: 1; }
+      82% { opacity: 1; transform: translate(115px, -24px) scale(1); }
+      100% { transform: translate(115px, -24px) scale(0.75); opacity: 0; }
+    }
+    @keyframes notEqualGlowS5 {
+      0%, 100% { filter: drop-shadow(0 0 6px #ff5252); }
+      50% { filter: drop-shadow(0 0 16px #ff5252); }
+    }
+
+    .orbit-cw-s5 { transform-origin: center; animation: spinClockwiseS5 9s linear infinite; }
+    .orbit-ccw-s5 { transform-origin: center; animation: spinCounterS5 13s linear infinite; }
+    .locked-atom-s5 { transform-origin: center; animation: lockedPulseS5 3s ease-in-out infinite; }
+    .psi-packet-s5 { animation: psiPacketMoveS5 4s ease-in-out infinite; }
+    .neq-badge-s5 { animation: notEqualGlowS5 3s ease-in-out infinite; }
+  </style>
+
+  
+  <rect width="1000" height="650" fill="url(#bg-grad-s5)" />
+  
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500 M 0,600 L 1000,600" />
+    <path d="M 100,0 L 100,650 M 200,0 L 200,650 M 300,0 L 300,650 M 400,0 L 400,650 M 500,0 L 500,650 M 600,0 L 600,650 M 700,0 L 700,650 M 800,0 L 800,650 M 900,0 L 900,650" />
+  </g>
+
+  
+  
+  <g transform="translate(500, 32)">
+    <rect x="-125" y="-13" width="250" height="24" rx="12" fill="#061224" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.6" />
+    <text x="0" y="3" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" letter-spacing="2" fill="#00f3ff">SLIDE 05   |   SPEAKER 04</text>
+  </g>
+
+  
+  <text x="500" y="75" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="27" font-weight="900" letter-spacing="4" fill="#ffffff" filter="url(#glow-cyan-s5)">WHAT ARE WE ACTUALLY TELEPORTING?</text>
+
+  
+  <g transform="translate(500, 108)">
+    <rect x="-195" y="-15" width="390" height="28" rx="14" fill="#081120" stroke="#00ff88" stroke-width="1.3" />
+    <text x="0" y="4" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14" font-weight="900" letter-spacing="2.5" fill="#00ff88">
+      MATTER  <tspan fill="#ff5252" font-size="16">≠</tspan>  <tspan fill="#00f3ff">QUANTUM STATE</tspan>
+    </text>
+  </g>
+
+  
+  <line x1="500" y1="150" x2="500" y2="545" stroke="#1e2d42" stroke-width="2" stroke-dasharray="6 6" />
+  <g transform="translate(500, 345)" class="neq-badge-s5">
+    <circle cx="0" cy="0" r="28" fill="#1c070a" stroke="#ff5252" stroke-width="2.2" />
+    <text x="0" y="9" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="26" font-weight="900" fill="#ff5252">≠</text>
+  </g>
+
+  
+  <g transform="translate(245, 345)">
+    <circle cx="0" cy="0" r="150" fill="url(#matter-glow-s5)" />
+    <rect x="-200" y="-190" width="400" height="380" rx="16" fill="#0c0804" stroke="#ff9800" stroke-width="2" stroke-opacity="0.85" />
+
+    
+    <rect x="-100" y="-170" width="200" height="28" rx="14" fill="#1f1103" stroke="#ff9800" stroke-width="1.2" />
+    <text x="0" y="-152" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#ff9800">MATTER</text>
+
+    
+    <g transform="translate(0, -35)">
+      
+      <circle cx="0" cy="0" r="64" fill="none" stroke="#ff9800" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.5" />
+      <ellipse cx="0" cy="0" rx="54" ry="20" fill="none" stroke="#ffb74d" stroke-width="1.5" opacity="0.7" class="orbit-cw-s5" />
+      <ellipse cx="0" cy="0" rx="54" ry="20" fill="none" stroke="#ff9800" stroke-width="1.5" opacity="0.7" class="orbit-ccw-s5" />
+
+      
+      <g class="locked-atom-s5">
+        <circle cx="0" cy="0" r="22" fill="url(#atom-core-s5)" filter="url(#glow-orange-s5)" />
+        <text x="0" y="5" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="12" font-weight="900" fill="#1a0900">MASS</text>
+      </g>
+
+      
+      <rect x="-85" y="74" width="170" height="22" rx="6" fill="#210d05" stroke="#ff5252" stroke-width="1.2" />
+      <text x="0" y="89" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#ff5252">ANCHORED • DOES NOT TRAVEL</text>
+    </g>
+
+    
+    <rect x="-175" y="78" width="350" height="90" rx="10" fill="#140c04" stroke="#ff9800" stroke-width="1" stroke-opacity="0.4" />
+    <g font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" text-anchor="start">
+      <circle cx="-152" cy="108" r="4.5" fill="#ff9800" />
+      <text x="-140" y="112" font-size="13" font-weight="700" fill="#ffffff">Matter: the physical particle or object</text>
+
+      <circle cx="-152" cy="142" r="4.5" fill="#ff5252" />
+      <text x="-140" y="146" font-size="13" font-weight="700" fill="#ffb74d">The original particle does not travel</text>
+    </g>
+  </g>
+
+  
+  <g transform="translate(755, 345)">
+    <circle cx="0" cy="0" r="150" fill="url(#state-glow-s5)" />
+    <rect x="-200" y="-190" width="400" height="380" rx="16" fill="#040d14" stroke="#00f3ff" stroke-width="2" stroke-opacity="0.85" />
+
+    
+    <rect x="-115" y="-170" width="230" height="28" rx="14" fill="#031926" stroke="#00f3ff" stroke-width="1.2" />
+    <text x="0" y="-152" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="800" letter-spacing="2" fill="#00f3ff">QUANTUM STATE</text>
+
+    
+    <g transform="translate(0, -35)">
+      
+      <g transform="translate(-115, 0)">
+        <circle cx="0" cy="0" r="32" fill="none" stroke="#00f3ff" stroke-width="1.3" stroke-dasharray="5 3" class="orbit-cw-s5" />
+        <circle cx="0" cy="0" r="18" fill="#041e2b" stroke="#00f3ff" stroke-width="2" filter="url(#glow-cyan-s5)" />
+        <text x="0" y="5" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" fill="#00f3ff">SYS 1</text>
+      </g>
+
+      
+      <g transform="translate(115, 0)">
+        <circle cx="0" cy="0" r="32" fill="none" stroke="#00ff88" stroke-width="1.3" stroke-dasharray="5 3" class="orbit-ccw-s5" />
+        <circle cx="0" cy="0" r="18" fill="#042418" stroke="#00ff88" stroke-width="2" filter="url(#glow-cyan-s5)" />
+        <text x="0" y="5" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" fill="#00ff88">SYS 2</text>
+      </g>
+
+      
+      <path d="M -78,0 C -35,-34 35,-34 78,0" fill="none" stroke="#00f3ff" stroke-width="2.5" stroke-dasharray="8 5" filter="url(#glow-cyan-s5)" style="animation: stateStreamS5 2.5s linear infinite;" />
+      <polygon points="81,2 69,-5 71,7" fill="#00ff88" />
+
+      
+      <g class="psi-packet-s5">
+        <rect x="-22" y="-13" width="44" height="24" rx="7" fill="#051a24" stroke="#00ff88" stroke-width="1.5" filter="url(#glow-intense-s5)" />
+        <text x="0" y="4" text-anchor="middle" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="14" font-weight="bold" fill="#ffffff">|Ψ⟩</text>
+      </g>
+
+      
+      <rect x="-95" y="74" width="190" height="22" rx="6" fill="#031c14" stroke="#00ff88" stroke-width="1.2" />
+      <text x="0" y="89" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#00ff88">|Ψ⟩ = α|0⟩ + β|1⟩ TRANSFERS</text>
+    </g>
+
+    
+    <rect x="-175" y="78" width="350" height="90" rx="10" fill="#04121c" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.4" />
+    <g font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" text-anchor="start">
+      <circle cx="-152" cy="108" r="4.5" fill="#00f3ff" />
+      <text x="-140" y="112" font-size="12.5" font-weight="700" fill="#ffffff">Quantum State: description of a quantum system</text>
+
+      <circle cx="-152" cy="142" r="4.5" fill="#00ff88" />
+      <text x="-140" y="146" font-size="12.5" font-weight="700" fill="#00ff88">State is transferred to another quantum system</text>
+    </g>
+  </g>
+
+  
+  <g transform="translate(500, 595)">
+    <rect x="-420" y="-20" width="840" height="38" rx="8" fill="#050a14" stroke="#1a2d48" stroke-width="1.5" />
+    <text x="0" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11.5" font-weight="bold" fill="#7d9ec0">
+      <tspan fill="#ff9800">MATTER:</tspan> Remains Local  |  <tspan fill="#00f3ff">QUANTUM STATE |Ψ⟩:</tspan> <tspan fill="#00ff88">Reconstructed on Remote Qubit</tspan>
+    </text>
+  </g>
+</svg>

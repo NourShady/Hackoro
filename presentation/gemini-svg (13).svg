@@ -1,0 +1,239 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <defs>
+    
+    <radialGradient id="bg-grad-s14" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="60%" stop-color="#04060b" />
+      <stop offset="100%" stop-color="#000205" />
+    </radialGradient>
+
+    
+    <radialGradient id="apps-glow-s14" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </radialGradient>
+
+    
+    <radialGradient id="chal-glow-s14" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff5252" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#ff5252" stop-opacity="0" />
+    </radialGradient>
+
+    
+    <filter id="glow-cyan-s14" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-green-s14" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-amber-s14" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-red-s14" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Continuous Animations */
+    @keyframes netLinkPulseS14 {
+      0% { stroke-dashoffset: 180; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes nodeBreathS14 {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+    @keyframes signalDecayS14 {
+      0% { stroke-dashoffset: 240; opacity: 1; }
+      70% { opacity: 0.35; }
+      100% { stroke-dashoffset: 0; opacity: 0.15; }
+    }
+    @keyframes noiseJitterS14 {
+      0%, 100% { transform: translate(0px, 0px); opacity: 0.85; }
+      20% { transform: translate(-2px, 2px); opacity: 0.45; }
+      40% { transform: translate(2px, -2px); opacity: 1; }
+      60% { transform: translate(-1px, -2px); opacity: 0.5; }
+      80% { transform: translate(2px, 1px); opacity: 0.9; }
+    }
+    @keyframes orbitClockwiseS14 {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .net-link-s14 { stroke-dasharray: 8 5; animation: netLinkPulseS14 3.5s linear infinite; }
+    .node-pulse-s14 { transform-origin: center; animation: nodeBreathS14 3s ease-in-out infinite; }
+    .decay-wave-s14 { stroke-dasharray: 10 6; animation: signalDecayS14 3s linear infinite; }
+    .noise-jitter-s14 { animation: noiseJitterS14 1.6s linear infinite; }
+    .orbit-cw-s14 { transform-origin: center; animation: orbitClockwiseS14 10s linear infinite; }
+  </style>
+
+  
+  <rect width="1000" height="650" fill="url(#bg-grad-s14)" />
+  
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500 M 0,600 L 1000,600" />
+    <path d="M 100,0 L 100,650 M 200,0 L 200,650 M 300,0 L 300,650 M 400,0 L 400,650 M 500,0 L 500,650 M 600,0 L 600,650 M 700,0 L 700,650 M 800,0 L 800,650 M 900,0 L 900,650" />
+  </g>
+
+  
+  
+  <g transform="translate(500, 32)">
+    <rect x="-125" y="-13" width="250" height="24" rx="12" fill="#061224" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.6" />
+    <text x="0" y="3" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" letter-spacing="2" fill="#00f3ff">SLIDE 14   |   SPEAKER 10</text>
+  </g>
+
+  
+  <text x="500" y="76" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="30" font-weight="900" letter-spacing="4" fill="#ffffff" filter="url(#glow-cyan-s14)">APPLICATIONS AND CHALLENGES</text>
+
+  
+  <text x="500" y="102" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="2" fill="#7d9ec0">FUTURE QUANTUM INFRASTRUCTURE &amp; ENGINEERING HURDLES</text>
+
+  
+  <line x1="500" y1="135" x2="500" y2="545" stroke="#1e2d42" stroke-width="2" stroke-dasharray="6 6" />
+
+  
+  <g transform="translate(265, 342)">
+    <circle cx="0" cy="0" r="185" fill="url(#apps-glow-s14)" />
+    <rect x="-210" y="-212" width="420" height="424" rx="16" fill="#04101a" stroke="#00f3ff" stroke-width="2" stroke-opacity="0.85" />
+
+    
+    <rect x="-135" y="-194" width="270" height="28" rx="14" fill="#031c2b" stroke="#00f3ff" stroke-width="1.2" />
+    <text x="0" y="-176" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="800" letter-spacing="1.8" fill="#00f3ff">POTENTIAL APPLICATIONS</text>
+
+    
+    <g transform="translate(0, -104)">
+      <rect x="-185" y="-48" width="370" height="96" rx="12" fill="#030b14" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.4" />
+      
+      
+      <g stroke="#00f3ff" stroke-width="1.6" class="net-link-s14">
+        <line x1="-115" y1="-16" x2="0" y2="-24" />
+        <line x1="0" y1="-24" x2="115" y2="-16" />
+        <line x1="-115" y1="-16" x2="-58" y2="20" />
+        <line x1="-58" y1="20" x2="58" y2="20" />
+        <line x1="58" y1="20" x2="115" y2="-16" />
+        <line x1="-58" y1="20" x2="0" y2="-24" stroke="#00ff88" />
+        <line x1="58" y1="20" x2="0" y2="-24" stroke="#00ff88" />
+      </g>
+
+      
+      <g class="node-pulse-s14">
+        <circle cx="-115" cy="-16" r="8" fill="#041e2e" stroke="#00f3ff" stroke-width="2" filter="url(#glow-cyan-s14)" />
+        <circle cx="0" cy="-24" r="10" fill="#04261a" stroke="#00ff88" stroke-width="2.2" filter="url(#glow-green-s14)" />
+        <circle cx="115" cy="-16" r="8" fill="#041e2e" stroke="#00f3ff" stroke-width="2" filter="url(#glow-cyan-s14)" />
+        <circle cx="-58" cy="20" r="7" fill="#1d0726" stroke="#e040fb" stroke-width="1.8" />
+        <circle cx="58" cy="20" r="7" fill="#1d0726" stroke="#e040fb" stroke-width="1.8" />
+      </g>
+
+      <text x="0" y="40" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#00ff88">INTERCONNECTED QUANTUM NODES</text>
+    </g>
+
+    
+    <g transform="translate(0, -14)">
+      <rect x="-185" y="-26" width="370" height="52" rx="10" fill="#061626" stroke="#00f3ff" stroke-width="1.3" stroke-opacity="0.55" />
+      <circle cx="-162" cy="0" r="5" fill="#00f3ff" filter="url(#glow-cyan-s14)" />
+      <text x="-144" y="5" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14" font-weight="800" fill="#ffffff">Quantum Communication</text>
+    </g>
+
+    
+    <g transform="translate(0, 52)">
+      <rect x="-185" y="-26" width="370" height="52" rx="10" fill="#061626" stroke="#00f3ff" stroke-width="1.3" stroke-opacity="0.55" />
+      <circle cx="-162" cy="0" r="5" fill="#00ff88" filter="url(#glow-green-s14)" />
+      <text x="-144" y="5" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14" font-weight="800" fill="#9deeff">Quantum Computing</text>
+    </g>
+
+    
+    <g transform="translate(0, 126)">
+      <rect x="-185" y="-34" width="370" height="68" rx="10" fill="#041c17" stroke="#00ff88" stroke-width="1.5" />
+      <circle cx="-162" cy="0" r="5" fill="#00ff88" filter="url(#glow-green-s14)" />
+      <text x="-144" y="-4" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14" font-weight="800" fill="#ffffff">Quantum Networks and</text>
+      <text x="-144" y="16" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14.5" font-weight="900" fill="#00ff88">Quantum Internet</text>
+    </g>
+  </g>
+
+  
+  <g transform="translate(735, 342)">
+    <circle cx="0" cy="0" r="185" fill="url(#chal-glow-s14)" />
+    <rect x="-210" y="-212" width="420" height="424" rx="16" fill="#120709" stroke="#ff5252" stroke-width="2" stroke-opacity="0.85" />
+
+    
+    <rect x="-135" y="-194" width="270" height="28" rx="14" fill="#260b0e" stroke="#ff5252" stroke-width="1.2" />
+    <text x="0" y="-176" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="800" letter-spacing="1.8" fill="#ff8a80">CURRENT CHALLENGES</text>
+
+    
+    <g transform="translate(0, -104)">
+      <rect x="-185" y="-48" width="370" height="96" rx="12" fill="#0d0507" stroke="#ff5252" stroke-width="1" stroke-opacity="0.4" />
+      
+      
+      <circle cx="-125" cy="-6" r="14" fill="#041e2e" stroke="#00f3ff" stroke-width="1.8" />
+      <text x="-125" y="-2" text-anchor="middle" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="12" font-weight="bold" fill="#ffffff">|Ψ⟩</text>
+
+      
+      <path d="M -105,-6 Q -75,-26 -45,-6 T 15,-6 T 75,-6 L 105,-6" fill="none" stroke="#ff9800" stroke-width="2" class="decay-wave-s14" />
+
+      
+      <g stroke="#ff5252" stroke-width="1.5" class="noise-jitter-s14">
+        <polyline points="-45,-28 -40,-18 -48,-14" fill="none" />
+        <polyline points="15,18 20,8 12,4" fill="none" />
+        <polyline points="65,-26 70,-16 62,-12" fill="none" />
+      </g>
+
+      
+      <g class="noise-jitter-s14">
+        <circle cx="125" cy="-6" r="14" fill="#290a0d" stroke="#ff5252" stroke-width="1.8" stroke-dasharray="3 2" />
+        <text x="125" y="-2" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" fill="#ff8a80">ERR</text>
+      </g>
+
+      <text x="0" y="38" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#ffb74d">PHOTON LOSS &amp; DECOHERENCE OVER DISTANCE</text>
+    </g>
+
+    
+    <g transform="translate(0, 10)">
+      <rect x="-185" y="-44" width="370" height="88" rx="12" fill="#1c0b0d" stroke="#ff9800" stroke-width="1.5" stroke-opacity="0.7" />
+      <rect x="-166" y="-32" width="128" height="20" rx="5" fill="#2e1805" stroke="#ff9800" stroke-width="1" />
+      <text x="-102" y="-18" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#ffb74d">RANGE LIMITATION</text>
+
+      <circle cx="-158" cy="12" r="5" fill="#ff9800" filter="url(#glow-amber-s14)" />
+      <text x="-142" y="10" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14" font-weight="800" fill="#ffffff">Maintaining entanglement</text>
+      <text x="-142" y="29" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14" font-weight="800" fill="#ffb74d">over distance</text>
+    </g>
+
+    
+    <g transform="translate(0, 118)">
+      <rect x="-185" y="-44" width="370" height="88" rx="12" fill="#1c080b" stroke="#ff5252" stroke-width="1.6" />
+      <rect x="-166" y="-32" width="128" height="20" rx="5" fill="#330d12" stroke="#ff5252" stroke-width="1" />
+      <text x="-102" y="-18" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#ff8a80">DECOHERENCE</text>
+
+      <circle cx="-158" cy="12" r="5" fill="#ff5252" filter="url(#glow-red-s14)" />
+      <text x="-142" y="10" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14" font-weight="800" fill="#ffffff">Noise, errors, and</text>
+      <text x="-142" y="29" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14" font-weight="800" fill="#ff8a80">system stability</text>
+    </g>
+  </g>
+
+  
+  <g transform="translate(500, 595)">
+    <rect x="-445" y="-20" width="890" height="38" rx="8" fill="#050a14" stroke="#1a2d48" stroke-width="1.5" />
+    <text x="0" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11.5" font-weight="bold" fill="#7d9ec0">
+      <tspan fill="#00ff88">GOAL:</tspan> Scalable Global Quantum Internet  |  <tspan fill="#ff8a80">ENGINEERING FOCUS:</tspan> <tspan fill="#ffffff">Quantum Repeaters &amp; Error Correction</tspan>
+    </text>
+  </g>
+</svg>

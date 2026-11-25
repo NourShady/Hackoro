@@ -1,0 +1,328 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <defs>
+    
+    <radialGradient id="bg-grad-s12" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="60%" stop-color="#04060b" />
+      <stop offset="100%" stop-color="#000205" />
+    </radialGradient>
+
+    
+    <radialGradient id="ml-glow-s12" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f3ff" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#00f3ff" stop-opacity="0" />
+    </radialGradient>
+
+    
+    <radialGradient id="limit-glow-s12" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e040fb" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#e040fb" stop-opacity="0" />
+    </radialGradient>
+
+    
+    <linearGradient id="gauge-grad-s12" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00ff88" />
+      <stop offset="50%" stop-color="#00f3ff" />
+      <stop offset="100%" stop-color="#ff9800" />
+    </linearGradient>
+
+    
+    <filter id="glow-cyan-s12" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-purple-s12" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-red-s12" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-intense-s12" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="4" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Continuous Animations */
+    @keyframes nnSignalPulseS12 {
+      0% { stroke-dashoffset: 180; opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { stroke-dashoffset: 0; opacity: 0.4; }
+    }
+    @keyframes gaugeBalanceNeedleS12 {
+      0%, 100% { transform: rotate(-28deg); }
+      50% { transform: rotate(28deg); }
+    }
+    @keyframes limitAlertPulseS12 {
+      0%, 100% { stroke-opacity: 0.7; }
+      50% { stroke-opacity: 1; filter: drop-shadow(0 0 10px #ff5252); }
+    }
+    @keyframes spinClockwiseS12 {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes fiberWaveS12 {
+      0% { stroke-dashoffset: 160; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    .nn-synapse-s12 { stroke-dasharray: 8 6; animation: nnSignalPulseS12 3s linear infinite; }
+    .gauge-needle-s12 { transform-origin: 0px 28px; animation: gaugeBalanceNeedleS12 4.5s ease-in-out infinite; }
+    .limit-box-s12 { animation: limitAlertPulseS12 3s ease-in-out infinite; }
+    .orbit-cw-s12 { transform-origin: center; animation: spinClockwiseS12 10s linear infinite; }
+    .fiber-stream-s12 { stroke-dasharray: 10 6; animation: fiberWaveS12 2.5s linear infinite; }
+  </style>
+
+  
+  <rect width="1000" height="650" fill="url(#bg-grad-s12)" />
+  
+  <g opacity="0.04" stroke="#ffffff" stroke-width="1">
+    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500 M 0,600 L 1000,600" />
+    <path d="M 100,0 L 100,650 M 200,0 L 200,650 M 300,0 L 300,650 M 400,0 L 400,650 M 500,0 L 500,650 M 600,0 L 600,650 M 700,0 L 700,650 M 800,0 L 800,650 M 900,0 L 900,650" />
+  </g>
+
+  
+  
+  <g transform="translate(500, 32)">
+    <rect x="-125" y="-13" width="250" height="24" rx="12" fill="#061224" stroke="#00f3ff" stroke-width="1" stroke-opacity="0.6" />
+    <text x="0" y="3" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11" font-weight="bold" letter-spacing="2" fill="#00f3ff">SLIDE 12   |   SPEAKER 09</text>
+  </g>
+
+  
+  <text x="500" y="75" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="27" font-weight="900" letter-spacing="3.5" fill="#ffffff" filter="url(#glow-cyan-s12)">
+    WHEN <tspan fill="#00f3ff">AI</tspan> MEETS <tspan fill="#00f3ff">QUANTUM TELEPORTATION</tspan>
+  </text>
+
+  
+  <text x="500" y="101" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="700" letter-spacing="2.5" fill="#7d9ec0">MACHINE LEARNING FOR QUANTUM TELEPORTATION</text>
+
+  
+  <g transform="translate(275, 342)">
+    <circle cx="0" cy="0" r="185" fill="url(#ml-glow-s12)" />
+    <rect x="-220" y="-212" width="440" height="424" rx="16" fill="#050e1c" stroke="#00f3ff" stroke-width="2" stroke-opacity="0.85" />
+
+    
+    <rect x="-150" y="-194" width="300" height="28" rx="14" fill="#031b29" stroke="#00f3ff" stroke-width="1.2" />
+    <text x="0" y="-176" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="800" letter-spacing="1.5" fill="#00f3ff">RESEARCH &amp; AI OPTIMIZATION</text>
+
+    
+    <g transform="translate(0, -124)">
+      <rect x="-195" y="-30" width="390" height="60" rx="10" fill="#071526" stroke="#00f3ff" stroke-width="1.2" stroke-opacity="0.5" />
+      <text x="-176" y="-5" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="13.5" font-weight="700" fill="#ffffff">Research published in</text>
+      <text x="-176" y="16" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14.5" font-weight="900" fill="#00f3ff">Physical Review A (2026)</text>
+
+      
+      <g transform="translate(152, 0)">
+        <rect x="-24" y="-22" width="48" height="44" rx="4" fill="#e8f1f8" stroke="#00f3ff" stroke-width="1.2" />
+        <rect x="-20" y="-18" width="40" height="7" fill="#0d47a1" />
+        <line x1="-18" y1="-5" x2="18" y2="-5" stroke="#546e7a" stroke-width="1.5" />
+        <line x1="-18" y1="1" x2="18" y2="1" stroke="#546e7a" stroke-width="1.5" />
+        <line x1="-18" y1="7" x2="6" y2="7" stroke="#546e7a" stroke-width="1.5" />
+        <rect x="8" y="5" width="10" height="10" fill="#00acc1" />
+      </g>
+    </g>
+
+    
+    <g transform="translate(0, -28)">
+      <text x="0" y="-44" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#7d9ec0">WEIGHT OPTIMIZATION</text>
+
+      
+      <g stroke="#00f3ff" stroke-width="1" opacity="0.45" class="nn-synapse-s12">
+        
+        <line x1="-105" y1="-20" x2="-35" y2="-30" /><line x1="-105" y1="-20" x2="-35" y2="-10" />
+        <line x1="-105" y1="-20" x2="-35" y2="10" /><line x1="-105" y1="-20" x2="-35" y2="30" />
+        <line x1="-105" y1="0" x2="-35" y2="-30" /><line x1="-105" y1="0" x2="-35" y2="-10" />
+        <line x1="-105" y1="0" x2="-35" y2="10" /><line x1="-105" y1="0" x2="-35" y2="30" />
+        <line x1="-105" y1="20" x2="-35" y2="-30" /><line x1="-105" y1="20" x2="-35" y2="-10" />
+        <line x1="-105" y1="20" x2="-35" y2="10" /><line x1="-105" y1="20" x2="-35" y2="30" />
+
+        
+        <line x1="-35" y1="-30" x2="35" y2="-30" /><line x1="-35" y1="-30" x2="35" y2="-10" />
+        <line x1="-35" y1="-10" x2="35" y2="-10" /><line x1="-35" y1="-10" x2="35" y2="10" />
+        <line x1="-35" y1="10" x2="35" y2="-10" /><line x1="-35" y1="10" x2="35" y2="10" />
+        <line x1="-35" y1="30" x2="35" y2="10" /><line x1="-35" y1="30" x2="35" y2="30" />
+        <line x1="-35" y1="-30" x2="35" y2="10" /><line x1="-35" y1="30" x2="35" y2="-10" />
+
+        
+        <line x1="35" y1="-30" x2="105" y2="-15" /><line x1="35" y1="-10" x2="105" y2="-15" />
+        <line x1="35" y1="10" x2="105" y2="15" /><line x1="35" y1="30" x2="105" y2="15" />
+        <line x1="35" y1="-10" x2="105" y2="15" /><line x1="35" y1="10" x2="105" y2="-15" />
+      </g>
+
+      
+      <g fill="#062236" stroke="#00f3ff" stroke-width="1.8" filter="url(#glow-cyan-s12)">
+        <circle cx="-105" cy="-20" r="6" />
+        <circle cx="-105" cy="0" r="6" />
+        <circle cx="-105" cy="20" r="6" />
+      </g>
+      <text x="-132" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#00f3ff">ML</text>
+
+      
+      <g fill="#21092b" stroke="#e040fb" stroke-width="1.6">
+        <circle cx="-35" cy="-30" r="5.5" />
+        <circle cx="-35" cy="-10" r="5.5" />
+        <circle cx="-35" cy="10" r="5.5" />
+        <circle cx="-35" cy="30" r="5.5" />
+      </g>
+
+      
+      <g fill="#21092b" stroke="#e040fb" stroke-width="1.6">
+        <circle cx="35" cy="-30" r="5.5" />
+        <circle cx="35" cy="-10" r="5.5" />
+        <circle cx="35" cy="10" r="5.5" />
+        <circle cx="35" cy="30" r="5.5" />
+      </g>
+
+      
+      <g fill="#291704" stroke="#ff9800" stroke-width="1.8">
+        <circle cx="105" cy="-15" r="6" />
+        <circle cx="105" cy="15" r="6" />
+      </g>
+      <text x="135" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#ffb74d">GATES</text>
+    </g>
+
+    
+    
+    <g transform="translate(-100, 114)">
+      <rect x="-95" y="-76" width="190" height="152" rx="10" fill="#041220" stroke="#00f3ff" stroke-width="1.1" stroke-opacity="0.45" />
+      <text x="0" y="-48" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11.5" font-weight="700" fill="#ffffff">Machine Learning</text>
+      <text x="0" y="-32" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11.5" font-weight="700" fill="#9deeff">helps identify suitable</text>
+      <text x="0" y="-16" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11.5" font-weight="800" fill="#00f3ff">quantum operations</text>
+
+      
+      <g transform="translate(0, 32)">
+        <text x="-66" y="-10" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="11" fill="#00f3ff">|Ψ⟩</text>
+        <text x="-66" y="18" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="11" fill="#00f3ff">|Ψ⟩</text>
+        <line x1="-46" y1="-14" x2="46" y2="-14" stroke="#00f3ff" stroke-width="1.4" />
+        <line x1="-46" y1="14" x2="46" y2="14" stroke="#00f3ff" stroke-width="1.4" />
+        
+        <rect x="-26" y="-23" width="18" height="18" rx="3" fill="#062236" stroke="#00ff88" stroke-width="1.4" />
+        <text x="-17" y="-10" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#00ff88">U</text>
+        
+        <line x1="16" y1="-14" x2="16" y2="14" stroke="#e040fb" stroke-width="1.5" />
+        <circle cx="16" cy="-14" r="3.5" fill="#e040fb" />
+        <circle cx="16" cy="14" r="7" fill="none" stroke="#e040fb" stroke-width="1.4" />
+        <text x="62" y="18" font-family="&#39;Georgia&#39;, serif" font-style="italic" font-size="11" fill="#00ff88">|Ψ⟩</text>
+      </g>
+    </g>
+
+    
+    <g transform="translate(100, 114)">
+      <rect x="-95" y="-76" width="190" height="152" rx="10" fill="#041220" stroke="#00ff88" stroke-width="1.1" stroke-opacity="0.45" />
+      <text x="0" y="-50" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11.5" font-weight="800" fill="#ffffff">Balances Fidelity and</text>
+      <text x="0" y="-34" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11.5" font-weight="800" fill="#00ff88">computational cost</text>
+
+      
+      <g transform="translate(0, 14)">
+        
+        <path d="M -52,28 A 52,52 0 0,1 52,28" fill="none" stroke="url(#gauge-grad-s12)" stroke-width="10" stroke-linecap="round" />
+        <path d="M -52,28 A 52,52 0 0,1 52,28" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="2 8" opacity="0.6" />
+        
+        <g class="gauge-needle-s12">
+          <line x1="0" y1="28" x2="0" y2="-16" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" filter="url(#glow-cyan-s12)" />
+        </g>
+        <circle cx="0" cy="28" r="5" fill="#00f3ff" stroke="#ffffff" stroke-width="1.2" />
+      </g>
+
+      <text x="-48" y="62" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#00ff88">FIDELITY</text>
+      <text x="48" y="62" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#ffb74d">COMP. COST</text>
+    </g>
+  </g>
+
+  
+  <g transform="translate(735, 342)">
+    <circle cx="0" cy="0" r="185" fill="url(#limit-glow-s12)" />
+    <rect x="-210" y="-212" width="420" height="424" rx="16" fill="#080b14" stroke="#313d54" stroke-width="2" />
+
+    
+    <rect x="-145" y="-194" width="290" height="28" rx="14" fill="#121826" stroke="#7d9ec0" stroke-width="1.2" />
+    <text x="0" y="-176" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="12" font-weight="800" letter-spacing="1.5" fill="#ffffff">AI ROLE VS. PHYSICAL LIMIT</text>
+
+    
+    <g transform="translate(0, -104)">
+      <rect x="-185" y="-48" width="370" height="96" rx="12" fill="#1c080a" stroke="#ff5252" stroke-width="2" class="limit-box-s12" />
+      
+      
+      <rect x="-166" y="-34" width="56" height="20" rx="5" fill="#ff5252" />
+      <text x="-138" y="-20" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10.5" font-weight="900" fill="#ffffff">FACT</text>
+
+      <rect x="-100" y="-34" width="154" height="20" rx="5" fill="#2e0d12" stroke="#ff5252" stroke-width="1" />
+      <text x="-23" y="-20" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#ff8a80">PHYSICAL LIMITATION</text>
+
+      
+      <text x="-166" y="10" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="13.5" font-weight="800" fill="#ffffff">AI supports the research process —</text>
+      <text x="-166" y="30" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="14" font-weight="900" fill="#ff8a80">it does not teleport objects.</text>
+    </g>
+
+    
+    
+    <g transform="translate(-98, 76)">
+      <rect x="-86" y="-102" width="172" height="204" rx="12" fill="#061221" stroke="#00f3ff" stroke-width="1.3" stroke-opacity="0.65" />
+      <text x="0" y="-80" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11.5" font-weight="800" fill="#00f3ff">AI / Computational</text>
+
+      
+      <g transform="translate(0, -10)">
+        <circle cx="0" cy="0" r="36" fill="none" stroke="#00f3ff" stroke-width="1.2" stroke-dasharray="5 3" class="orbit-cw-s12" />
+        <rect x="-20" y="-20" width="40" height="40" rx="8" fill="#041e2e" stroke="#00f3ff" stroke-width="1.8" filter="url(#glow-cyan-s12)" />
+        <text x="0" y="5" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="13" font-weight="900" fill="#ffffff">AI</text>
+      </g>
+
+      <rect x="-70" y="42" width="140" height="22" rx="6" fill="#041b29" stroke="#00f3ff" stroke-width="0.9" />
+      <text x="0" y="56" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#9deeff">AI-DRIVEN THEORY</text>
+      <text x="0" y="82" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10.5" font-weight="600" fill="#7d9ec0">Simulates &amp; Optimizes</text>
+    </g>
+
+    
+    <g transform="translate(98, 76)">
+      <rect x="-86" y="-102" width="172" height="204" rx="12" fill="#13071c" stroke="#e040fb" stroke-width="1.3" stroke-opacity="0.65" />
+      <text x="0" y="-80" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="11.5" font-weight="800" fill="#e040fb">Quantum Physics</text>
+
+      
+      <g transform="translate(0, -10)">
+        <line x1="-46" y1="0" x2="46" y2="0" stroke="#00ff88" stroke-width="2" class="fiber-stream-s12" />
+        <circle cx="-36" cy="0" r="11" fill="#041c29" stroke="#00f3ff" stroke-width="1.6" />
+        <text x="-36" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#00f3ff">A</text>
+        <circle cx="36" cy="0" r="11" fill="#21062b" stroke="#e040fb" stroke-width="1.6" />
+        <text x="36" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="10" font-weight="bold" fill="#e040fb">B</text>
+      </g>
+
+      <rect x="-70" y="42" width="140" height="22" rx="6" fill="#21072e" stroke="#e040fb" stroke-width="0.9" />
+      <text x="0" y="56" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="9.5" font-weight="bold" fill="#f3a6ff">PHYSICAL HARDWARE</text>
+      <text x="0" y="82" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10.5" font-weight="600" fill="#7d9ec0">Transfers State |Ψ⟩</text>
+    </g>
+
+    
+    <g transform="translate(0, 76)">
+      <circle cx="0" cy="0" r="16" fill="#090d16" stroke="#7d9ec0" stroke-width="1.6" />
+      <text x="0" y="4" text-anchor="middle" font-family="&#39;Segoe UI&#39;, Roboto, sans-serif" font-size="10" font-weight="900" fill="#ffffff">VS</text>
+    </g>
+  </g>
+
+  
+  <g transform="translate(500, 595)">
+    <rect x="-445" y="-20" width="890" height="38" rx="8" fill="#050a14" stroke="#1a2d48" stroke-width="1.5" />
+    <text x="0" y="4" text-anchor="middle" font-family="&#39;Courier New&#39;, monospace" font-size="11.5" font-weight="bold" fill="#7d9ec0">
+      <tspan fill="#00f3ff">AI &amp; ML (2026):</tspan> Optimizes Parameters &amp; Gate Sequences  |  <tspan fill="#e040fb">QUANTUM PHYSICS:</tspan> <tspan fill="#00ff88">Remotely Transfers State |Ψ⟩</tspan> <tspan fill="#ffffff">(Matter does not travel)</tspan>
+    </text>
+  </g>
+</svg>
