@@ -4,13 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Presentation Viewer</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
+
     * {
       font-family: 'Inter', sans-serif;
       user-select: none;
@@ -26,19 +24,14 @@
       background-color: #0f172a;
     }
 
-    /* Dynamic background container transition */
     #bg-backdrop {
       transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Slide viewport wrapper */
     .slide-viewport {
       perspective: 1200px;
-    
-      transform-style: preserve-3d;
     }
 
-    /* Slide Container Base */
     .slide-node {
       position: absolute;
       top: 0;
@@ -48,32 +41,41 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      will-change: transform, opacity, filter, clip-path;
-      backface-visibility: hidden;
+      visibility: hidden;
       opacity: 0;
       pointer-events: none;
       z-index: 1;
     }
 
     .slide-node.active {
+      visibility: visible;
       opacity: 1;
       pointer-events: auto;
       z-index: 10;
     }
 
-    /* Content styling inside slide */
-    .slide-node img, .slide-node svg {
+    .slide-node.exiting {
+      visibility: visible;
+      z-index: 5;
+    }
+
+    .slide-node img,
+    .slide-node svg,
+    .slide-node object {
+      width: 90%;
+      height: 90vh;
       max-width: 90%;
       max-height: 95vh;
       object-fit: contain;
-      filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
       border-radius: 12px;
-      transition: transform 0.3s ease;
+      pointer-events: none;
     }
 
-    /* TRANSITION EFFECTS */
+    .slide-node img {
+      width: auto;
+      height: auto;
+    }
 
-    /* 1. Fade / Dissolve */
     .transition-fade-enter {
       animation: fadeIn 0.7s ease-out forwards;
     }
@@ -90,7 +92,6 @@
       to { opacity: 0; }
     }
 
-    /* 2. Morph (Blur, Scale & Radial Clip) */
     .transition-morph-enter {
       animation: morphIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
@@ -101,17 +102,14 @@
     @keyframes morphIn {
       0% {
         opacity: 0;
-        filter: blur(20px) contrast(150%);
-        transform: scale(1.15) rotate(1deg);
-        clip-path: circle(10% at 50% 50%);
+        transform: scale(1.12) rotate(1deg);
+        clip-path: circle(12% at 50% 50%);
       }
       60% {
-        filter: blur(5px) contrast(110%);
         clip-path: circle(75% at 50% 50%);
       }
       100% {
         opacity: 1;
-        filter: blur(0px) contrast(100%);
         transform: scale(1) rotate(0deg);
         clip-path: circle(150% at 50% 50%);
       }
@@ -120,19 +118,16 @@
     @keyframes morphOut {
       0% {
         opacity: 1;
-        filter: blur(0px);
         transform: scale(1);
         clip-path: circle(150% at 50% 50%);
       }
       100% {
         opacity: 0;
-        filter: blur(25px) contrast(200%);
-        transform: scale(0.85) rotate(-2deg);
+        transform: scale(0.88) rotate(-2deg);
         clip-path: circle(0% at 50% 50%);
       }
     }
 
-    /* 3. Zoom-Slide */
     .transition-zoom-slide-next-enter {
       animation: zoomSlideNextIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -163,7 +158,6 @@
       100% { opacity: 0; transform: translate3d(100%, 0, -200px) scale(0.7); }
     }
 
-    /* 4. Pop (Springy 3D Pop/Scale) */
     .transition-pop-enter {
       animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
@@ -181,7 +175,6 @@
       100% { opacity: 0; transform: scale3d(0.5, 0.5, 0.5) translateZ(-300px); }
     }
 
-    /* Custom Scrollbar for Drawer */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -196,71 +189,42 @@
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(255,255,255,0.4);
     }
-
-    /* Pulsing animations for built-in SVGs */
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(3deg); }
-    }
-    @keyframes spinSlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 15px rgba(59,130,246,0.6)); }
-      50% { opacity: 1; filter: drop-shadow(0 0 35px rgba(147,51,234,0.9)); }
-    }
-    .svg-float { animation: floatSlow 6s ease-in-out infinite; }
-    .svg-spin { animation: spinSlow 20s linear infinite; transform-origin: center; }
-    .svg-pulse { animation: pulseGlow 3s ease-in-out infinite; }
   </style>
 </head>
 <body class="bg-slate-950 text-white overflow-hidden select-none">
 
-  <!-- Main Background Container for Dynamic Color Matching -->
   <div id="bg-backdrop" class="relative w-full h-full flex flex-col justify-between overflow-hidden bg-slate-900">
-    
-    <!-- Ambient Blur Glow Behind Presentation -->
+
     <div id="ambient-glow" class="absolute inset-0 opacity-40 blur-3xl transition-all duration-1000 pointer-events-none"></div>
 
-    <!-- Presentation Viewport -->
-    <main id="viewport" class="slide-viewport relative w-full h-full flex items-center justify-center cursor-pointer">
-      <!-- Slides will be rendered dynamically here -->
-    </main>
+    <main id="viewport" class="slide-viewport relative w-full h-full flex items-center justify-center cursor-pointer"></main>
 
-    <!-- Overlay Navigation Bar Controls -->
     <nav id="controls-bar" class="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-2.5 rounded-full bg-slate-900/70 backdrop-blur-md border border-white/10 shadow-2xl transition-opacity duration-300 hover:opacity-100 opacity-90">
-      
-      <!-- Prev Button -->
+
       <button id="btn-prev" title="Previous Slide (Left Arrow)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/15 active:scale-95 transition">
         <i class="fa-solid fa-chevron-left text-sm"></i>
       </button>
 
-      <!-- Slide Counter / Indicator -->
       <div id="slide-indicator" class="px-3 py-1 text-xs font-semibold tracking-wider text-slate-200 min-w-[80px] text-center">
-        1 / 4
+        1 / 16
       </div>
 
-      <!-- Next Button -->
       <button id="btn-next" title="Next Slide (Right Arrow / Space)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/15 active:scale-95 transition">
         <i class="fa-solid fa-chevron-right text-sm"></i>
       </button>
 
       <div class="w-px h-5 bg-white/20 mx-1"></div>
 
-      <!-- Drawer / Overview Toggle -->
       <button id="btn-drawer" title="Toggle Slide Overview" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/15 active:scale-95 transition">
         <i class="fa-solid fa-border-all text-sm"></i>
       </button>
 
-      <!-- Fullscreen Toggle -->
       <button id="btn-fullscreen" title="Toggle Fullscreen (F)" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/15 active:scale-95 transition">
         <i class="fa-solid fa-expand text-sm"></i>
       </button>
 
     </nav>
 
-    <!-- Slide Overview / Thumbnail Drawer Overlay -->
     <div id="drawer" class="absolute inset-x-0 bottom-0 z-40 bg-slate-950/90 backdrop-blur-xl border-t border-white/10 transform translate-y-full transition-transform duration-300 p-6 max-h-[45vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-4 max-w-6xl mx-auto">
         <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Slide Overview</h3>
@@ -269,98 +233,35 @@
         </button>
       </div>
 
-      <div id="thumbnail-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
-        <!-- Dynamic Thumbnails -->
-      </div>
+      <div id="thumbnail-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 max-w-6xl mx-auto"></div>
     </div>
 
-    <!-- Onscreen Touch Swipe Hint (Displays briefly on touch devices) -->
     <div id="touch-hint" class="hidden absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-[11px] tracking-wide text-slate-300 pointer-events-none">
       Swipe left or right to navigate
     </div>
 
   </div>
 
-  <!-- JavaScript Code Section -->
   <script>
-    /**
-     * PRESENTATION CONFIGURATION ARRAY
-     * Set up your slides using file URLs (PNG, JPG, SVG, WebP, etc.).
-     * 
-     * Properties:
-     *  - url: Path or web URL to your PNG or SVG slide
-     *  - transition: 'fade' | 'dissolve' | 'morph' | 'zoom-slide' | 'pop'
-     *  - title: Optional display name for drawer / tooltips
-     */
     const presentationSlides = [
-           {
-        url: "gemini-svg.svg",
-        transition: "fade",
-        title: "Slide 1 - Fade Transition"
-      }, {
-        url: "gemini-svg (1).svg",
-        transition: "fade",
-        title: "Slide 1 - Fade Transition"
-      },{
-        url: "gemini-svg (2).svg",
-        transition: "fade",
-        title: "Slide 2 - Fade  Transition"
-      },{
-        url: "gemini-svg (3).svg",
-        transition: "fade",
-        title: "Slide 3 - Zoom Slide Transition"
-      },{
-        url: "gemini-svg (4).svg",
-        transition: "fade",
-        title: "Slide 4 - Pop Transition"
-      },{
-        url: "gemini-svg (5).svg",
-        transition: "fade",
-        title: "Slide 5 - Fade Transition"
-      },{
-        url: "gemini-svg (6).svg",
-        transition: "fade",
-        title: "Slide 6 - Morph Transition"
-      },{
-        url: "gemini-svg (7).svg",
-        transition: "fade",
-        title: "Slide 7 - Zoom Slide Transition"
-      },{
-        url: "gemini-svg (8).svg",
-        transition: "fade",
-        title: "Slide 8 - Pop Transition"
-      },{
-        url: "gemini-svg (9).svg",
-        transition: "fade",
-        title: "Slide 9 - Fade Transition"
-      },{
-        url: "gemini-svg (10).svg",
-        transition: "fade",
-        title: "Slide 10 - Morph Transition"
-      },{
-        url: "gemini-svg (11).svg",
-        transition: "fade",
-        title: "Slide 11 - Zoom Slide Transition"
-      },{
-        url: "gemini-svg (12).svg",
-        transition: "fade",
-        title: "Slide 12 - Pop Transition"
-      },{
-        url: "gemini-svg (13).svg",
-        transition: "fade",
-        title: "Slide 13 - Fade Transition"
-      },{
-        url: "gemini-svg (14).svg",
-        transition: "fade",
-        title: "Slide 14 - Morph Transition"
-      },{
-        url: "gemini-svg (15).svg",
-        transition: "fade",
-        title: "Slide 15 - Zoom Slide Transition"
-      }
+      { url: "gemini-svg.svg", transition: "fade", title: "Slide 1 - Fade Transition" },
+      { url: "gemini-svg (1).svg", transition: "fade", title: "Slide 1 - Fade Transition" },
+      { url: "gemini-svg (2).svg", transition: "fade", title: "Slide 2 - Fade Transition" },
+      { url: "gemini-svg (3).svg", transition: "fade", title: "Slide 3 - Zoom Slide Transition" },
+      { url: "gemini-svg (4).svg", transition: "fade", title: "Slide 4 - Pop Transition" },
+      { url: "gemini-svg (5).svg", transition: "fade", title: "Slide 5 - Fade Transition" },
+      { url: "gemini-svg (6).svg", transition: "fade", title: "Slide 6 - Morph Transition" },
+      { url: "gemini-svg (7).svg", transition: "fade", title: "Slide 7 - Zoom Slide Transition" },
+      { url: "gemini-svg (8).svg", transition: "fade", title: "Slide 8 - Pop Transition" },
+      { url: "gemini-svg (9).svg", transition: "fade", title: "Slide 9 - Fade Transition" },
+      { url: "gemini-svg (10).svg", transition: "fade", title: "Slide 10 - Morph Transition" },
+      { url: "gemini-svg (11).svg", transition: "fade", title: "Slide 11 - Zoom Slide Transition" },
+      { url: "gemini-svg (12).svg", transition: "fade", title: "Slide 12 - Pop Transition" },
+      { url: "gemini-svg (13).svg", transition: "fade", title: "Slide 13 - Fade Transition" },
+      { url: "gemini-svg (14).svg", transition: "fade", title: "Slide 14 - Morph Transition" },
+      { url: "gemini-svg (15).svg", transition: "fade", title: "Slide 15 - Zoom Slide Transition" }
     ];
 
-    // Presentation Controller State
     class PresentationEngine {
       constructor(slides) {
         this.slides = slides;
@@ -368,7 +269,6 @@
         this.isAnimating = false;
         this.drawerOpen = false;
 
-        // DOM elements
         this.viewport = document.getElementById('viewport');
         this.bgBackdrop = document.getElementById('bg-backdrop');
         this.ambientGlow = document.getElementById('ambient-glow');
@@ -376,11 +276,9 @@
         this.drawer = document.getElementById('drawer');
         this.thumbnailGrid = document.getElementById('thumbnail-grid');
 
-        // Touch Tracking State
         this.touchStartX = 0;
         this.touchStartY = 0;
 
-        // Canvas for dynamic color extraction
         this.colorCanvas = document.createElement('canvas');
         this.colorCtx = this.colorCanvas.getContext('2d', { willReadFrequently: true });
 
@@ -393,7 +291,6 @@
         this.bindEvents();
         this.updateSlide(0, 'next', true);
 
-        // Detect touch device to display gesture hint
         if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
           const hint = document.getElementById('touch-hint');
           if (hint) {
@@ -403,6 +300,35 @@
         }
       }
 
+      isSvgUrl(url) {
+        return typeof url === 'string' && url.split('?')[0].toLowerCase().endsWith('.svg');
+      }
+
+      createSlideMedia(slide, idx) {
+        if (this.isSvgUrl(slide.url)) {
+          const obj = document.createElement('object');
+          obj.type = 'image/svg+xml';
+          obj.data = slide.url;
+          obj.setAttribute('aria-label', slide.title || `Slide ${idx + 1}`);
+          obj.onerror = () => {
+            const fallback = document.createElement('img');
+            fallback.src = `https://placehold.co/1200x800/1e293b/f8fafc?text=Slide+${idx + 1}+(${encodeURIComponent(slide.transition || 'Fade')})`;
+            obj.replaceWith(fallback);
+          };
+          return obj;
+        }
+
+        const img = document.createElement('img');
+        img.src = slide.url;
+        img.alt = slide.title || `Slide ${idx + 1}`;
+        img.crossOrigin = "Anonymous";
+        img.onerror = () => {
+          img.onerror = null;
+          img.src = `https://placehold.co/1200x800/1e293b/f8fafc?text=Slide+${idx + 1}+(${encodeURIComponent(slide.transition || 'Fade')})`;
+        };
+        return img;
+      }
+
       renderSlides() {
         this.viewport.innerHTML = '';
         this.slides.forEach((slide, idx) => {
@@ -410,20 +336,27 @@
           node.className = `slide-node slide-${idx}`;
           node.dataset.index = idx;
 
-          const img = document.createElement('img');
-          img.src = slide.url;
-          img.alt = slide.title || `Slide ${idx + 1}`;
-          img.crossOrigin = "Anonymous"; // Enable canvas sampling for CORS images
-          
-          // Fallback graphic generator if URL fails to load
-          img.onerror = () => {
-            img.onerror = null;
-            img.src = `https://placehold.co/1200x800/1e293b/f8fafc?text=Slide+${idx + 1}+(${encodeURIComponent(slide.transition || 'Fade')})`;
-          };
+          if (idx === 0) {
+            node.appendChild(this.createSlideMedia(slide, idx));
+          }
 
-          node.appendChild(img);
           this.viewport.appendChild(node);
         });
+      }
+
+      ensureSlideLoaded(index) {
+        const node = this.viewport.querySelector(`.slide-${index}`);
+        if (!node) return;
+        const slide = this.slides[index];
+        if (!node.firstChild) {
+          node.appendChild(this.createSlideMedia(slide, index));
+        } else if (this.isSvgUrl(slide.url)) {
+          const oldObj = node.querySelector('object');
+          if (oldObj) {
+            const freshObj = this.createSlideMedia(slide, index);
+            oldObj.replaceWith(freshObj);
+          }
+        }
       }
 
       renderThumbnails() {
@@ -465,18 +398,17 @@
         const prevIndex = this.currentIndex;
         this.currentIndex = targetIndex;
 
+        this.ensureSlideLoaded(targetIndex);
+
         const currentSlideNode = this.viewport.querySelector(`.slide-${prevIndex}`);
         const nextSlideNode = this.viewport.querySelector(`.slide-${targetIndex}`);
 
         if (!nextSlideNode) return;
 
-        // Extract background color dynamically from image/svg source
         this.extractAndApplyBgColor(nextSlideNode);
 
-        // Update Counter
         this.slideIndicator.innerText = `${this.currentIndex + 1} / ${this.slides.length}`;
 
-        // Highlight active thumbnail
         Array.from(this.thumbnailGrid.children).forEach((child, i) => {
           if (i === this.currentIndex) {
             child.className = child.className.replace(/border-white\/(10|30)/, 'border-indigo-500 shadow-lg shadow-indigo-500/30 scale-105');
@@ -486,18 +418,16 @@
         });
 
         if (immediate || prevIndex === targetIndex) {
-          if (currentSlideNode) currentSlideNode.classList.remove('active');
+          if (currentSlideNode) currentSlideNode.classList.remove('active', 'exiting');
           nextSlideNode.classList.add('active');
           return;
         }
 
         this.isAnimating = true;
 
-        // Resolve Transition Type
         let transType = (this.slides[targetIndex].transition || 'fade').toLowerCase();
         if (transType === 'dissolve') transType = 'fade';
 
-        // Prepare Animation Classes
         let enterClass = '';
         let exitClass = '';
 
@@ -515,16 +445,16 @@
           exitClass = 'transition-pop-exit';
         }
 
-        // Trigger Animations
         if (currentSlideNode) {
-          currentSlideNode.classList.add(exitClass);
+          currentSlideNode.classList.remove('active');
+          currentSlideNode.classList.add('exiting', exitClass);
         }
 
         nextSlideNode.classList.add('active', enterClass);
 
         setTimeout(() => {
           if (currentSlideNode) {
-            currentSlideNode.classList.remove('active', exitClass);
+            currentSlideNode.classList.remove('active', 'exiting', exitClass);
           }
           nextSlideNode.classList.remove(enterClass);
           this.isAnimating = false;
@@ -570,13 +500,15 @@
 
       extractAndApplyBgColor(slideNode) {
         const img = slideNode.querySelector('img');
-        if (img) {
-          if (img.complete && img.naturalWidth > 0) {
-            this.sampleImageColor(img);
-          } else {
-            img.onload = () => this.sampleImageColor(img);
-            img.onerror = () => this.setThemeBg('#0f172a');
-          }
+        if (!img) {
+          this.setThemeBg('#0f172a');
+          return;
+        }
+        if (img.complete && img.naturalWidth > 0) {
+          this.sampleImageColor(img);
+        } else {
+          img.onload = () => this.sampleImageColor(img);
+          img.onerror = () => this.setThemeBg('#0f172a');
         }
       }
 
